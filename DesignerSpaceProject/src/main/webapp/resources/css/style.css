@@ -14,6 +14,7 @@ body, html{
     display: block;
     box-shadow: 0px 0px 20px rgba(0,0,0,0.3);
     transition: all 0.3s;
+    z-index: 1000;
 }
 #header.headerC{
 	top: -60px;
@@ -201,13 +202,13 @@ body, html{
 /* 기본 공통단 */
 #wrap{	
 	min-height: calc(100% - 120px);
-	background-image: url("../img/background.jpg");
+	background-image: url("../img/background.png");
 	background-size: cover;
 	background-position: 0px -2px;
 }
 #innerWrap{
 	box-sizing: border-box;
-	padding: 280px 100px;
+	padding: 230px 100px;
 }
 #innerPage{
 	background-color: #fff;
