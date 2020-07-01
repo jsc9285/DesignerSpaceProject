@@ -18,7 +18,7 @@
 <body>
 
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>	
-	
+
 	<div id="wrap">
 		<div id="innerWrap">	
 			<div id="innerPage">
