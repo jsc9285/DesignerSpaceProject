@@ -207,7 +207,7 @@ body, html{
 /* 기본 공통단 */
 #wrap{	
 	min-height: calc(100% - 120px);
-	background-image: url("../img/background.png");
+	background-image: url("../img/background.jpg");
 	background-size: cover;
 	background-position: 0px -2px;
 }

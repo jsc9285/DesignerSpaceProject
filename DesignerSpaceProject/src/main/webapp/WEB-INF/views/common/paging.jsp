@@ -4,7 +4,7 @@
 
 
 <style type="text/css">
-nav > ul {
+#navList > ul {
  	list-style-type: none; 
     padding: 0;
     overflow: hidden;
@@ -15,11 +15,11 @@ nav > ul {
     
 }
 
-nav > ul > li {
+#navList > ul > li {
 	float: left;
 }
 
-nav > ul > li > a {
+#navList > ul > li > a {
     display: block;
     color: white;  
     text-align: center;
@@ -27,7 +27,7 @@ nav > ul > li > a {
     text-decoration: none;
 } 
 
-nav > ul > li > a:hover { 
+#navList > ul > li > a:hover { 
      color: #FFD9EC; 
      background-color: #5D5D5D; 
      font-weight: bold; 
@@ -41,7 +41,7 @@ nav > ul > li > a:hover {
 </style>
 
 <!-- <script type="text/javascript"  -->
-<!-- 	src="/springHome/resources/js/jquery-3.5.1.js"></script> -->
+<!-- 	src="/DesignerSpaceProject/resources/js/jquery-3.5.1.js"></script> -->
 <script type="text/javascript"
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -65,19 +65,26 @@ nav > ul > li > a:hover {
 			.setAttribute('class', 'active');
 	}
 </script>
-
-	<nav>
+	
+	<nav id="navList">
 		<ul>
 			<li>
 				<a href="#" 
-					onclick="goPageFnc(${pagingMap.freeBoardPaging.prevPage});">
+					onclick="goPageFnc(${pagingMap.paging.prevPage});">
 					<span>≪</span>
 				</a>
 			</li>
+			<li>
+				<c:if test="${pagingMap.paging.blockBegin eq 1 && pagingMap.paging.blockEnd eq 0}">
+					<a href="#">
+						<c:out value="1"/>
+					</a>
+				</c:if>			
+			</li>
 			
 			<c:forEach var="num" 
-				begin="${pagingMap.freeBoardPaging.blockBegin}" 
-				end="${pagingMap.freeBoardPaging.blockEnd}">
+				begin="${pagingMap.paging.blockBegin}" 
+				end="${pagingMap.paging.blockEnd}">
 				
 				<li id='pageButton${num}'>
 					<a href="#" onclick="goPageFnc(${num});">
@@ -89,10 +96,11 @@ nav > ul > li > a:hover {
 
 			<li>
 				<a href="#"
-					onclick="goPageFnc(${pagingMap.freeBoardPaging.nextPage});">
+					onclick="goPageFnc(${pagingMap.paging.nextPage});">
 					<span>≫</span>
 				</a>
 			</li>
+
 		</ul>
 	</nav>
 
