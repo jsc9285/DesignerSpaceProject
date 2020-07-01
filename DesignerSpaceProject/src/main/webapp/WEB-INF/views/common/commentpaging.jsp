@@ -47,34 +47,29 @@ nav > ul > li > a:hover {
 
 <script type="text/javascript">
 	function goPageFnc(pageNumber){
-// 		alert(pageNumber);
+
 		var curPage = $('#curPage');
-		
-		alert()
-// 		curPage.value = pageNumber;
+
 		curPage.val(pageNumber);
 		
 		var pagingForm = $('#pagingForm');
 		pagingForm.submit();
 	}
 	
-// 	window.onload = function(){
-// 		var curPage = document.getElementById('curPage');
-// 		var pageButtonId = 'pageButton' + curPage.value;
-		
-// 		document.getElementById(pageButtonId)
-// 			.setAttribute('class', 'active');
-// 	}
 </script>
 
 	<nav>
 		<ul>
-			<li>
-				<a href="#"
-					onclick="goPageFnc(${freeBoardCommentPaging.curPage + 1});">
-					<span>더보기</span>
-					${freeBoardCommentPaging.curPage + 1}
-				</a>
+			<li>	
+			<c:choose>
+				<c:when test="${freeBoardCommentPaging.curPage < freeBoardCommentPaging.totPage }">
+					<a href="#"
+						onclick="goPageFnc(${freeBoardCommentPaging.curPage + 1});">
+						<span>더보기</span>
+					</a>
+				</c:when>
+			</c:choose>
+
 			</li>
 		</ul>
 	</nav>

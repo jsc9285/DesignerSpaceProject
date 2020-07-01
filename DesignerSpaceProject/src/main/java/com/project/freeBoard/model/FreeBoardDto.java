@@ -2,6 +2,8 @@ package com.project.freeBoard.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class FreeBoardDto {
 	
 	
@@ -10,7 +12,9 @@ public class FreeBoardDto {
 	private String 		freeBoardTitle;
 	private String 		freeBoardContents;
 	private int 		freeBoardViews;
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date 		freeBoardCreDate;
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date 		freeBoardModDate;
 	private int 		freeBoardLike;
 	private int 		freeBoardRownum;
@@ -31,7 +35,9 @@ public class FreeBoardDto {
 	private int 		freeCommentFbno;
 	private int 		freeCommentMno;
 	private String 		freeCommentComments;
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date 		freeCommentCreDate;
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date 		freeCommentModDate;
 	
 	
@@ -46,7 +52,10 @@ public class FreeBoardDto {
 	private String 		memberComments;
 	private String 		memberSignCheck;
 	private String 		memberDelFlag;
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date 		memberCreDate;
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+
 	private Date 		memberModDate;
 	private int 		memberGrade;
 	

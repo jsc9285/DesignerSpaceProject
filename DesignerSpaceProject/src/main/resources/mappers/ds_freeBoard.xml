@@ -80,25 +80,26 @@
 		resultType="int">
 		select floor((rnum-1) / 10)+1 no
 		from (
-		    select rownum rnum,f.free_board_no, f.free_board_title, f.member_no, f.free_board_views, f.member_nick, f.free_board_cre_date, f.free_board_contents,f.nl
+		    select rownum rnum,f.free_board_no, f.free_board_title, f.member_no, f.free_board_views, f.member_nick, f.free_board_cre_date, f.free_board_contents, nvl(f.nl,0)
 		    from (
 		            select fb.free_board_no, fb.free_board_title, m.member_no, fb.free_board_views, m.member_nick ,fb.free_board_cre_date, fb.free_board_contents, l.nl
 		            from free_board fb, member m
 			            ,(select nvl(count(fl.free_like_no),0) nl, fb.free_board_no
 			              from free_board fb left join free_like fl
 			              on fb.free_board_no = fl.free_like_fbno
+                          where fl.free_like_flag = 'Y'
 			              group by fb.free_board_no)l
-                     where fb.free_board_no = l.free_board_no
+                     where fb.free_board_no = l.free_board_no(+)
                      and fb.free_board_mno = m.member_no
                      <include refid="freeBoardSearch"></include>
-                     order by fb.free_board_cre_date desc) f
+                     order by fb.free_board_no desc) f
 		    )ff
 		where ff.free_board_no = #{no}
 	</select>
 	
 	<select id="freeBoardSelectList" parameterType="map"
 		resultMap="freeBoardResultMap">
-		select ff.rnum,ff.free_board_no, ff.free_board_title, ff.member_no, ff.free_board_views, ff.member_nick, ff.free_board_cre_date, ff.free_board_contents,ff.nl
+		select ff.rnum,ff.free_board_no, ff.free_board_title, ff.member_no, ff.free_board_views, ff.member_nick, ff.free_board_cre_date, ff.free_board_contents, nvl(ff.nl,0) nl
 		from (
 		select rownum rnum,f.free_board_no, f.free_board_title, f.member_no, f.free_board_views, f.member_nick, f.free_board_cre_date, f.free_board_contents,f.nl
 		from (
@@ -106,19 +107,21 @@
 		        from free_board fb, member m,(select nvl(count(fl.free_like_no),0) nl, fb.free_board_no
 		                                        from free_board fb left join free_like fl
 		                                        on fb.free_board_no = fl.free_like_fbno
-		                                        group by fb.free_board_no)l
-		                                        where fb.free_board_no = l.free_board_no
-		                                        and fb.free_board_mno = m.member_no
-		                                       	<include refid="freeBoardSearch"></include>
-		                                        order by fb.free_board_no desc)f
-		                                        )ff                                    
+                                                where fl.free_like_flag ='Y'
+                                                group by fb.free_board_no
+                                               )l
+            where fb.free_board_no = l.free_board_no(+)
+            <include refid="freeBoardSearch"></include>
+            and fb.free_board_mno = m.member_no
+            order by fb.free_board_no desc)f
+		                                        )ff                                
 		where rnum between #{start} and #{end}
 	</select>
 	
 	
 	<select id="freeBoardSelectOne" parameterType="int"
 		resultMap="freeBoardResultMap">
-		select ff.rnum,ff.free_board_no, ff.free_board_title, ff.member_no, ff.free_board_views, ff.member_nick, ff.free_board_cre_date, ff.free_board_contents,ff.nl
+		select ff.rnum,ff.free_board_no, ff.free_board_title, ff.member_no, ff.free_board_views, ff.member_nick, ff.free_board_cre_date, ff.free_board_contents, nvl(ff.nl,0) nl
 		from (
 		select rownum rnum,f.free_board_no, f.free_board_title, f.member_no, f.free_board_views, f.member_nick, f.free_board_cre_date, f.free_board_contents,f.nl
 		from (
@@ -126,10 +129,13 @@
 		        from free_board fb, member m,(select nvl(count(fl.free_like_no),0) nl, fb.free_board_no
 		                                        from free_board fb left join free_like fl
 		                                        on fb.free_board_no = fl.free_like_fbno
-		                                        group by fb.free_board_no)l
-		                                        where fb.free_board_no = l.free_board_no
-		                                        and fb.free_board_mno = m.member_no
-		                                        order by fb.free_board_no desc)f
+                                                where fl.free_like_flag ='Y'
+                                                group by fb.free_board_no
+                                               )l
+            where fb.free_board_no = l.free_board_no(+)
+            
+            and fb.free_board_mno = m.member_no
+            order by fb.free_board_no desc)f
 		                                        )ff
 		where ff.free_board_no = #{no}
 	</select>
@@ -158,29 +164,16 @@
 		        )
 	</select>
 	
-<!-- 	<select id="freeBoardCommentSelectCurPage" parameterType="map" -->
-<!-- 		resultType="int"> -->
-<!-- 		select floor((rnum-1) / 10)+1 no -->
-<!-- 		from (select rownum rnum,fbm.free_board_no,fbm.free_comment_no,fbm.free_comment_comments,fbm.free_comment_cre_date, fbm.member_name, fbm.profile_table_stored_name -->
-<!-- 		    from ( -->
-<!-- 		        select fb.free_board_no, fc.free_comment_no,fc.free_comment_comments,fc.free_comment_cre_date, m.member_name, pt.profile_table_stored_name -->
-<!-- 		        from free_board fb , free_comment fc, member m, profile_table pt -->
-<!-- 		        where fb.free_board_no = fc.free_comment_fbno -->
-<!-- 		        and fc.free_comment_mno = m.member_no -->
-<!-- 		        and m.member_no = pt.profile_table_mno -->
-<!--                 and fb.free_board_no = #{no} -->
-<!-- 		        order by fc.free_comment_no desc)fbm -->
-<!-- 		        )c -->
-<!-- 		where c.free_comment_no = #{fcno} -->
-<!-- 	</select> -->
 	
 	<select id="freeBoardCommentSelectList" parameterType="map"
 		resultMap="freeBoardResultMap">
 		
 		SELECT *
 		FROM (SELECT ROWNUM RNUM,FBM.FREE_COMMENT_NO,FBM.FREE_COMMENT_COMMENTS,FBM.FREE_COMMENT_CRE_DATE, FBM.MEMBER_NICK, FBM.PROFILE_TABLE_STORED_NAME
+				,FBM.PROFILE_TABLE_ORIGINAL_NAME, FBM.PROFILE_TABLE_MNO, FBM.PROFILE_TABLE_NO
 		    FROM (
 		        SELECT FC.FREE_COMMENT_NO,FC.FREE_COMMENT_COMMENTS,FC.FREE_COMMENT_CRE_DATE, M.MEMBER_NICK, PT.PROFILE_TABLE_STORED_NAME
+                    ,PT.PROFILE_TABLE_ORIGINAL_NAME, PT.PROFILE_TABLE_MNO, PT.PROFILE_TABLE_NO
 		        FROM FREE_BOARD FB , FREE_COMMENT FC, MEMBER M, PROFILE_TABLE PT
 		        WHERE FB.FREE_BOARD_NO = FC.FREE_COMMENT_FBNO
 		        AND FC.FREE_COMMENT_MNO = M.MEMBER_NO
@@ -194,5 +187,91 @@
 		
 	</select>
 	
+	
+	
+<!-- 	<select id="freeBoardLikeSelectList" parameterType="int" -->
+<!-- 		resultMap="freeBoardResultMap"> -->
+<!-- 		 SELECT FL.FREE_LIKE_NO, FL.FREE_LIKE_MNO, FL.FREE_LIKE_FBNO, FL.FREE_LIKE_FLAG -->
+<!-- 			FROM FREE_BOARD FB RIGHT JOIN FREE_LIKE FL -->
+<!-- 			on FB.FREE_BOARD_NO = FL.FREE_LIKE_FBNO -->
+<!-- 			AND FB.FREE_BOARD_NO = #{no} -->
+<!-- 	</select> -->
+	
+	<select id="freeBoardLikeSelectList" parameterType="map"
+		resultMap="freeBoardResultMap">
+		 SELECT FREE_LIKE_NO, FREE_LIKE_MNO, FREE_LIKE_FBNO, FREE_LIKE_FLAG
+			FROM FREE_LIKE
+			where free_like_fbno= #{no}
+            and free_like_mno = #{mno}
+	</select>
+	
+	<insert id="freeBoardLikeInsert" parameterType="map">
+		insert into free_like
+			value(free_like_no,free_like_mno,free_like_fbno, free_like_flag)
+			values(free_like_flno_seq.nextval,#{mno},#{no}, 'Y')
+	</insert>
+	
+	<update id="freeBoardLikeUpdate" parameterType="map">
+		update free_like
+			set
+			free_like_flag ='Y'
+			where free_like_mno = #{mno}
+			and free_like_fbno= #{no}
+	
+	</update>
+	
+	<update id="freeBoardLikeDel" parameterType="map">
+		update free_like
+			set
+			free_like_flag ='N'
+			where free_like_mno = #{mno}
+			and free_like_fbno= #{no}
+	
+	</update>
+	
+	<insert id="freeBoardAdd" parameterType ="map">
+		INSERT INTO FREE_BOARD
+			VALUE(FREE_BOARD_NO,FREE_BOARD_MNO,FREE_BOARD_TITLE, FREE_BOARD_CONTENTS, FREE_BOARD_CRE_DATE)
+			VALUES(FREE_BOARD_FBNO_SEQ.NEXTVAL,#{mno},#{title},#{contents},SYSDATE)
+	</insert>
+	
+	<select id="freeBoardAddOne" parameterType="map"
+		resultType="String">
+			SELECT MEMBER_NICK
+			FROM  MEMBER
+			WHERE MEMBER_NO = #{mno}
+	</select>
+	
+	<delete id="freeBoardLikeDelete" parameterType="int">
+		delete from free_like
+			where free_like_fbno = #{no}
+	</delete>
+	
+	<delete id="freeBoardCommentDelete" parameterType="int">
+		delete from free_comment
+			where free_comment_fbno = #{no}
+	</delete>
+	
+	<delete id="freeBoardDelete" parameterType="int">
+		delete from free_board
+			where free_board_no = #{no}
+	</delete>
+	
+	<insert id="freeBoardCommentAdd" parameterType="map">
+		insert into free_comment
+			value(free_comment_no,free_comment_fbno,free_comment_mno,free_comment_comments, free_comment_cre_date)
+			values(free_comment_fcno_seq.nextval, #{no},#{mno},#{comments}, sysdate)
+	</insert>
+	
+	<update id="freeBoardUpdate" parameterType="map">
+		UPDATE FREE_BOARD 
+		<set>
+			<if test="title != ''">FREE_BOARD_TITLE = #{title},</if>
+			<if test="contents != ''">FREE_BOARD_CONTENTS = #{contents},</if>
+			FREE_BOARD_MOD_DATE = SYSDATE
+		</set>
+		WHERE free_board_no = #{no}
+	</update>
+
 	
 </mapper>

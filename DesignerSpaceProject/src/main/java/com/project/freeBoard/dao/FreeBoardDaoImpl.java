@@ -87,16 +87,6 @@ public class FreeBoardDaoImpl implements FreeBoardDao{
 		return sqlSession.selectOne(namespace + "freeBoardCommentSelectTotalCount", no);
 	}
 
-//	@Override
-//	public int freeBoardCommentSelectCurPage(int no, int fcno) {
-//		// TODO Auto-generated method stub
-//		Map<String, Object> map = new HashMap<>();
-//		map.put("no", no);
-//		map.put("fcno", fcno);
-//		
-//		return sqlSession.selectOne(namespace + "freeBoardCommentSelectCurPage", map);
-//	}
-
 	@Override
 	public List<FreeBoardDto> freeBoardCommentSelectList(int no, int end ) {
 		// TODO Auto-generated method stub
@@ -110,8 +100,104 @@ public class FreeBoardDaoImpl implements FreeBoardDao{
 		
 		return freeBoardCommentList;
 	}
-	
-	
+
+	@Override
+	public int freeBoardLikeInsert(int mno, int no) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("mno", mno);
+		map.put("no", no);
+		
+		return sqlSession.insert(namespace + "freeBoardLikeInsert", map);
+	}
+
+	@Override
+	public List<Object> freeBoardLikeSelectList(int no, int mno) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("mno", mno);
+		map.put("no", no);
+		
+		return sqlSession.selectList(namespace + "freeBoardLikeSelectList", map);
+	}
+
+	@Override
+	public int freeBoardLikeUpdate(int no, int mno) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("no", no);
+		map.put("mno", mno);
+
+		return sqlSession.update(namespace + "freeBoardLikeUpdate", map);
+	}
+
+	@Override
+	public int freeBoardLikeDel(int no, int mno) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("no", no);
+		map.put("mno", mno);
+
+		return sqlSession.update(namespace + "freeBoardLikeDel", map);
+	}
+
+	@Override
+	public void freeBoardAdd(int mno, String title, String contents) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("mno", mno);
+		map.put("title", title);
+		map.put("contents", contents);
+		
+		sqlSession.insert(namespace + "freeBoardAdd", map);
+	}
+
+	@Override
+	public String freeBoardAddOne(int mno) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("mno", mno);
+		
+		return sqlSession.selectOne(namespace +"freeBoardAddOne", map);
+	}
+
+	@Override
+	public int freeBoardLikeDelete(int no) {
+		// TODO Auto-generated method stub
+		return sqlSession.delete(namespace + "freeBoardLikeDelete", no);
+	}
+
+	@Override
+	public int freeBoardCommentDelete(int no) {
+		// TODO Auto-generated method stub
+		return sqlSession.delete(namespace + "freeBoardCommentDelete", no);
+	}
+
+	@Override
+	public int freeBoardDelete(int no) {
+		// TODO Auto-generated method stub
+		return sqlSession.delete(namespace + "freeBoardDelete", no);
+	}
+
+	@Override
+	public int freeBoardCommentAdd( int no, int mno,String comments) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("no", no);
+		map.put("mno", mno);
+		map.put("comments", comments);
+		return sqlSession.insert(namespace + "freeBoardCommentAdd", map);
+	}
+
+	@Override
+	public void freeBoardUpdate(int no, String title, String contents) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("no", no);
+		map.put("title", title);
+		map.put("contents", contents);
+		sqlSession.update(namespace + "freeBoardUpdate", map);
+	}
 	
 
 }

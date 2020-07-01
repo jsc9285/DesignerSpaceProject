@@ -19,9 +19,29 @@ public interface FreeBoardService {
 	
 	public int freeBoardCommentSelectTotalCount(int no);
 
-//	public int freeBoardCommentSelectCurPage(int no, int fcno);
-
 	public List<FreeBoardDto> freeBoardCommentSelectList(int no, int end);
+
+	public int freeBoardLikeInsert(int no,int mno);
+
+	public List<Object> freeBoardLikeSelectList(int no, int mno);
+
+	public int freeBoardLikeUpdate(int no, int mno);
+
+	public int freeBoardLikeDel(int no, int mno);
+
+	public void freeBoardAdd(int mno, String title, String contents);
+
+	public String freeBoardAddOne(int mno);
+
+	public int freeBoardLikeDelete(int no);
+
+	public int freeBoardCommentDelete(int no);
+
+	public int freeBoardDelete(int no);
+
+	public int freeBoardCommentAdd(int no, int mno, String comments);
+
+	public void freeBoardUpdate(int no, String title, String contents);
 
 	
 }

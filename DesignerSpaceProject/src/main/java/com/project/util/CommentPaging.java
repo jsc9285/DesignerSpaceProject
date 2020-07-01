@@ -5,7 +5,8 @@ import java.io.Serializable;
 public class CommentPaging implements Serializable{
 
 	// 페이지당 게시물수
-	public static final int PAGE_SCALE = 10;
+	public static final int PAGE_SCALE = 9;
+
 	
 	// 화면당 페이지 수
 	public static final int BLOCK_SCALE = 10;
