@@ -213,9 +213,13 @@ body, html{
 #innerWrap{
 	box-sizing: border-box;
 <<<<<<< HEAD
+	padding: 230px 100px 100px;
+=======
+<<<<<<< HEAD
 	padding: 280px 100px;
 =======
 	padding: 230px 100px 100px;
+>>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 >>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 }
 #innerPage{
