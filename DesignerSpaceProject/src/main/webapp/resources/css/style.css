@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+body, html{
+	height: 100%;
+}
+
 /* 헤더 */
 #header{
     background-color: #fff;
@@ -195,15 +199,16 @@
 }
 
 /* 기본 공통단 */
-#wrap{
-	height: 780px;
+#wrap{	
+	min-height: calc(100% - 120px);
 	background-image: url("../img/background.jpg");
 	background-size: cover;
-	background-color: #E6E6FA;
-	padding: 280px 100px;	
+	background-position: 0px -2px;
+}
+#innerWrap{
+	box-sizing: border-box;
+	padding: 280px 100px;
 }
 #innerPage{
 	background-color: #fff;
-	width: 100%;
-	height: 100%;
 }
