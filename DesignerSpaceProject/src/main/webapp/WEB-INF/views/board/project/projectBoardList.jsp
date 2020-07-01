@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,9 +55,12 @@
 		 	vertical-align: middle;
 		}
 		#projectView{
+			display: inline-table;
 			margin-top: 20px;
 		}
 		.projectList{
+			margin: 0px 10px 20px;
+			display: inline-block;
 			width: 320px;
 		}
 		.projectList .thumbnailPic{
@@ -78,8 +82,15 @@
 			background-repeat: no-repeat;
 			background-position: center;
 			background-size: cover;
+			display: inline-block;
+			vertical-align: middle;
 		}
 		.projectList .profileNic{
+			display: inline-block;
+			width: 150px;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 		}
 	</style>
 	
@@ -93,7 +104,7 @@
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>	
 	
 	<div id="wrap">
-		<div id="innerWrap">
+		<div id="innerWrap">		
 <!-- 			검색, 카테고리 선택, 정렬방법 -->
 			<div id="topMenu">
 				<select>
@@ -115,19 +126,25 @@
 					<option>조회수</option>
 				</select>
 			</div>
-<!-- 			프로젝트 조회 -->
+<!-- 			프로젝트 조회 -->		
 			<div id="projectView">
-				<div class="projectList">
-					<div class="thumbnailPic" style="background-image: url('<%=request.getContextPath()%>/resources/img/examImg.jpeg');"></div>
-					<img class="profilePic" src="<%=request.getContextPath()%>/resources/img/examImg.jpeg">
-					<span class="profileNic">Steven Gerrard</span>
-						
-					<img src="<%=request.getContextPath()%>/resources/img/iconLike.png">
-					<span>100</span>
-					<img src="<%=request.getContextPath()%>/resources/img/iconView.png">
-					<span>200</span>					
-				</div>
-			</div>
+				<c:forEach begin="1" end="25">
+					<div class="projectList">
+						<div class="thumbnailPic" style="background-image: url('<%=request.getContextPath()%>/resources/img/examImg.jpeg');"></div>
+						<div style="float: left;">
+							<div class="profilePic" style="background-image: url('<%=request.getContextPath()%>/resources/img/examImg.jpeg');"></div>
+							<span class="profileNic">Steven Gerrard</span>
+						</div>												
+						<div style="float: right; padding-top: 10px;">
+							<img src="<%=request.getContextPath()%>/resources/img/iconLike.png">
+							<span>100</span>
+							<img src="<%=request.getContextPath()%>/resources/img/iconView.png">
+							<span>200</span>
+						</div>						
+					</div>
+				</c:forEach>
+			</div>	
+
 <!-- 			프로젝트 페이징 -->
 			<div id="paging">
 			

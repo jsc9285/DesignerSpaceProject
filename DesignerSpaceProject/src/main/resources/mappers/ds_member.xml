@@ -5,4 +5,68 @@
   
 <mapper namespace="com.project.member">
 	
+	<resultMap type="com.project.member.model.MemberDto" 
+		id="memberResultMap">
+		<id column="MEMBER_NO" property="member_no"/>
+		<result column="MEMBER_NICK" property="member_nick"/>
+		<result column="MEMBER_NAME" property="member_name"/>
+		<result column="MEMBER_EMAIL" property="member_email"/>
+		<result column="MEMBER_PWD" property="member_pwd"/>
+		<result column="MEMBER_PHONE" property="member_phone"/>
+		<result column="MEMBER_CHECK_QUESTION" property="member_check_question"/>
+		<result column="MEMBER_CHECK_ANSWER" property="member_check_answer"/>
+		<result column="MEMBER_COMMENTS" property="member_comments"/>
+		<result column="MEMBER_CRE_DATE" property="member_cre_date"
+			javaType="java.util.Date"/>
+		<result column="MEMBER_MOD_DATE" property="member_mod_date"
+			javaType="java.util.Date"/>
+		<result column="MEMBER_SIGN_CHECK" property="member_sign_check"/>
+		<result column="MEMBER_GRADE" property="member_grade"/>
+		<result column="MEMBER_DEL_FLAG" property="member_del_flag"/>
+	</resultMap>
+	
+	
+	<select id="memberExist" parameterType="map" 
+		resultMap="memberResultMap">
+		SELECT MEMBER_NO, MEMBER_NICK
+		FROM MEMBER
+		WHERE MEMBER_EMAIL = #{member_email}
+		AND MEMBER_PWD = #{member_pwd}
+	</select>
+	
+	<select id="memberIdFind" parameterType="map" 
+		resultMap="memberResultMap">
+		SELECT MEMBER_EMAIL
+		FROM MEMBER
+		WHERE MEMBER_NAME = #{member_name}
+		AND MEMBER_PHONE = #{member_phone}
+	</select>
+	
+	<select id="memberPwdFind" parameterType="map" 
+		resultMap="memberResultMap">
+		SELECT MEMBER_Pwd
+		FROM MEMBER
+		WHERE MEMBER_EMAIL = #{member_email}
+		AND MEMBER_CHECK_QUESTION = #{member_check_question}
+		AND MEMBER_CHECK_ANSWER = #{member_check_answer}
+	</select>
+	
+	<insert id="memberAdd" parameterType="com.project.member.model.MemberDto"
+		useGeneratedKeys="true" keyProperty="member_no">
+		<selectKey keyProperty="member_no" resultType="int" order="BEFORE">
+			SELECT MEMBER_MNO_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO MEMBER
+		VALUE(MEMBER_NO,MEMBER_NAME,MEMBER_NICK,MEMBER_EMAIL,MEMBER_PWD,MEMBER_PHONE,MEMBER_CHECK_QUESTION,
+			MEMBER_CHECK_ANSWER,MEMBER_COMMENTS, MEMBER_CRE_DATE, MEMBER_SIGN_CHECK)
+		VALUES(#{member_no}, #{member_name}, #{member_nick}, #{member_email}, #{member_pwd}, #{member_phone}, 
+			#{member_check_question}, #{member_check_answer}, #{member_comments}, SYSDATE, #{member_sign_check})
+		
+	</insert>
+	
+	<select id="memberList" resultMap="memberResultMap">
+		SELECT MEMBER_NO, MEMBER_NICK, MEMBER_NAME, MEMBER_EMAIL, MEMBER_CRE_DATE
+		FROM MEMBER
+	</select>
+	
 </mapper>

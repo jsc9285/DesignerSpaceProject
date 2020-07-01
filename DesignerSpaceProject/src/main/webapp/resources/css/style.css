@@ -208,8 +208,10 @@ body, html{
 }
 #innerWrap{
 	box-sizing: border-box;
-	padding: 230px 100px;
+	padding: 230px 100px 100px;
 }
 #innerPage{
+	width: 1350px;
+	margin: auto;
 	background-color: #fff;
 }
