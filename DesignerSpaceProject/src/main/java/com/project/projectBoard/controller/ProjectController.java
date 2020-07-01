@@ -16,6 +16,21 @@ public class ProjectController {
 	private static final Logger log = 
 		LoggerFactory.getLogger(ProjectController.class);
 
+<<<<<<< HEAD
+	
+	@RequestMapping(value = "main/member.do", method = RequestMethod.GET)
+	public String mainMember(HttpSession session, Model model) {
+		
+		return "main/memberMain";
+	}
+	
+	@RequestMapping(value = "main/admin.do", method = RequestMethod.GET)
+	public String adminMember(HttpSession session, Model model) {
+		
+		return "main/adminMain";
+	}
+		
+=======
 //	============================== 메인페이지
 	@RequestMapping(value = "main/member.do", method = RequestMethod.GET)
 	public String mainMember(HttpSession session, Model model) {
@@ -53,4 +68,5 @@ public class ProjectController {
 		return "board/project/projectBoardUpdate";
 	}
 //	============================== 
+>>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 }
