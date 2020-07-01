@@ -202,21 +202,13 @@ body, html{
 /* 기본 공통단 */
 #wrap{	
 	min-height: calc(100% - 120px);
-<<<<<<< HEAD
-	background-image: url("../img/background.jpg");
-=======
 	background-image: url("../img/background.png");
->>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 	background-size: cover;
 	background-position: 0px -2px;
 }
 #innerWrap{
 	box-sizing: border-box;
-<<<<<<< HEAD
-	padding: 280px 100px;
-=======
 	padding: 230px 100px 100px;
->>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 }
 #innerPage{
 	width: 1350px;

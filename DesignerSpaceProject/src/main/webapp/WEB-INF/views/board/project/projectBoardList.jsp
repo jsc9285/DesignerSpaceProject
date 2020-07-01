@@ -64,12 +64,31 @@
 			width: 320px;
 		}
 		.projectList .thumbnailPic{
+			position: relative;
+			overflow: hidden;
 			width: 320px;
 			height: 250px;
 			border-radius: 5px;
 			background-repeat: no-repeat;
 			background-position: center;
 			background-size: cover;
+			cursor: pointer;
+		}
+		.projectList .thumbnailPic div{
+			position: absolute;
+			left: 0px;
+			bottom: 0px;
+			width: 100%;
+			height: 60px;
+			box-sizing: border-box;
+			color: #fff;
+			font-weight: bold;
+			padding-top: 30px;
+			padding-left: 10px;
+			background: -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(81%, rgba(0, 0, 0, 0.6)));
+    		background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 81%);
+    		opacity: 0;
+    		transition: all 0.3s;
 		}
 		.projectList img{
 			vertical-align: middle;
@@ -87,16 +106,30 @@
 		}
 		.projectList .profileNic{
 			display: inline-block;
+			vertical-align: middle;
+			font-weight: bold;
 			width: 150px;
 			overflow: hidden;
 			white-space: nowrap;
 			text-overflow: ellipsis;
+		}
+		.projectList .thumbnailPic .hoverTitle{
+			opacity: 1.0;
 		}
 	</style>
 	
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('.thumbnailPic').hover(function() {
+				$(this).children().addClass('hoverTitle');
+			}, function() {
+				$(this).children().removeClass('hoverTitle');
+			});
+		});
+	</script>
 </head>
 
 <body>
@@ -128,18 +161,22 @@
 			</div>
 <!-- 			프로젝트 조회 -->		
 			<div id="projectView">
-				<c:forEach begin="1" end="25">
+				<c:forEach var="projectBoardDto" items="${projectBoardList}">
 					<div class="projectList">
-						<div class="thumbnailPic" style="background-image: url('<%=request.getContextPath()%>/resources/img/examImg.jpeg');"></div>
+						<div class="thumbnailPic" onclick="location.href='./detail.do?project_board_no=${projectBoardDto.project_board_no}'" style="background-image: url('<%=request.getContextPath()%>/resources/projectImg/${projectBoardDto.FILE_TABLE_STORED_FILE_NAME}');">
+							<div>
+								<a>${projectBoardDto.project_board_title}</a>
+							</div>
+						</div>						
 						<div style="float: left;">
-							<div class="profilePic" style="background-image: url('<%=request.getContextPath()%>/resources/img/examImg.jpeg');"></div>
-							<span class="profileNic">Steven Gerrard</span>
+							<div class="profilePic" style="background-image: url('<%=request.getContextPath()%>/resources/projectImg/${projectBoardDto.PROFILE_TABLE_STORED_NAME}');"></div>
+							<span class="profileNic">${projectBoardDto.member_nick}</span>
 						</div>												
 						<div style="float: right; padding-top: 10px;">
 							<img src="<%=request.getContextPath()%>/resources/img/iconLike.png">
 							<span>100</span>
 							<img src="<%=request.getContextPath()%>/resources/img/iconView.png">
-							<span>200</span>
+							<span>${projectBoardDto.project_board_views}</span>
 						</div>						
 					</div>
 				</c:forEach>

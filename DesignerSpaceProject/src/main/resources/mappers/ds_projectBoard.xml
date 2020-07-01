@@ -2,5 +2,62 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.project.projectBoard">
-
+	
+	<resultMap type="com.project.projectBoard.model.ProjectBoardDto"
+		 id="projectBoardResultMap">
+		<result column="project_board_no" property="project_board_no"/>
+		<result column="project_board_title" property="project_board_title"/>
+		<result column="project_board_contents" property="project_board_contents"/>
+		<result column="project_board_views" property="project_board_views"/>
+		<result column="project_board_category" property="project_board_category"/>
+		<result column="project_board_cre_date" property="project_board_cre_date"
+			javaType="java.util.Date"/>
+		<result column="project_board_mod_date" property="project_board_mod_date"
+			javaType="java.util.Date"/>	
+		<result column="project_board_del_flag" property="project_board_del_flag"/>
+		<result column="member_nick" property="member_nick"/>
+		<result column="FILE_TABLE_ORIGINAL_FILE_NAME" property="FILE_TABLE_ORIGINAL_FILE_NAME"/>
+		<result column="FILE_TABLE_STORED_FILE_NAME" property="FILE_TABLE_STORED_FILE_NAME"/>
+		<result column="PROFILE_TABLE_ORIGINAL_NAME" property="PROFILE_TABLE_ORIGINAL_NAME"/>
+		<result column="PROFILE_TABLE_STORED_NAME" property="PROFILE_TABLE_STORED_NAME"/>
+		<result column="project_comment_comments" property="project_comment_comments"/>
+		<result column="project_comment_cre_date" property="project_comment_cre_date"/>
+		<result column="project_comment_mod_date" property="project_comment_mod_date"/>
+	</resultMap>	
+	
+	<select id="projectBoardSelectList" 
+		resultMap="projectBoardResultMap">
+		select project_board_no, project_board_title, project_board_views, file_table_stored_file_name, member_nick, profile_table_stored_name
+		from member m left join profile_table pt
+		on m.member_no = pt.profile_table_mno
+		join (select FB.rnum, fb.project_board_no, fb.project_board_title, fb.project_board_views, fb.file_table_stored_file_name, fb.project_board_mno
+		      from (select rownum rnum, f.project_board_no, f.project_board_title, f.project_board_views, f.file_table_stored_file_name,f.project_board_mno
+		            from (select pb.project_board_mno ,pb.project_board_no, pb.project_board_title, pb.project_board_views, ft.file_table_stored_file_name
+		                  ,DENSE_RANK() OVER (PARTITION BY pb.project_board_no
+		                  ORDER BY ft.file_table_no) r
+		                  from project_board pb, file_table ft
+		                  where pb.project_board_no = ft.file_table_pbno) f 
+		                  where f.r = 1
+		                  order by f.project_board_no
+		                   ) FB) PBM
+		on m.member_no = PBM.project_board_mno
+		where pbm.rnum between 1 and 25
+	</select>
+	
+	<select id="projectBoardSelectOne" parameterType="int"
+		resultMap="projectBoardResultMap">
+		select member_nick, profile_table_stored_name, project_board_title, project_board_contents, project_board_like, project_board_views, project_board_cre_date, file_table_stored_file_name
+		from project_board pb, file_table ft, member m, profile_table pt,
+		                (select count(project_like_no) project_board_like, pb.project_board_no
+		                from project_board pb left join project_like pl
+		                on pb.project_board_no = pl.project_like_pbno
+		                where pb.project_board_mno = all (select project_like_mno from project_like where project_like_pbno = #{no})
+		                and pb.project_board_no = #{no}
+		                group by pb.project_board_no) L
+		where pb.project_board_no = ft.file_table_pbno
+		and pb.project_board_mno = m.member_no
+		and m.member_no = pt.profile_table_mno(+)
+		and L.project_board_no = pb.project_board_no
+	</select>
+	
 </mapper>
