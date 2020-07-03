@@ -3,4 +3,54 @@
 
 <mapper namespace="com.project.qnaBoard">
 
+	<resultMap type="com.project.qnaBoard.model.QnaBoardDto" 
+		id="qnaBoardResultMap">
+		
+		<id column="QNA_BOARD_NO" property="QNA_BOARD_NO"/>
+		<result column="QNA_BOARD_MNO" property="QNA_BOARD_MNO"/>
+		<result column="QNA_BOARD_TITLE" property="QNA_BOARD_TITLE"/>
+		<result column="QNA_BOARD_CONTENTS" property="QNA_BOARD_CONTENTS"/>
+		<result column="QNA_BOARD_CRE_DATE" property="QNA_BOARD_CRE_DATE"
+			javaType="java.util.Date"/>
+		<result column="QNA_BOARD_MOD_DATE" property="QNA_BOARD_MOD_DATE"
+			javaType="java.util.Date"/>
+		<result column="QNA_BOARD_ANSWER_DATE" property="QNA_BOARD_ANSWER_DATE"
+			javaType="java.util.Date"/>
+		<result column="QNA_BOARD_ANSWER_STATUS" property="QNA_BOARD_ANSWER_STATUS"/>
+		
+		<result column="MEMBER_NO" property="MEMBER_NO"/>
+		<result column="MEMBER_NAME" property="MEMBER_NAME"/>
+		<result column="MEMBER_NICK" property="MEMBER_NICK"/>
+		<result column="MEMBER_EMAIL" property="MEMBER_EMAIL"/>
+		<result column="MEMBER_PWD" property="MEMBER_PWD"/>
+		<result column="MEMBER_PHONE" property="MEMBER_PHONE"/>
+		<result column="MEMBER_CHECK_QUESTION" property="MEMBER_CHECK_QUESTION"/>
+		<result column="MEMBER_CHECK_ANSWER" property="MEMBER_CHECK_ANSWER"/>
+		<result column="MEMBER_COMMENTS" property="MEMBER_COMMENTS"/>
+		<result column="MEMBER_CRE_DATE" property="MEMBER_CRE_DATE"/>
+		<result column="MEMBER_MOD_DATE" property="MEMBER_MOD_DATE"/>
+		<result column="MEMBER_SIGN_CHECK" property="MEMBER_SIGN_CHECK"/>
+		<result column="MEMBER_GRADE" property="MEMBER_GRADE"/>
+		<result column="MEMBER_DEL_FLAG" property="MEMBER_DEL_FLAG"/>
+		
+	</resultMap>
+
+	<select id="qnaBoardSelectList" parameterType="map" 
+		resultMap="qnaBoardResultMap">
+		SELECT QB.QNA_BOARD_NO, QB.QNA_BOARD_TITLE, M.MEMBER_NICK, QB.QNA_BOARD_CRE_DATE,
+			   QB.QNA_BOARD_ANSWER_DATE, QB.QNA_BOARD_ANSWER_STATUS 
+        FROM QNA_BOARD QB, MEMBER M
+		WHERE QB.QNA_BOARD_MNO = M.MEMBER_NO
+		ORDER BY QB.QNA_BOARD_NO DESC
+	</select>
+	
+	<select id="qnaBoardSelectDetail" parameterType="int"
+		resultMap="qnaBoardResultMap">
+		SELECT M.MEMBER_NICK, QB.QNA_BOARD_TITLE, QB.QNA_BOARD_CONTENTS, 
+			   QB.QNA_BOARD_CRE_DATE, QB.QNA_BOARD_ANSWER_DATE, QB.QNA_BOARD_ANSWER_STATUS  
+		FROM QNA_BOARD QB, MEMBER M
+		WHERE QB.QNA_BOARD_MNO = M.MEMBER_NO
+		AND QB.QNA_BOARD_NO = #{QNA_BOARD_NO}	
+	</select>
+
 </mapper>
