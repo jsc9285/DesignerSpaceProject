@@ -3,6 +3,7 @@
  "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
+  
 <mapper namespace="com.project.member">
 	
 	<resultMap type="com.project.member.model.MemberDto" 
@@ -23,15 +24,22 @@
 		<result column="MEMBER_SIGN_CHECK" property="member_sign_check"/>
 		<result column="MEMBER_GRADE" property="member_grade"/>
 		<result column="MEMBER_DEL_FLAG" property="member_del_flag"/>
+		
+		<result column="profile_table_no" property="profile_table_no"/>
+		<result column="profile_table_mno" property="profile_table_mno"/>
+		<result column="profile_table_original_name" property="profile_table_original_name"/>
+		<result column="profile_table_stored_name" property="profile_table_stored_name"/>
 	</resultMap>
 	
 	
 	<select id="memberExist" parameterType="map" 
 		resultMap="memberResultMap">
-		SELECT MEMBER_NO, MEMBER_NICK
-		FROM MEMBER
-		WHERE MEMBER_EMAIL = #{member_email}
-		AND MEMBER_PWD = #{member_pwd}
+		
+		SELECT M.MEMBER_NO, M.MEMBER_NICK, PT.PROFILE_TABLE_STORED_NAME, M.MEMBER_GRADE
+		FROM MEMBER M LEFT JOIN PROFILE_TABLE PT
+        ON MEMBER_NO = PROFILE_TABLE_MNO
+		WHERE M.MEMBER_EMAIL = #{member_email}
+		AND M.MEMBER_PWD = #{member_pwd}
 	</select>
 	
 	<select id="memberIdFind" parameterType="map" 
@@ -67,6 +75,63 @@
 	<select id="memberList" resultMap="memberResultMap">
 		SELECT MEMBER_NO, MEMBER_NICK, MEMBER_NAME, MEMBER_EMAIL, MEMBER_CRE_DATE
 		FROM MEMBER
+	</select>
+	
+	<insert id="profileAdd" parameterType="map">
+		INSERT INTO PROFILE_TABLE
+			(PROFILE_TABLE_NO, PROFILE_TABLE_MNO, PROFILE_TABLE_ORIGINAL_NAME, PROFILE_TABLE_STORED_NAME)
+		VALUES(
+			profile_table_ptno_SEQ.nextval, #{profile_table_mno}, #{profile_table_original_name},
+			#{profile_table_stored_name}
+		)
+	</insert>
+	
+	<select id="memberInfo" parameterType="int" 
+		resultMap="memberResultMap">
+		SELECT MEMBER_NO, MEMBER_NICK, MEMBER_EMAIL, MEMBER_NAME, MEMBER_PHONE, PROFILE_TABLE_STORED_NAME,
+			MEMBER_COMMENTS
+		FROM MEMBER LEFT JOIN PROFILE_TABLE 
+        ON MEMBER_NO = PROFILE_TABLE_MNO
+		WHERE MEMBER_NO =#{member_no}
+	</select>
+	
+	<select id="memberMod" parameterType="int" 
+		resultMap="memberResultMap">
+		SELECT MEMBER_PWD
+		FROM MEMBER
+		WHERE MEMBER_NO =#{member_no}
+	</select>
+	
+	<select id="memberModDetail" parameterType="int" 
+		resultMap="memberResultMap">
+		SELECT MEMBER_NO, MEMBER_NAME, Member_Nick, Member_Email, MEMBER_PWD, MEMBER_PHONE, 
+    		MEMBER_Check_Question, MEMBER_Check_Answer, PROFILE_TABLE_ORIGINAL_NAME, 
+    		PROFILE_TABLE_STORED_NAME, MEMBER_COMMENTS
+		FROM MEMBER LEFT JOIN PROFILE_TABLE
+		ON MEMBER_NO = PROFILE_TABLE.PROFILE_TABLE_MNO
+		WHERE MEMBER_No = #{member_no}
+	</select>
+	
+	<update id="memberUpdate" parameterType="com.project.member.model.MemberDto">
+		UPDATE MEMBER
+		<set>
+			 MEMBER_NAME =#{member_name} , MEMBER_NICK= #{member_nick}, MEMBER_EMAIL=#{member_email}, 
+			 MEMBER_PWD=#{member_pwd}, MEMBER_PHONE=#{member_phone},MEMBER_CHECK_QUESTION=#{member_check_question},
+			 MEMBER_CHECK_ANSWER=#{member_check_answer}, MEMBER_COMMENTS=#{member_comments}, MEMBER_MOD_DATE = SYSDATE
+		</set>
+		WHERE MEMBER_NO =#{member_no}
+	</update>
+	
+	<delete id="profileDelete" parameterType="int">
+			DELETE FROM PROFILE_TABLE
+			WHERE PROFILE_TABLE_MNO = #{profile_table_mno}
+	</delete>
+	
+	<select id="profileSelectStoredFileName" parameterType="int"
+		resultType="map">
+		SELECT profile_table_no, profile_table_stored_name
+		FROM PROFILE_TABLE
+		WHERE profile_table_mno = #{profile_table_mno}
 	</select>
 	
 </mapper>

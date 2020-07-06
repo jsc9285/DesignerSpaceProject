@@ -13,17 +13,23 @@
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 	
 </head>
+<script type="text/javascript">
+	window.onload = function(){ 
+		alert('회원수정이 완료되었습니다');
+		
+		location.href="./info.do";
+	}
+	
+	
 
+</script>
 <body>
 
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>	
 	
 	<div id="wrap">
 		<div id="innerWrap">
-			번호 : <input value="${memberDto.member_no}" name='member_no'>
-			닉네임 : <input value="${memberDto.member_nick}" name='member_nick'>
 			
-			<button onclick="location.href='info.do'">회원정보수정</button>
 		</div>
 	</div>
 	

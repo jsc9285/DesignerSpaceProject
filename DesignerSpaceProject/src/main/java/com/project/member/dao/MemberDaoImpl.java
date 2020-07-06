@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.member.model.MemberDto;
-import com.project.member.model.MemberFileDto;
 
 
 @Repository
@@ -75,7 +74,7 @@ public class MemberDaoImpl implements MemberDao{
 		return memberDto;
 	}
 	
-
+	//회원목록 
 	@Override
 	public List<MemberDto> getMemberList() {
 	
@@ -86,5 +85,68 @@ public class MemberDaoImpl implements MemberDao{
 		return memberList;
 	}
 	
+	@Override
+	public void profileAdd(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		System.out.println("들어왓나");
+		sqlSession.insert(namespace + "profileAdd", map);
+	}
+
+	@Override
+	public MemberDto memberInfo(int member_no) {
+		// TODO Auto-generated method stub
+	
+		MemberDto memberDto = 
+				sqlSession.selectOne(namespace + "memberInfo", member_no);
+		
+		return memberDto;
+	}
+
+	@Override
+	public String memberMod(int member_no) {
+		// TODO Auto-generated method stub
+		
+		MemberDto memberDto = 
+				sqlSession.selectOne(namespace + "memberMod", member_no);
+		System.out.println(memberDto.getMember_pwd());
+		String getPwd =memberDto.getMember_pwd();
+		return getPwd;
+	}
+
+	@Override
+	public MemberDto memberModDetail(int member_no) {
+		// TODO Auto-generated method stub
+		MemberDto memberDto = 
+				sqlSession.selectOne(namespace + "memberModDetail", member_no);
+		System.out.println(memberDto);
+		
+		return memberDto;
+	}
+
+	@Override
+	public void memberUpdate(MemberDto memberDto) {
+		// TODO Auto-generated method stub
+		System.out.println("memberUpdate들어왔다");
+		
+		sqlSession.update(namespace + "memberUpdate", memberDto);
+		
+		
+	}
+
+
+	@Override
+	public void profileDelete(int profile_table_mno) {
+		// TODO Auto-generated method stub
+		System.out.println("profileDelete들어왔다");
+		
+		sqlSession.delete(namespace + "profileDelete", profile_table_mno);
+	}
+
+	@Override
+	public Map<String, Object> profileSelectStoredFileName(int profile_table_mno) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace 
+				+ "profileSelectStoredFileName", profile_table_mno);
+	}
 
 }

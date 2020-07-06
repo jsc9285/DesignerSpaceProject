@@ -1,20 +1,19 @@
 package com.project.member.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.project.member.dao.MemberDao;
 import com.project.member.model.MemberDto;
-import com.project.member.model.MemberFileDto;
+import com.project.util.ProfileUtils;
 
 
 @Service
@@ -25,6 +24,9 @@ public class MemberServiceImpl implements MemberService{
 	
 	@Autowired
 	public MemberDao memberDao;	
+	
+	@Resource(name="profileUtils")
+	private ProfileUtils profileUtils;
 	
 
 	@Override
@@ -37,13 +39,36 @@ public class MemberServiceImpl implements MemberService{
 	}
 	
 	@Override
-	public void memberAdd(MemberDto memberDto) {
+	public void memberAdd(MemberDto memberDto, MultipartHttpServletRequest mulRequest) {
 		// TODO Auto-generated method stub
 		System.out.println("ooooooo00000000000000000000000ooooooooooo");
 		
 		
 		memberDao.memberAdd(memberDto);
 		
+		System.out.println("멤버는 추가하였다");
+		
+		
+		
+		int profile_table_mno = memberDto.getMember_no();
+		
+		try {
+			List<Map<String, Object>> profileList = 
+				profileUtils.parseInsertFileInfo(profile_table_mno
+					, mulRequest);
+			
+			System.out.println(profileList);
+			
+			for (int i = 0; i < profileList.size(); i++) {
+				memberDao.profileAdd(profileList.get(i));
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("문제 생기면 처리할꺼 정하자");
+			System.out.println("일단 여긴 파일 처리 중 문제 발생한 거야");
+			e.printStackTrace();
+		}
 		
 		
 	}
@@ -78,7 +103,91 @@ public class MemberServiceImpl implements MemberService{
 		return getMemberList;
 	}
 
-	
+	@Override
+	public MemberDto memberInfo(int member_no) {
+		// TODO Auto-generated method stub
+		
+		MemberDto memberDto = memberDao.memberInfo(member_no);
+		
+		return memberDto;
+	}
+
+	@Override
+	public String memberMod(int member_no) {
+		// TODO Auto-generated method stub
+		String getPwd = memberDao.memberMod(member_no);
+		
+		return getPwd;
+	}
+
+	@Override
+	public MemberDto memberModDetail(int member_no) {
+		// TODO Auto-generated method stub
+		MemberDto memberDto = memberDao.memberModDetail(member_no);
+		
+		return memberDto;
+	}
 
 	
+	@Override
+	public void memberUpdate(MemberDto memberDto, 
+			MultipartHttpServletRequest mulRequest) {
+		// TODO Auto-generated method stub
+		
+		
+	
+			int profile_table_mno = memberDto.getMember_no();
+			
+			System.out.println("memberServiceimple"+profile_table_mno);
+			
+			Map<String, Object> tempFileMap //존재하는 파일명
+				= memberDao.profileSelectStoredFileName(profile_table_mno);
+			System.out.println("0000000000000000000000000000000000000000000000000000");
+			System.out.println(tempFileMap);
+			
+			
+			try {
+				System.out.println("안들어옴");
+				List<Map<String, Object>> profileList = 
+					profileUtils.parseInsertFileInfo(profile_table_mno
+						, mulRequest);
+				
+				System.out.println(profileList);
+				
+				if(tempFileMap == null && profileList != null ) {//없고 있고
+					System.out.println("1");
+					for (int i = 0; i < profileList.size(); i++) {
+						System.out.println("4");
+						memberDao.profileAdd(profileList.get(i));
+					}
+				}else if(tempFileMap!=null && profileList!=null) {//있고 있고
+					System.out.println("2");
+					profileUtils.UpdateProfile(tempFileMap);
+					memberDao.profileDelete(profile_table_mno);
+					memberDao.profileAdd(profileList.get(0));
+				}else if(tempFileMap !=null && profileList==null) {//있고 없고
+					System.out.println("3");
+					profileUtils.UpdateProfile(tempFileMap);
+					memberDao.profileDelete(profile_table_mno);
+				}else {//없고 없고
+					System.out.println("●▅▇█▇▅▄▄▌●▅▇█▇▅▄▄▌프로필은 변하지 않는다●▅▇█▇▅▄▄▌●▅▇█▇▅▄▄▌");
+				}
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				System.out.println("문제 생기면 처리할꺼 정하자");
+				System.out.println("일단 여긴 파일 처리 중 문제 발생한 거야");
+				e.printStackTrace();
+			}
+			
+			
+			
+			memberDao.memberUpdate(memberDto);
+			
+	
+		
+	
+	
+
+	}
 }

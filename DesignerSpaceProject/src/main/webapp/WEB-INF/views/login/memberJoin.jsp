@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,10 +13,6 @@
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/resources/css/style.css">
 
-<script type="text/javascript"
-	src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
-<script type="text/javascript"
-	src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 
 </head>
 <style>
@@ -25,12 +23,43 @@ input {
 select {
 	margin-bottom: 10px;
 }
-</style>
-<script type="text/javascript">
-	window.onload = function() {
-		alert('되는가');
 
-	}
+#pImage{
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+}
+#image_container{
+	border-radius: 50%;
+}
+</style>
+
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
+	
+
+<script type="text/javascript">
+	function setThumbnailFnc(event) { 
+		var reader = new FileReader(); 
+		
+		reader.onload = function(event) { 
+			var img = document.getElementById("pImage"); 
+			img.setAttribute("src", event.target.result); 
+	// 		document.querySelector("div#image_container").appendChild(img); 
+		}; 
+		
+		reader.readAsDataURL(event.target.files[0]); }
+
+	
+	function defaltProfileFnc(){
+		
+	    $("#fileName").val("");
+	    
+	    $("#pImage").attr('src', '<%=request.getContextPath()%>/resources/img/profile.png');
+
+
+ 	}
+
 </script>
 <body>
 
@@ -41,7 +70,7 @@ select {
 
 			<div style="margin: auto;">
 
-				<form action="joinCtr.do" method="post">
+				<form action="joinCtr.do" method="post" enctype="multipart/form-data">
 					<h1>회원가입</h1><br> 
 					성명<br> 
 					<input type="text" name="member_name" value="홍길동"><br> 
@@ -62,7 +91,15 @@ select {
 					</select> <br> 
 					<input name="member_check_answer" value="김치"><br>
 					 프로필사진<br>
-					<input type="file" name="profile"><br> 
+					<input type="file" id="fileName" name="file" accept="image/*" onchange="setThumbnailFnc(event);"/> 
+					<br>
+					<div id="image_container" style="width: 100px; height: 100px; border: 1px solid black;">
+					<c:if  test="${empty fileList}">
+						<img id="pImage" src="<%=request.getContextPath()%>/resources/img/profile.png">
+					</c:if>
+					</div>
+					<input type="button" value="기본프로필 사용" onclick="defaltProfileFnc()">
+					<br>
 					소개<br>
 					<input type="text" name="member_comments" value="자기 소개글을 간단히 작성해주세요"><br>
 					이용약관<br>
@@ -82,4 +119,5 @@ select {
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
 </body>
+
 </html>

@@ -32,6 +32,8 @@
 	
 	<div id="wrap">
 		<div id="innerWrap">
+		
+			<button onclick="location.href='listOneAdmin.do'">회원눌렀을시 이동</button>
 			<p style="font-size: 50px; font-weight: bold;">회원목록</p>
 			<br>
 			<br>

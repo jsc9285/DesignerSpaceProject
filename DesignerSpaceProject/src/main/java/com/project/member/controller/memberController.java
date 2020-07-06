@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.project.member.model.MemberDto;
 import com.project.member.service.MemberService;
@@ -47,8 +48,25 @@ public class memberController {
 		MemberDto memberDto = memberService.memberExist(member_email, member_pwd);
 		System.out.println("dddddddddddddddddddd"+memberDto);
 		session.setAttribute("memberDto",memberDto);
-		return "/login/loginDone";
+		
+		if(memberDto.getMember_grade()==0) {
+			return "/main/member.do";	
+		}else {
+			return "/main/admin.do";	
+		}
+		//return /login/loginDone
+		
 	}
+	
+	// 로그아웃
+		@RequestMapping(value = "/logout.do", method = RequestMethod.GET)
+		public String logout(HttpSession session, Model model) {
+			log.info("로그아웃 gogo");
+
+			session.invalidate();
+			
+			return "redirect:/login.do";
+		}
 	
 	
 	@RequestMapping(value = "/join.do", method = RequestMethod.GET)
@@ -58,11 +76,12 @@ public class memberController {
 	}
 	
 	@RequestMapping(value = "/joinCtr.do", method = RequestMethod.POST)
-	public String memberList(MemberDto memberDto, Model model) {
+	public String memberList(MemberDto memberDto, MultipartHttpServletRequest mulRequest, Model model) {
 		log.info("회원가입 진행"+memberDto);
 		
 		
-		memberService.memberAdd(memberDto);
+		
+		memberService.memberAdd(memberDto, mulRequest);
 		
 		return "/login/alert/successAlert";
 	}
@@ -105,17 +124,125 @@ public class memberController {
 		return "/login/alert/findPwdAlert";
 	}
 	
-	@RequestMapping(value = "/list.do", method = RequestMethod.GET)
-	public String memberList(Model model) {
-		log.info("회원목록이동");
+	
+	//회원정보조회
+	@RequestMapping(value = "/info.do", method = RequestMethod.GET)
+	public String memberInfo(HttpSession session, Model model) {
+		log.info("회원정보 조회 페이지 이동");
 		
-		List<MemberDto> memberList = memberService.getMemberList();
+		MemberDto sessionMemeberDto = (MemberDto)session.getAttribute("memberDto");
+		System.out.println(sessionMemeberDto);
 		
-		model.addAttribute("memberList", memberList);
+		MemberDto memberDto = memberService.memberInfo(sessionMemeberDto.getMember_no());
 		
-		return "/login/memberList";
+		
+		model.addAttribute("memberDto", memberDto);
+		
+		return "/member/memberInfo";
+	}
+		
+	//회원정보 수정
+	@RequestMapping(value = "/modInfo.do", method = RequestMethod.GET)
+	public String memberMod(HttpSession session, Model model) {
+		log.info("회원정보 수정 페이지 이동");
+		
+		int member_no = ((MemberDto)session.getAttribute("memberDto")).getMember_no();
+		System.out.println(member_no);
+		
+		String getPwd = memberService.memberMod(member_no);
+		
+		
+		model.addAttribute("member_no", member_no);
+		model.addAttribute("member_pwd", getPwd);
+		
+		
+		return "/member/memberModify";
 	}
 	
-	
+	//회원정보 수정 상세
+		@RequestMapping(value = "/modInfoDetail.do", method = RequestMethod.GET)
+		public String memberModDetail(HttpSession session, Model model) {
+			log.info("회원정보 상세수정 페이지 이동");
+			
+			int member_no = ((MemberDto)session.getAttribute("memberDto")).getMember_no();
+			
+			System.out.println(member_no);
+			
+			MemberDto memberDto = memberService.memberModDetail(member_no);
+			
+			model.addAttribute("memberDto", memberDto);
+			
+			
+			return "/member/memberModifyDetail";
+		}
+		
+		@RequestMapping(value = "/modInfoDetailCtr.do", method = RequestMethod.POST)
+		public String memberUpdate(MemberDto memberDto, MultipartHttpServletRequest mulRequest,
+			HttpSession session, Model model){
+			
+			log.info("회원정보 수정 가즈아"+memberDto);
+			
+			
+			memberService.memberUpdate(memberDto, mulRequest);
+			
+			System.out.println("●▅▇█▇▅▄▄▌●▅▇█▇▅▄▄▌성공●▅▇█▇▅▄▄▌●▅▇█▇▅▄▄▌");
+			
+			memberDto = memberService.memberExist(memberDto.getMember_email(), memberDto.getMember_pwd());
+			session.setAttribute("memberDto",memberDto);
+			
+			return "/member/alert/updateSuccess";
+		}
+		
+		@RequestMapping(value = "/myBoard.do", method = RequestMethod.GET)
+		public String myBoard(MemberDto memberDto, HttpSession session, Model model){
+			
+			log.info("내글목록보기"+memberDto);
+			
+			
+			
+			
+			return "/member/myBoard";
+		}
+		
+		@RequestMapping(value = "/myReport.do", method = RequestMethod.GET)
+		public String myNotify(MemberDto memberDto, HttpSession session, Model model){
+			
+			log.info("내 신고글 보기"+memberDto);
+			
+			
+			
+			
+			return "/member/myReport";
+		}
+		
+		@RequestMapping(value = "/myQna.do", method = RequestMethod.GET)
+		public String myQna(MemberDto memberDto, HttpSession session, Model model){
+			
+			log.info("내 QNA 보기"+memberDto);
+			
+			return "/member/myQna";
+		}
+		
+		@RequestMapping(value = "/listAdmin.do", method = RequestMethod.GET)
+		public String memberList(HttpSession session, Model model){
+			
+			log.info("관리자용 회원관리");
+			
+			List<MemberDto> memberList = memberService.getMemberList();
+			
+			model.addAttribute("memberList", memberList);
+			
+			return "/member/memberListAdmin";
+		}
+		
+		
+		
+		@RequestMapping(value = "/listOneAdmin.do", method = RequestMethod.GET)
+		public String memberOne(MemberDto memberDto, HttpSession session, Model model){
+			
+			log.info("관리자용 회원정보보기"+memberDto);
+			
+			return "/member/memberOneAdmin";
+		}
 		
 }

@@ -20,10 +20,7 @@
 	
 	<div id="wrap">
 		<div id="innerWrap">
-			번호 : <input value="${memberDto.member_no}" name='member_no'>
-			닉네임 : <input value="${memberDto.member_nick}" name='member_nick'>
-			
-			<button onclick="location.href='info.do'">회원정보수정</button>
+			여기는 내글목록
 		</div>
 	</div>
 	
