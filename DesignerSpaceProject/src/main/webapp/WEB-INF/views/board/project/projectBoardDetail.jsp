@@ -166,7 +166,7 @@
 				<h1>${projectBoardDto.project_board_title}</h1>
 					
 				<img src="<%=request.getContextPath()%>/resources/img/iconLike_grey.png">
-				<span>${projectBoardDto.project_board_like}</span>
+				<span>${projectBoardDto.project_board_like }</span>
 				<img src="<%=request.getContextPath()%>/resources/img/iconView_grey.png">
 				<span>${projectBoardDto.project_board_views}</span>
 				<img src="<%=request.getContextPath()%>/resources/img/iconChat_grey.png">
