@@ -3,6 +3,20 @@
 
 <mapper namespace="com.project.qnaBoard">
 
+
+	<sql id="search">
+		<choose>
+        	<when test="searchOption == 'titleAndContent'">
+        		WHERE (QNA_BOARD_TITLE LIKE '%' || #{keyword} || '%'
+        		OR    QNA_BOARD_CONTENTS LIKE '%' || #{keyword} || '%')
+        	</when>
+        	
+        	<otherwise>
+        		WHERE (${searchOption} LIKE '%' || #{keyword} || '%')
+        	</otherwise>
+        </choose>
+	</sql>
+
 	<resultMap type="com.project.qnaBoard.model.QnaBoardDto" 
 		id="qnaBoardResultMap">
 		
@@ -17,6 +31,15 @@
 		<result column="QNA_BOARD_ANSWER_DATE" property="QNA_BOARD_ANSWER_DATE"
 			javaType="java.util.Date"/>
 		<result column="QNA_BOARD_ANSWER_STATUS" property="QNA_BOARD_ANSWER_STATUS"/>
+		
+		<result column="QNA_COMMENT_NO" property="QNA_COMMENT_NO"/>
+		<result column="QNA_COMMENT_QBNO" property="QNA_COMMENT_QBNO"/>
+		<result column="QNA_COMMENT_MNO" property="QNA_COMMENT_MNO"/>
+		<result column="QNA_COMMENT_COMMENTS" property="QNA_COMMENT_COMMENTS"/>
+		<result column="QNA_COMMENT_CRE_DATE" property="QNA_COMMENT_CRE_DATE"
+			javaType="java.util.Date"/>
+		<result column="QNA_COMMENT_MOD_DATE" property="QNA_COMMENT_MOD_DATE"
+			javaType="java.util.Date"/>
 		
 		<result column="MEMBER_NO" property="MEMBER_NO"/>
 		<result column="MEMBER_NAME" property="MEMBER_NAME"/>
@@ -33,24 +56,84 @@
 		<result column="MEMBER_GRADE" property="MEMBER_GRADE"/>
 		<result column="MEMBER_DEL_FLAG" property="MEMBER_DEL_FLAG"/>
 		
+		<result column="PROFILE_TABLE_NO" property="PROFILE_TABLE_NO"/>
+		<result column="PROFILE_TABLE_MNO" property="PROFILE_TABLE_MNO"/>
+		<result column="PROFILE_TABLE_ORIGINAL_NAME" property="PROFILE_TABLE_ORIGINAL_NAME"/>
+		<result column="PROFILE_TABLE_STORED_NAME" property="PROFILE_TABLE_STORED_NAME"/>
+		
 	</resultMap>
 
 	<select id="qnaBoardSelectList" parameterType="map" 
 		resultMap="qnaBoardResultMap">
-		SELECT QB.QNA_BOARD_NO, QB.QNA_BOARD_TITLE, M.MEMBER_NICK, QB.QNA_BOARD_CRE_DATE,
-			   QB.QNA_BOARD_ANSWER_DATE, QB.QNA_BOARD_ANSWER_STATUS 
-        FROM QNA_BOARD QB, MEMBER M
-		WHERE QB.QNA_BOARD_MNO = M.MEMBER_NO
-		ORDER BY QB.QNA_BOARD_NO DESC
+		SELECT QNAM.RNUM, QNAM.QNA_BOARD_NO, QNAM.QNA_BOARD_TITLE, QNAM.MEMBER_NICK,
+       		   QNAM.QNA_BOARD_CRE_DATE, QNAM.QNA_BOARD_ANSWER_DATE, QNAM.QNA_BOARD_ANSWER_STATUS
+		FROM(SELECT ROWNUM RNUM, QNA.QNA_BOARD_NO, QNA.QNA_BOARD_TITLE, QNA.MEMBER_NICK,
+                    QNA.QNA_BOARD_CRE_DATE, QNA.QNA_BOARD_ANSWER_DATE, QNA.QNA_BOARD_ANSWER_STATUS 
+     		 FROM(SELECT QB.QNA_BOARD_NO, QB.QNA_BOARD_TITLE, M.MEMBER_NICK, QB.QNA_BOARD_CRE_DATE,
+			   			 QB.QNA_BOARD_ANSWER_DATE, QB.QNA_BOARD_ANSWER_STATUS 
+          		  FROM QNA_BOARD QB LEFT OUTER JOIN MEMBER M
+          		  ON QB.QNA_BOARD_MNO = M.MEMBER_NO
+          		  
+          		  <include refid="search"></include>
+          		  
+          		  ORDER BY QB.QNA_BOARD_NO DESC) QNA 
+     		 )QNAM     
+		WHERE QNAM.RNUM BETWEEN #{start} AND #{end}
 	</select>
 	
 	<select id="qnaBoardSelectDetail" parameterType="int"
 		resultMap="qnaBoardResultMap">
-		SELECT M.MEMBER_NICK, QB.QNA_BOARD_TITLE, QB.QNA_BOARD_CONTENTS, 
+		SELECT QB.QNA_BOARD_NO, M.MEMBER_NICK, QB.QNA_BOARD_TITLE, QB.QNA_BOARD_CONTENTS, 
 			   QB.QNA_BOARD_CRE_DATE, QB.QNA_BOARD_ANSWER_DATE, QB.QNA_BOARD_ANSWER_STATUS  
 		FROM QNA_BOARD QB, MEMBER M
 		WHERE QB.QNA_BOARD_MNO = M.MEMBER_NO
 		AND QB.QNA_BOARD_NO = #{QNA_BOARD_NO}	
 	</select>
+	
+	<insert id="qnaBoardInsertOne" parameterType="com.project.qnaBoard.model.QnaBoardDto">
+		INSERT INTO QNA_BOARD
+		VALUE(QNA_BOARD_NO,QNA_BOARD_MNO,QNA_BOARD_TITLE,QNA_BOARD_CONTENTS,QNA_BOARD_CRE_DATE)
+		VALUES(QNA_BOARD_QBNO_SEQ.NEXTVAL, #{QNA_BOARD_MNO}, #{QNA_BOARD_TITLE}, #{QNA_BOARD_CONTENTS}, SYSDATE)
+		
+	</insert>
+	
+	<update id="qnaBoardUpdateOne" parameterType="com.project.qnaBoard.model.QnaBoardDto">
+		UPDATE QNA_BOARD
+		SET QNA_BOARD_TITLE = #{QNA_BOARD_TITLE},
+    		QNA_BOARD_CONTENTS = #{QNA_BOARD_CONTENTS},
+    		QNA_BOARD_MOD_DATE = SYSDATE
+		WHERE QNA_BOARD_NO = #{QNA_BOARD_NO}
+	</update>
+	
+	<delete id="qnaBoardDeleteOne" parameterType="java.lang.Integer">
+		DELETE FROM QNA_BOARD
+		WHERE QNA_BOARD_NO = #{QNA_BOARD_NO}
+	</delete>
+	
+	<!-- 주석 처리 -->
+	<select id="qnaBoardSelectTotalCount" resultType="int" 
+		parameterType="map">
+		SELECT COUNT(*)
+		FROM QNA_BOARD QB LEFT OUTER JOIN MEMBER M
+		ON QB.QNA_BOARD_MNO = M.MEMBER_NO
+		<include refid="search"></include>
+	</select>
+	
+	<select id="qnaSelectCurPage" parameterType="map"
+		resultType="int">
+		SELECT FLOOR((RNUM-1) / 10) + 1 NO
+		FROM(SELECT ROWNUM RNUM, QNA.QNA_BOARD_NO, QNA.QNA_BOARD_TITLE, QNA.MEMBER_NICK,
+                    QNA.QNA_BOARD_CRE_DATE, QNA.QNA_BOARD_ANSWER_DATE, QNA.QNA_BOARD_ANSWER_STATUS 
+     		 FROM(SELECT QB.QNA_BOARD_NO, QB.QNA_BOARD_TITLE, M.MEMBER_NICK, QB.QNA_BOARD_CRE_DATE,
+			   			 QB.QNA_BOARD_ANSWER_DATE, QB.QNA_BOARD_ANSWER_STATUS 
+          		  FROM QNA_BOARD QB LEFT OUTER JOIN MEMBER M
+          		  ON QB.QNA_BOARD_MNO = M.MEMBER_NO
+          		  
+          		  <include refid="search"></include>
+          		  
+          		  ORDER BY QB.QNA_BOARD_NO DESC) QNA 
+     		 )    
+		WHERE QNA_BOARD_NO = #{QNA_BOARD_NO}
+	</select>	
 
 </mapper>
