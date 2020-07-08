@@ -12,18 +12,113 @@
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 <style type="text/css">
-table {
-	border-collapse: collapse;
-}
+	#boardTitle{
+		font-size: 70px;
+		font-weight: bold;
+		float: left;
+		color: #7D7471;
+	}
 
-table, tr, th, td{
-	border: 1px solid black;
-}
-
-#wrap{
-	margin-top : 500px;
-}
-
+	#searchOption{
+		margin-top: 40px;
+		margin-left: 20px;
+		width: 138px;
+		height: 50px;
+		vertical-align: middle;
+		text-align-last: center;
+		font-size: 17px;
+		float: left;
+	}
+	
+	#keyword{
+		margin-top: 40px;
+		width: 420px;
+		height: 45px;
+		float: left;
+	}
+	
+	#searchButton{
+		margin-top: 40px;
+		width: 50px;
+		height: 50px;
+		float: left;
+	}
+	
+	#writeButton{
+		float: right;
+		text-align: center;
+		color: white;
+		width: 150px;
+		height: 50px;
+		margin-top: 40px;
+		font-size: 20px;
+		background-color: #7D7471;
+		border: 0;
+		outline: 0;
+	}
+	
+	#selectProcessStatus{
+		margin-top: 40px;
+		margin-left: 20px;
+		width: 138px;
+		height: 50px;
+		margin-right: 10px;
+		vertical-align: middle;
+		text-align-last: center;
+		font-size: 17px;
+		float: right;
+	}
+	
+	#columnTitle{
+		clear: both;
+		margin-top: 100px;
+		width: 100%;
+	}
+	
+	#lineTitle{
+		border-bottom: 1px solid black;
+		height: 77px;
+	}
+	
+	.cell{
+		border-bottom: 1px solid black;
+		border-top: 1px solid black;
+		border-color: #D8D8D8;
+		background-color: #7D7471;
+		vertical-align: middle;
+		font-size: 30px;
+		color: white;
+	}
+	
+	.cell2{
+		border-bottom: 1px solid black;
+		border-top: 1px solid black;
+		border-color: #D8D8D8;
+		vertical-align: middle;
+		font-size: 30px;
+		font-weight: bold;
+		text-align: center;
+	}
+	
+	#admin{
+		border-bottom: 1px solid black;
+		border-top: 1px solid black;
+		border-color: #D8D8D8;
+		vertical-align: middle;
+		font-size: 30px;
+		font-weight: bold;
+		text-align: center;
+		color: red;
+	}
+	a > #admin { 
+	text-decoration:none;
+	color: red;
+	}
+	a{
+	text-decoration:none;
+	color: black;
+	} 
+	
 </style>
 
 <script type="text/javascript" 
@@ -40,10 +135,10 @@ function freeBoardListOnePageFnc(obj, event){
 	var freeBoardNoObj = '';
 	var keywordObj = $('#keyword');
 	var searchOptionObj = $('#searchOption');
-	var memberNoObj = '';
+	var memberNoObj = $('#mno');
 	
 	freeBoardNoObj = aTagObj.parent().parent().children('td').eq(0);
-	memberNoObj = aTagObj.parent().parent().children('td').eq(7);
+// 	memberNoObj = aTagObj.parent().parent().children('td').eq(7);
 
 	var url = '';
 	
@@ -51,12 +146,25 @@ function freeBoardListOnePageFnc(obj, event){
 	url += 'no=' + freeBoardNoObj.html();
 	url += '&keyword=' + keywordObj.val();
 	url += '&searchOption=' + searchOptionObj.val();
-	url += '&mno=' + memberNoObj.html();
+// 	url += '&mno=' + memberNoObj.html();
+	url += '&mno=' + memberNoObj.val();
 			
 	location.href = url;
 
 	return false;
 }
+	$(document).ready(function () {
+		
+		for (var i = 0; i < $('.freeBoardTitle').length; i++) {
+			var freeBoardTitleStr = $('.freeBoardTitle').eq(i).text();
+			if(freeBoardTitleStr.length >= 7){
+				
+				freeBoardTitleStr = freeBoardTitleStr.substring(0,7) + "...";	
+			}
+			$('.freeBoardTitle').eq(i).text(freeBoardTitleStr);
+		}
+		
+	})
 
 	
 </script>
@@ -68,11 +176,12 @@ function freeBoardListOnePageFnc(obj, event){
 	
 	<div id="wrap">
 		<div id="innerWrap">
-			<h1>자유게시판</h1>
+			<div id='boardTitle'>자유게시판</div>
 			<div>
 				<form action="./freeBoardAdd.do" method="post">
-					<input type="submit" value="작성">
-					<input type="hidden" id="mno" name="mno" value='3'>
+					<input type="submit" value="작성" id='writeButton'>
+					<input type="hidden" id="mno" name="mno" value="${memberDto.member_no}">
+<!-- 					<input type="hidden" id="mno" name="mno" value='3'> -->
 				</form>
 			</div>
 
@@ -103,51 +212,68 @@ function freeBoardListOnePageFnc(obj, event){
 				<input type="text" id='keyword' 
 					name="keyword" value="${searchMap.keyword}"
 					placeholder="제목 or 작성자 검색">
-				<input type="submit" value="검색">
+				<input type="submit" value="검색" id='searchButton'>
 				
 			</form>	
 			
-			<table>
-				<tr>
-					<th>글번호</th><th>제목</th>
-					<th>작성자</th><th>조회수</th>
-					<th>좋아요</th><th>작성일</th>
-					<th></th><th></th>
+			<table id='columnTitle'>
+				<tr id='lineTitle'>
+					<th class="cell">글번호</th>
+					<th class="cell">제목</th>
+					<th class="cell">작성자</th>
+					<th class="cell">조회수</th>
+					<th class="cell">좋아요</th>
+					<th class="cell" colspan="2">작성일</th>
+					
 				</tr>
 			<c:choose>
 				<c:when test="${empty freeBoardList}">
 					<tr>
-						<td colspan="8" style="text-align: center;">
+						<td class="cell2" colspan="8" style="text-align: center;">
 							등록된 게시글이 없습니다.
 						</td>
 					</tr>
 				</c:when>
 				<c:otherwise>
 					<c:forEach var="freeBoardDto" items="${freeBoardList}">
+					<input type="hidden" id="boardTitle" name="boardTitle" value="${freeBoardDto.freeBoardTitle}">
 					<tr>
-						<td>${freeBoardDto.freeBoardNo}</td>
-						<td>
-							<a href='#' onclick="freeBoardListOnePageFnc(this, event);">
-								${freeBoardDto.freeBoardTitle}
-							</a>
+						<td class="cell2">${freeBoardDto.freeBoardNo}</td>
+						<c:choose>
+						<c:when test="${freeBoardDto.memberGrade eq '0'}">
+						<td class="cell2">
+							<a href='#' class="freeBoardTitle" onclick="freeBoardListOnePageFnc(this, event);">${freeBoardDto.freeBoardTitle}</a>
 						</td>
-						<td>${freeBoardDto.memberNick}</td>
-						
-						<td>${freeBoardDto.freeBoardViews}</td>				
-						
-						<td>${freeBoardDto.freeBoardLike}</td>
-						
-						<td>
+						</c:when>
+						<c:when test="${freeBoardDto.memberGrade eq '1'}">
+						<td class="cell2">
+							<a id="admin" class="freeBoardTitle" href='#' onclick="freeBoardListOnePageFnc(this, event);">${freeBoardDto.freeBoardTitle}</a>
+						</td>
+						</c:when>
+						</c:choose>
+						<c:choose>
+						<c:when test="${freeBoardDto.memberGrade eq '0'}">
+						<td class="cell2">${freeBoardDto.memberNick}</td>
+						</c:when>
+						<c:when test="${freeBoardDto.memberGrade eq '1'}">
+						<td class="cell2" id="admin">${freeBoardDto.memberNick}</td>
+						</c:when>
+						</c:choose>
+						<td class="cell2">${freeBoardDto.freeBoardViews}</td>				
+		
+						<td class="cell2">${freeBoardDto.freeBoardLike}</td>
+
+						<td class="cell2">
 							<fmt:formatDate value="${freeBoardDto.freeBoardCreDate}" 
-								pattern="yyyy년MM월dd일 hh시mm분"/>
+								pattern="yyyy.MM.dd  HH:mm"/>
 						</td>
 						<c:choose>
-						<c:when test="${freeBoardDto.memberGrade eq 1 || freeBoardDto.memberGrade eq 0}">
-						<td>
+						<c:when test="${memberDto.member_grade eq '1'}">
+						<td class="cell2">
 							<a href='./freeBoardDeleteCtr.do?no=${freeBoardDto.freeBoardNo}'>[삭제]</a>
 						</td>
-						<td>${freeBoardDto.memberNo}</td>
 						</c:when>
+					
 						<c:otherwise>
 						
 						</c:otherwise>
@@ -167,8 +293,8 @@ function freeBoardListOnePageFnc(obj, event){
 				<input type="hidden" id='curPage' name='curPage' 
 					value="${pagingMap.paging.curPage}">
 				<input type="hidden" id='no' name="no" value="${freeBoardDto.freeBoardNo}">
-				<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
-				<input type="hidden" id='keyword' name="keyword" value="${keyword}">
+				<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
+				<input type="hidden" id='keyword' name="keyword" value="${searchMap.keyword}">
 			</form>
 			
 		

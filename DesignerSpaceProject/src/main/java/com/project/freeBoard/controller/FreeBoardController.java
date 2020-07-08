@@ -105,16 +105,9 @@ public class FreeBoardController {
 				+ "\n" + keyword + "\n" + mno);
 		
 		
-		//조회수
-//		if(curPage == 1) {
-//			freeBoardService.freeBoardView(no);
-//		}
-		
 		Map<String, Object> map = freeBoardService.freeBoardSelectOne(no);
 		
 		FreeBoardDto freeBoardDto = (FreeBoardDto)map.get("freeBoardDto");
-		
-//		List<FreeBoardDto> freeBoardLikeList = freeBoardService.freeBoardLikeSelectList(no);
 		
 		//////
 		int totalCount = 
@@ -125,12 +118,16 @@ public class FreeBoardController {
 
 		List<FreeBoardDto> freeBoardCommentList = 
 				freeBoardService.freeBoardCommentSelectList(no, end);
-
+		
+		int commentCount = freeBoardService.freeBoardCommentTotalCount(no);
+		
 		model.addAttribute("freeBoardCommentList", freeBoardCommentList);
 		model.addAttribute("freeBoardCommentPaging", freeBoardCommentPaging);
 		//////
-		List<Object> freeBoardLikeList = freeBoardService.freeBoardLikeSelectList(no, mno);
+
+		String freeBoardLikeList = freeBoardService.freeBoardLikeSelectList(no, mno);
 		
+		model.addAttribute("commentCount", commentCount);
 		model.addAttribute("freeBoardLikeList", freeBoardLikeList);
 		model.addAttribute("freeBoardDto", freeBoardDto);
 		model.addAttribute("searchOption", searchOption);
@@ -182,7 +179,9 @@ public class FreeBoardController {
 			,String title
 			,String contents) {
 		log.info("게시물 작성 "+mno +"회원번호" + title + contents);
+		
 		freeBoardService.freeBoardAdd(mno, title, contents);
+		
 		return "redirect:/freeBoard/free.do";
 	}
 	
@@ -213,15 +212,12 @@ public class FreeBoardController {
 	}
 	@RequestMapping(value="/freeBoard/freeBoardUpdate.do", method = {RequestMethod.GET, RequestMethod.POST}) 
 	public String freeBoardUpdate(@RequestParam(defaultValue = "0") int no
-			,int mno
-			,String writer
-			,String title
-			,String contents
-			,String searchOption
-			,String keyword
+			,int mno		,String writer
+			,String title	,String contents
+			,String searchOption	,String keyword
 			,Model model) {
-		log.info(no +"게시물번호");
-		String memInfo = freeBoardService.freeBoardAddOne(no);
+		log.info(no +"게시물번호" + writer + "회원번호");
+		String memInfo = freeBoardService.freeBoardAddOne(mno);
 		
 		model.addAttribute("memInfo", memInfo);	
 		model.addAttribute("mno", mno);
@@ -245,5 +241,26 @@ public class FreeBoardController {
 		return "forward:/freeBoard/freeBoardListOne.do";
 	}
 	
+	@RequestMapping(value="/freeBoard/freeBoardCommentDeleteCtr.do", method = RequestMethod.GET)
+	public String freeBoardCommentDeleteCtr(int no, int fcno) {
+		log.info("게시물 댓글 삭제"+ ": 댓글번호 " + fcno);
+		
+		freeBoardService.freeBoardCommentOneDelete(fcno);
+		
+		return "forward:/freeBoard/freeBoardListOne.do";
+	}
+	
+	@RequestMapping(value="/freeBoard/freeBoardCommentUpdateCtr.do", method = RequestMethod.GET) 
+	public String freeBoardCommentUpdateCtr(
+			@RequestParam(defaultValue="0") int no
+			,String title
+			,String searchOption
+			,String keyword
+			,String comments
+			,int fcno) {
+		log.info("댓글 수정 "+fcno +"댓글 내용" + comments);
+		freeBoardService.freeBoardCommentUpdate(fcno, comments);
+		return "forward:/freeBoard/freeBoardListOne.do";
+	}
 
 }

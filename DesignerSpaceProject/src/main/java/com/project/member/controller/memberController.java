@@ -50,9 +50,9 @@ public class memberController {
 		session.setAttribute("memberDto",memberDto);
 		
 		if(memberDto.getMember_grade()==0) {
-			return "/main/member.do";	
+			return "redirect:/main/member.do";	
 		}else {
-			return "/main/admin.do";	
+			return "redirect:/main/admin.do";	
 		}
 		//return /login/loginDone
 		

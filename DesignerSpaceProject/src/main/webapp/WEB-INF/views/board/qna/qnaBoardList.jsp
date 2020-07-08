@@ -11,10 +11,73 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 
-	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
-
 <style type="text/css">
+	#boardTitle{
+		font-size: 80px;
+		font-weight: bold;
+		float: left;
+		color: #7D7471;
+	}
+
+	#searchOption{
+		margin-top: 40px;
+		margin-left: 20px;
+		width: 138px;
+		height: 50px;
+		vertical-align: middle;
+		text-align-last: center;
+		font-size: 17px;
+		float: left;
+	}
+	
+	#keyword{
+		margin-top: 40px;
+		width: 420px;
+		height: 45px;
+		float: left;
+	}
+	
+	#searchButton{
+		margin-top: 40px;
+		width: 50px;
+		height: 50px;
+		float: left;
+	}
+	
+	#writeButton{
+		float: right;
+		text-align: center;
+		color: white;
+		width: 150px;
+		height: 50px;
+		margin-top: 40px;
+		font-size: 20px;
+		background-color: #7D7471;
+	}
+	
+	#selectProcessStatus{
+		margin-top: 40px;
+		margin-left: 20px;
+		width: 138px;
+		height: 50px;
+		margin-right: 10px;
+		vertical-align: middle;
+		text-align-last: center;
+		font-size: 17px;
+		float: right;
+	}
+	
+	#columnTitle{
+		clear: both;
+		margin-top: 100px;
+		width: 100%;
+	}
+	
+	#lineTitle{
+		border-bottom: 1px solid black;
+		height: 77px;
+	}
+	
 	.cell{
 		border-bottom: 1px solid black;
 		border-top: 1px solid black;
@@ -37,86 +100,97 @@
 	
 </style>
 
+	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
+
+<script type="text/javascript">
+	function writeButtonFnc() {
+		location.href = './add.do';
+	}
+	
+	function listDetailPageFnc(obj, event) {
+		
+		var aTagObj = $(obj);
+		
+		event.preventDefault();
+		
+		var qnaBoardNoObj = '';
+		var keywordObj = $('#keyword');
+		var searchOptionObj = $('#searchOption');
+		
+		// 회원이름 클릭시 자신의 회원번호 td태그
+		qnaBoardNoObj = aTagObj.parent().parent().children('td').eq(0);
+		
+		var url = '';
+		
+		url += './listDetail.do?';
+		url += 'QNA_BOARD_NO=' + qnaBoardNoObj.html();
+		url += '&keyword=' + keywordObj.val();
+		url += '&searchOption=' + searchOptionObj.val();
+				
+		location.href = url;
+
+		return false;
+	}
+</script>
+
 </head>
 <body>
 
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
-	
-<!-- 	<h1>게시글목록</h1> -->
-	
-<%-- 	<c:forEach var="qnaBoardDto" items="${qnaBoardList}"> --%>
-<%-- 		${qnaBoardDto.QNA_BOARD_NO}, --%>
-<%-- 		${qnaBoardDto.QNA_BOARD_TITLE}, --%>
-<%-- 		${qnaBoardDto.MEMBER_NAME}, --%>
-<%-- 		${qnaBoardDto.QNA_BOARD_CRE_DATE}, --%>
-<%-- 		${qnaBoardDto.QNA_BOARD_ANSWER_DATE}, --%>
-<%-- 		${qnaBoardDto.QNA_BOARD_ANSWER_STATUS} --%>
-<%-- 	</c:forEach> --%>
-
-<%-- <c:choose> --%>
-<%-- 		<c:when test="${empty memberList}"> --%>
-<!-- 			<tr> -->
-<!-- 				<td colspan="6" style="text-align: center;"> -->
-<!-- 					등록된 게시글이 없습니다. -->
-<!-- 				</td> -->
-<!-- 			</tr> -->
-<%-- 		</c:when> --%>
-<%-- 		<c:otherwise> --%>
-<%-- 			<c:forEach var="memberDto" items="${memberList}"> --%>
-<!-- 			<tr> -->
-<%-- 				<td>${memberDto.no}</td> --%>
-<!-- 				<td> -->
-<!-- 					<a href='#' onclick="listOnePageFnc(this, event);"> -->
-<%-- 						${memberDto.name} --%>
-<!-- 					</a> -->
-<!-- 				</td> -->
-<%-- 				<td>${memberDto.email}</td> --%>
-<!-- 				<td> -->
-<%-- 					<fmt:formatDate value="${memberDto.createdDate}"  --%>
-<!-- 						pattern="yyyy년MM월dd일 hh시mm분"/> -->
-<!-- 				</td> -->
-				
-<%-- 				<c:if test="${empty memberDto.originalFileName}" var="fileFlag"> --%>
-<!-- 					<td>첨부파일 없음</td>			 -->
-<%-- 				</c:if> --%>
-<%-- 				<c:if test="${fileFlag eq false}"> --%>
-<%-- 					<td>${memberDto.originalFileName}</td>			 --%>
-<%-- 				</c:if> --%>
-				
-<!-- 				<td> -->
-<%-- 					<a href='./deleteCtr.do?no=${memberDto.no}'>[삭제]</a> --%>
-<!-- 				</td> -->
-<!-- 			</tr> -->
-<%-- 			</c:forEach> --%>
-<%-- 		</c:otherwise> --%>
-<%-- 	</c:choose> --%>
 
 	<div id="wrap">
 		<div id="innerWrap">
-			<div style="font-size: 80px; font-weight: bold; float: left; color: #7D7471;">QnA</div>
-			<select style="margin-top: 40px; margin-left: 20px; width: 138px; height: 50px;
-				vertical-align: middle; text-align-last: center; font-size: 17px; float: left;">
-				<option>제목</option>
-				<option>내용</option>
-				<option>제목 + 내용</option>
-				<option>작성자</option>
-			</select>
-			<input type="text" style="margin-top: 40px; width: 420px; height: 45px; float: left;">
-			<input type="submit" value="검색" style="margin-top: 40px; width: 50px; height: 50px; float: left;">
+			<div id='boardTitle'>QnA</div>
 			
-			<input type="text" value="작성" style="float: right; text-align: center; color: white;
-				width: 150px; height: 50px; margin-top: 40px; font-size: 20px; background-color: #7D7471;">
-			<select style="margin-top: 40px; margin-left: 20px; width: 138px; height: 50px; margin-right: 10px;
-				vertical-align: middle; text-align-last: center; font-size: 17px; float: right;">
-				<option>전체</option>
-				<option>접수중</option>
-				<option>답변중</option>
-				<option>기한만료</option>
-				<option>답변완료</option>
-			</select>
+			<form action="./list.do" method="get">
+				<select id='searchOption' name="searchOption">
+					<c:choose>
+						<c:when test="${searchMap.searchOption eq 'titleAndContent'}">
+							<option value="titleAndContent" selected="selected">제목 + 내용</option>
+							<option value="title">제목</option>
+							<option value="content">내용</option>
+							<option value="writer">작성자</option>
+						</c:when>
+						
+						<c:when test="${searchMap.searchOption eq 'title'}">
+							<option value="titleAndContent">제목 + 내용</option>
+							<option value="title" selected="selected">제목</option>
+							<option value="content">내용</option>
+							<option value="writer">작성자</option>
+						</c:when>
+						
+						<c:when test="${searchMap.searchOption eq 'content'}">
+							<option value="titleAndContent">제목 + 내용</option>
+							<option value="title">제목</option>
+							<option value="content" selected="selected">내용</option>
+							<option value="writer">작성자</option>
+						</c:when>
+						
+						<c:when test="${searchMap.searchOption eq 'writer'}">
+							<option value="titleAndContent">제목 + 내용</option>
+							<option value="title">제목</option>
+							<option value="content">내용</option>
+							<option value="writer" selected="selected">작성자</option>
+						</c:when>
+					</c:choose>
+				</select>
+				
+				<input type="text" id='keyword' name="keyword" value="${searchMap.keyword}">
+				<input type="submit" value="검색" id='searchButton'>
+				<input type="button" value="작성" id='writeButton' onclick="writeButtonFnc();">
+				
+				<select id='selectProcessStatus'>
+					<option>전체</option>
+					<option>접수중</option>
+					<option>답변중</option>
+					<option>기한만료</option>
+					<option>답변완료</option>
+				</select>
+			</form>
 			
-			<table style="clear: both; margin-top: 100px; width: 100%">
-				<tr style="border-bottom: 1px solid black; height: 77px;">
+			<table id='columnTitle'>
+				<tr id='lineTitle'>
 					<th class="cell">글번호</th>
 					<th class="cell">제목</th>
 					<th class="cell">작성자</th>
@@ -139,7 +213,7 @@
 							<tr>
 								<td class="cell2">${QnaBoardDto.QNA_BOARD_NO}</td>
 								<td class="cell2">
-									<a href='./update.do?QNA_BOARD_NO=${QnaBoardDto.QNA_BOARD_NO }'>
+									<a href='#' onclick="listDetailPageFnc(this, event);">
 										${QnaBoardDto.QNA_BOARD_TITLE}
 									</a>
 								</td>
@@ -161,9 +235,26 @@
 										</c:otherwise>
 									</c:choose>
 								</td>
-								<td class="cell2">
-									${QnaBoardDto.QNA_BOARD_ANSWER_STATUS}
-								</td>
+								<c:if test="${QnaBoardDto.QNA_BOARD_ANSWER_STATUS eq '접수중'}">
+									<td class="cell2" style="color: #E14E4E;">
+										${QnaBoardDto.QNA_BOARD_ANSWER_STATUS}
+									</td>
+								</c:if>
+								<c:if test="${QnaBoardDto.QNA_BOARD_ANSWER_STATUS eq '답변중'}">
+									<td class="cell2" style="color: #2E89D4;">
+										${QnaBoardDto.QNA_BOARD_ANSWER_STATUS}
+									</td>
+								</c:if>
+								<c:if test="${QnaBoardDto.QNA_BOARD_ANSWER_STATUS eq '기한만료'}">
+									<td class="cell2" style="color: #E8CA35;">
+										${QnaBoardDto.QNA_BOARD_ANSWER_STATUS}
+									</td>
+								</c:if>
+								<c:if test="${QnaBoardDto.QNA_BOARD_ANSWER_STATUS eq '답변완료'}">
+									<td class="cell2" style="color: #BBBBBB;">
+										${QnaBoardDto.QNA_BOARD_ANSWER_STATUS}
+									</td>
+								</c:if>
 							</tr>
 						</c:forEach>
 					</c:otherwise>
@@ -172,6 +263,18 @@
 			
 		</div>
 	</div>
+	
+	<jsp:include page="/WEB-INF/views/common/paging.jsp">
+		<jsp:param value="${pagingMap}" name="pagingMap"/>
+	</jsp:include>
+	
+	<form action="./list.do" id='pagingForm' method="get">
+		<input type="hidden" id='curPage' name='curPage' 
+			value="${pagingMap.paging.curPage}">
+		<input type="hidden" id='QNA_BOARD_NO' name="QNA_BOARD_NO" value="${QnaBoardDto.QNA_BOARD_NO}">
+		<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
+		<input type="hidden" id='keyword' name="keyword" value="${keyword}">
+	</form>
 	
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 

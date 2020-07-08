@@ -23,7 +23,9 @@ public interface FreeBoardService {
 
 	public int freeBoardLikeInsert(int no,int mno);
 
-	public List<Object> freeBoardLikeSelectList(int no, int mno);
+//	public List<Object> freeBoardLikeSelectList(int no, int mno);
+
+	public String freeBoardLikeSelectList(int no, int mno);
 
 	public int freeBoardLikeUpdate(int no, int mno);
 
@@ -42,6 +44,12 @@ public interface FreeBoardService {
 	public int freeBoardCommentAdd(int no, int mno, String comments);
 
 	public void freeBoardUpdate(int no, String title, String contents);
+
+	public void freeBoardCommentUpdate(int fcno, String comments);
+
+	public void freeBoardCommentOneDelete(int fcno);
+
+	public int freeBoardCommentTotalCount(int no);
 
 	
 }
