@@ -4,257 +4,365 @@ import java.util.Date;
 
 public class QnaBoardDto {
 	
-	private int QNA_BOARD_NO = 0;
-    private int QNA_BOARD_MNO = 0;
-    private String QNA_BOARD_TITLE = "";
-    private String QNA_BOARD_CONTENTS = "";
-    private Date QNA_BOARD_CRE_DATE = null;
-    private Date QNA_BOARD_MOD_DATE = null;
-    private Date QNA_BOARD_ANSWER_DATE = null;
-    private String QNA_BOARD_ANSWER_STATUS = "";
+	private int qna_board_no = 0;
+    private int qna_board_mno = 0;
+    private String qna_board_title = "";
+    private String qna_board_contents = "";
+    private Date qna_board_cre_date = null;
+    private Date qna_board_mod_date = null;
+    private Date qna_board_answer_date = null;
+    private String qna_board_answer_status = "";
     
-    private int MEMBER_NO = 0;
-    private String MEMBER_NAME = "";
-    private String MEMBER_NICK = "";
-    private String MEMBER_EMAIL = "";
-    private String MEMBER_PWD = "";
-    private String MEMBER_PHONE = "";
-    private int MEMBER_CHECK_QUESTION = 0;
-    private String MEMBER_CHECK_ANSWER = "";
-    private String MEMBER_COMMENTS = "";
-    private Date MEMBER_CRE_DATE = null;
-    private Date MEMBER_MOD_DATE = null;
-    private String MEMBER_SIGN_CHECK = "";
-    private int MEMBER_GRADE = 0;
-    private String MEMBER_DEL_FLAG = "";
+    private int qna_comment_no = 0;
+    private int qna_comment_qbno = 0;
+    private int qna_comment_mno = 0;
+    private String qna_comment_comments = "";
+    private Date qna_comment_cre_date = null;
+    private Date qna_comment_mod_date = null;
+    
+    private int member_no = 0;
+    private String member_name = "";
+    private String member_nick = "";
+    private String member_email = "";
+    private String member_pwd = "";
+    private String member_phone = "";
+    private int member_check_question = 0;
+    private String member_check_answer = "";
+    private String member_comments = "";
+    private Date member_cre_date = null;
+    private Date member_mod_date = null;
+    private String member_sign_check = "";
+    private int member_grade = 0;
+    private String member_del_flag = "";
+    
+    private int profile_table_no = 0;
+    private int profile_table_mno = 0;
+    private String profile_table_original_name = "";
+    private String profile_table_stored_name = "";
 	
     public QnaBoardDto() {
 		super();
 	}
 
-	public QnaBoardDto(int qNA_BOARD_NO, int qNA_BOARD_MNO, String qNA_BOARD_TITLE, String qNA_BOARD_CONTENTS,
-			Date qNA_BOARD_CRE_DATE, Date qNA_BOARD_MOD_DATE, Date qNA_BOARD_ANSWER_DATE,
-			String qNA_BOARD_ANSWER_STATUS, int mEMBER_NO, String mEMBER_NAME, String mEMBER_NICK, String mEMBER_EMAIL,
-			String mEMBER_PWD, String mEMBER_PHONE, int mEMBER_CHECK_QUESTION, String mEMBER_CHECK_ANSWER,
-			String mEMBER_COMMENTS, Date mEMBER_CRE_DATE, Date mEMBER_MOD_DATE, String mEMBER_SIGN_CHECK,
-			int mEMBER_GRADE, String mEMBER_DEL_FLAG) {
+	public QnaBoardDto(int qna_board_no, int qna_board_mno, String qna_board_title, String qna_board_contents,
+			Date qna_board_cre_date, Date qna_board_mod_date, Date qna_board_answer_date,
+			String qna_board_answer_status, int qna_comment_no, int qna_comment_qbno, int qna_comment_mno,
+			String qna_comment_comments, Date qna_comment_cre_date, Date qna_comment_mod_date, int member_no,
+			String member_name, String member_nick, String member_email, String member_pwd, String member_phone,
+			int member_check_question, String member_check_answer, String member_comments, Date member_cre_date,
+			Date member_mod_date, String member_sign_check, int member_grade, String member_del_flag,
+			int profile_table_no, int profile_table_mno, String profile_table_original_name,
+			String profile_table_stored_name) {
 		super();
-		QNA_BOARD_NO = qNA_BOARD_NO;
-		QNA_BOARD_MNO = qNA_BOARD_MNO;
-		QNA_BOARD_TITLE = qNA_BOARD_TITLE;
-		QNA_BOARD_CONTENTS = qNA_BOARD_CONTENTS;
-		QNA_BOARD_CRE_DATE = qNA_BOARD_CRE_DATE;
-		QNA_BOARD_MOD_DATE = qNA_BOARD_MOD_DATE;
-		QNA_BOARD_ANSWER_DATE = qNA_BOARD_ANSWER_DATE;
-		QNA_BOARD_ANSWER_STATUS = qNA_BOARD_ANSWER_STATUS;
-		MEMBER_NO = mEMBER_NO;
-		MEMBER_NAME = mEMBER_NAME;
-		MEMBER_NICK = mEMBER_NICK;
-		MEMBER_EMAIL = mEMBER_EMAIL;
-		MEMBER_PWD = mEMBER_PWD;
-		MEMBER_PHONE = mEMBER_PHONE;
-		MEMBER_CHECK_QUESTION = mEMBER_CHECK_QUESTION;
-		MEMBER_CHECK_ANSWER = mEMBER_CHECK_ANSWER;
-		MEMBER_COMMENTS = mEMBER_COMMENTS;
-		MEMBER_CRE_DATE = mEMBER_CRE_DATE;
-		MEMBER_MOD_DATE = mEMBER_MOD_DATE;
-		MEMBER_SIGN_CHECK = mEMBER_SIGN_CHECK;
-		MEMBER_GRADE = mEMBER_GRADE;
-		MEMBER_DEL_FLAG = mEMBER_DEL_FLAG;
+		this.qna_board_no = qna_board_no;
+		this.qna_board_mno = qna_board_mno;
+		this.qna_board_title = qna_board_title;
+		this.qna_board_contents = qna_board_contents;
+		this.qna_board_cre_date = qna_board_cre_date;
+		this.qna_board_mod_date = qna_board_mod_date;
+		this.qna_board_answer_date = qna_board_answer_date;
+		this.qna_board_answer_status = qna_board_answer_status;
+		this.qna_comment_no = qna_comment_no;
+		this.qna_comment_qbno = qna_comment_qbno;
+		this.qna_comment_mno = qna_comment_mno;
+		this.qna_comment_comments = qna_comment_comments;
+		this.qna_comment_cre_date = qna_comment_cre_date;
+		this.qna_comment_mod_date = qna_comment_mod_date;
+		this.member_no = member_no;
+		this.member_name = member_name;
+		this.member_nick = member_nick;
+		this.member_email = member_email;
+		this.member_pwd = member_pwd;
+		this.member_phone = member_phone;
+		this.member_check_question = member_check_question;
+		this.member_check_answer = member_check_answer;
+		this.member_comments = member_comments;
+		this.member_cre_date = member_cre_date;
+		this.member_mod_date = member_mod_date;
+		this.member_sign_check = member_sign_check;
+		this.member_grade = member_grade;
+		this.member_del_flag = member_del_flag;
+		this.profile_table_no = profile_table_no;
+		this.profile_table_mno = profile_table_mno;
+		this.profile_table_original_name = profile_table_original_name;
+		this.profile_table_stored_name = profile_table_stored_name;
 	}
 
-	public int getQNA_BOARD_NO() {
-		return QNA_BOARD_NO;
+	public int getQna_board_no() {
+		return qna_board_no;
 	}
 
-	public void setQNA_BOARD_NO(int qNA_BOARD_NO) {
-		QNA_BOARD_NO = qNA_BOARD_NO;
+	public void setQna_board_no(int qna_board_no) {
+		this.qna_board_no = qna_board_no;
 	}
 
-	public int getQNA_BOARD_MNO() {
-		return QNA_BOARD_MNO;
+	public int getQna_board_mno() {
+		return qna_board_mno;
 	}
 
-	public void setQNA_BOARD_MNO(int qNA_BOARD_MNO) {
-		QNA_BOARD_MNO = qNA_BOARD_MNO;
+	public void setQna_board_mno(int qna_board_mno) {
+		this.qna_board_mno = qna_board_mno;
 	}
 
-	public String getQNA_BOARD_TITLE() {
-		return QNA_BOARD_TITLE;
+	public String getQna_board_title() {
+		return qna_board_title;
 	}
 
-	public void setQNA_BOARD_TITLE(String qNA_BOARD_TITLE) {
-		QNA_BOARD_TITLE = qNA_BOARD_TITLE;
+	public void setQna_board_title(String qna_board_title) {
+		this.qna_board_title = qna_board_title;
 	}
 
-	public String getQNA_BOARD_CONTENTS() {
-		return QNA_BOARD_CONTENTS;
+	public String getQna_board_contents() {
+		return qna_board_contents;
 	}
 
-	public void setQNA_BOARD_CONTENTS(String qNA_BOARD_CONTENTS) {
-		QNA_BOARD_CONTENTS = qNA_BOARD_CONTENTS;
+	public void setQna_board_contents(String qna_board_contents) {
+		this.qna_board_contents = qna_board_contents;
 	}
 
-	public Date getQNA_BOARD_CRE_DATE() {
-		return QNA_BOARD_CRE_DATE;
+	public Date getQna_board_cre_date() {
+		return qna_board_cre_date;
 	}
 
-	public void setQNA_BOARD_CRE_DATE(Date qNA_BOARD_CRE_DATE) {
-		QNA_BOARD_CRE_DATE = qNA_BOARD_CRE_DATE;
+	public void setQna_board_cre_date(Date qna_board_cre_date) {
+		this.qna_board_cre_date = qna_board_cre_date;
 	}
 
-	public Date getQNA_BOARD_MOD_DATE() {
-		return QNA_BOARD_MOD_DATE;
+	public Date getQna_board_mod_date() {
+		return qna_board_mod_date;
 	}
 
-	public void setQNA_BOARD_MOD_DATE(Date qNA_BOARD_MOD_DATE) {
-		QNA_BOARD_MOD_DATE = qNA_BOARD_MOD_DATE;
+	public void setQna_board_mod_date(Date qna_board_mod_date) {
+		this.qna_board_mod_date = qna_board_mod_date;
 	}
 
-	public Date getQNA_BOARD_ANSWER_DATE() {
-		return QNA_BOARD_ANSWER_DATE;
+	public Date getQna_board_answer_date() {
+		return qna_board_answer_date;
 	}
 
-	public void setQNA_BOARD_ANSWER_DATE(Date qNA_BOARD_ANSWER_DATE) {
-		QNA_BOARD_ANSWER_DATE = qNA_BOARD_ANSWER_DATE;
+	public void setQna_board_answer_date(Date qna_board_answer_date) {
+		this.qna_board_answer_date = qna_board_answer_date;
 	}
 
-	public String getQNA_BOARD_ANSWER_STATUS() {
-		return QNA_BOARD_ANSWER_STATUS;
+	public String getQna_board_answer_status() {
+		return qna_board_answer_status;
 	}
 
-	public void setQNA_BOARD_ANSWER_STATUS(String qNA_BOARD_ANSWER_STATUS) {
-		QNA_BOARD_ANSWER_STATUS = qNA_BOARD_ANSWER_STATUS;
+	public void setQna_board_answer_status(String qna_board_answer_status) {
+		this.qna_board_answer_status = qna_board_answer_status;
 	}
 
-	public int getMEMBER_NO() {
-		return MEMBER_NO;
+	public int getQna_comment_no() {
+		return qna_comment_no;
 	}
 
-	public void setMEMBER_NO(int mEMBER_NO) {
-		MEMBER_NO = mEMBER_NO;
+	public void setQna_comment_no(int qna_comment_no) {
+		this.qna_comment_no = qna_comment_no;
 	}
 
-	public String getMEMBER_NAME() {
-		return MEMBER_NAME;
+	public int getQna_comment_qbno() {
+		return qna_comment_qbno;
 	}
 
-	public void setMEMBER_NAME(String mEMBER_NAME) {
-		MEMBER_NAME = mEMBER_NAME;
+	public void setQna_comment_qbno(int qna_comment_qbno) {
+		this.qna_comment_qbno = qna_comment_qbno;
 	}
 
-	public String getMEMBER_NICK() {
-		return MEMBER_NICK;
+	public int getQna_comment_mno() {
+		return qna_comment_mno;
 	}
 
-	public void setMEMBER_NICK(String mEMBER_NICK) {
-		MEMBER_NICK = mEMBER_NICK;
+	public void setQna_comment_mno(int qna_comment_mno) {
+		this.qna_comment_mno = qna_comment_mno;
 	}
 
-	public String getMEMBER_EMAIL() {
-		return MEMBER_EMAIL;
+	public String getQna_comment_comments() {
+		return qna_comment_comments;
 	}
 
-	public void setMEMBER_EMAIL(String mEMBER_EMAIL) {
-		MEMBER_EMAIL = mEMBER_EMAIL;
+	public void setQna_comment_comments(String qna_comment_comments) {
+		this.qna_comment_comments = qna_comment_comments;
 	}
 
-	public String getMEMBER_PWD() {
-		return MEMBER_PWD;
+	public Date getQna_comment_cre_date() {
+		return qna_comment_cre_date;
 	}
 
-	public void setMEMBER_PWD(String mEMBER_PWD) {
-		MEMBER_PWD = mEMBER_PWD;
+	public void setQna_comment_cre_date(Date qna_comment_cre_date) {
+		this.qna_comment_cre_date = qna_comment_cre_date;
 	}
 
-	public String getMEMBER_PHONE() {
-		return MEMBER_PHONE;
+	public Date getQna_comment_mod_date() {
+		return qna_comment_mod_date;
 	}
 
-	public void setMEMBER_PHONE(String mEMBER_PHONE) {
-		MEMBER_PHONE = mEMBER_PHONE;
+	public void setQna_comment_mod_date(Date qna_comment_mod_date) {
+		this.qna_comment_mod_date = qna_comment_mod_date;
 	}
 
-	public int getMEMBER_CHECK_QUESTION() {
-		return MEMBER_CHECK_QUESTION;
+	public int getMember_no() {
+		return member_no;
 	}
 
-	public void setMEMBER_CHECK_QUESTION(int mEMBER_CHECK_QUESTION) {
-		MEMBER_CHECK_QUESTION = mEMBER_CHECK_QUESTION;
+	public void setMember_no(int member_no) {
+		this.member_no = member_no;
 	}
 
-	public String getMEMBER_CHECK_ANSWER() {
-		return MEMBER_CHECK_ANSWER;
+	public String getMember_name() {
+		return member_name;
 	}
 
-	public void setMEMBER_CHECK_ANSWER(String mEMBER_CHECK_ANSWER) {
-		MEMBER_CHECK_ANSWER = mEMBER_CHECK_ANSWER;
+	public void setMember_name(String member_name) {
+		this.member_name = member_name;
 	}
 
-	public String getMEMBER_COMMENTS() {
-		return MEMBER_COMMENTS;
+	public String getMember_nick() {
+		return member_nick;
 	}
 
-	public void setMEMBER_COMMENTS(String mEMBER_COMMENTS) {
-		MEMBER_COMMENTS = mEMBER_COMMENTS;
+	public void setMember_nick(String member_nick) {
+		this.member_nick = member_nick;
 	}
 
-	public Date getMEMBER_CRE_DATE() {
-		return MEMBER_CRE_DATE;
+	public String getMember_email() {
+		return member_email;
 	}
 
-	public void setMEMBER_CRE_DATE(Date mEMBER_CRE_DATE) {
-		MEMBER_CRE_DATE = mEMBER_CRE_DATE;
+	public void setMember_email(String member_email) {
+		this.member_email = member_email;
 	}
 
-	public Date getMEMBER_MOD_DATE() {
-		return MEMBER_MOD_DATE;
+	public String getMember_pwd() {
+		return member_pwd;
 	}
 
-	public void setMEMBER_MOD_DATE(Date mEMBER_MOD_DATE) {
-		MEMBER_MOD_DATE = mEMBER_MOD_DATE;
+	public void setMember_pwd(String member_pwd) {
+		this.member_pwd = member_pwd;
 	}
 
-	public String getMEMBER_SIGN_CHECK() {
-		return MEMBER_SIGN_CHECK;
+	public String getMember_phone() {
+		return member_phone;
 	}
 
-	public void setMEMBER_SIGN_CHECK(String mEMBER_SIGN_CHECK) {
-		MEMBER_SIGN_CHECK = mEMBER_SIGN_CHECK;
+	public void setMember_phone(String member_phone) {
+		this.member_phone = member_phone;
 	}
 
-	public int getMEMBER_GRADE() {
-		return MEMBER_GRADE;
+	public int getMember_check_question() {
+		return member_check_question;
 	}
 
-	public void setMEMBER_GRADE(int mEMBER_GRADE) {
-		MEMBER_GRADE = mEMBER_GRADE;
+	public void setMember_check_question(int member_check_question) {
+		this.member_check_question = member_check_question;
 	}
 
-	public String getMEMBER_DEL_FLAG() {
-		return MEMBER_DEL_FLAG;
+	public String getMember_check_answer() {
+		return member_check_answer;
 	}
 
-	public void setMEMBER_DEL_FLAG(String mEMBER_DEL_FLAG) {
-		MEMBER_DEL_FLAG = mEMBER_DEL_FLAG;
+	public void setMember_check_answer(String member_check_answer) {
+		this.member_check_answer = member_check_answer;
+	}
+
+	public String getMember_comments() {
+		return member_comments;
+	}
+
+	public void setMember_comments(String member_comments) {
+		this.member_comments = member_comments;
+	}
+
+	public Date getMember_cre_date() {
+		return member_cre_date;
+	}
+
+	public void setMember_cre_date(Date member_cre_date) {
+		this.member_cre_date = member_cre_date;
+	}
+
+	public Date getMember_mod_date() {
+		return member_mod_date;
+	}
+
+	public void setMember_mod_date(Date member_mod_date) {
+		this.member_mod_date = member_mod_date;
+	}
+
+	public String getMember_sign_check() {
+		return member_sign_check;
+	}
+
+	public void setMember_sign_check(String member_sign_check) {
+		this.member_sign_check = member_sign_check;
+	}
+
+	public int getMember_grade() {
+		return member_grade;
+	}
+
+	public void setMember_grade(int member_grade) {
+		this.member_grade = member_grade;
+	}
+
+	public String getMember_del_flag() {
+		return member_del_flag;
+	}
+
+	public void setMember_del_flag(String member_del_flag) {
+		this.member_del_flag = member_del_flag;
+	}
+
+	public int getProfile_table_no() {
+		return profile_table_no;
+	}
+
+	public void setProfile_table_no(int profile_table_no) {
+		this.profile_table_no = profile_table_no;
+	}
+
+	public int getProfile_table_mno() {
+		return profile_table_mno;
+	}
+
+	public void setProfile_table_mno(int profile_table_mno) {
+		this.profile_table_mno = profile_table_mno;
+	}
+
+	public String getProfile_table_original_name() {
+		return profile_table_original_name;
+	}
+
+	public void setProfile_table_original_name(String profile_table_original_name) {
+		this.profile_table_original_name = profile_table_original_name;
+	}
+
+	public String getProfile_table_stored_name() {
+		return profile_table_stored_name;
+	}
+
+	public void setProfile_table_stored_name(String profile_table_stored_name) {
+		this.profile_table_stored_name = profile_table_stored_name;
 	}
 
 	@Override
 	public String toString() {
-		return "QnaBoardDto [QNA_BOARD_NO=" + QNA_BOARD_NO + ", QNA_BOARD_MNO=" + QNA_BOARD_MNO + ", QNA_BOARD_TITLE="
-				+ QNA_BOARD_TITLE + ", QNA_BOARD_CONTENTS=" + QNA_BOARD_CONTENTS + ", QNA_BOARD_CRE_DATE="
-				+ QNA_BOARD_CRE_DATE + ", QNA_BOARD_MOD_DATE=" + QNA_BOARD_MOD_DATE + ", QNA_BOARD_ANSWER_DATE="
-				+ QNA_BOARD_ANSWER_DATE + ", QNA_BOARD_ANSWER_STATUS=" + QNA_BOARD_ANSWER_STATUS + ", MEMBER_NO="
-				+ MEMBER_NO + ", MEMBER_NAME=" + MEMBER_NAME + ", MEMBER_NICK=" + MEMBER_NICK + ", MEMBER_EMAIL="
-				+ MEMBER_EMAIL + ", MEMBER_PWD=" + MEMBER_PWD + ", MEMBER_PHONE=" + MEMBER_PHONE
-				+ ", MEMBER_CHECK_QUESTION=" + MEMBER_CHECK_QUESTION + ", MEMBER_CHECK_ANSWER=" + MEMBER_CHECK_ANSWER
-				+ ", MEMBER_COMMENTS=" + MEMBER_COMMENTS + ", MEMBER_CRE_DATE=" + MEMBER_CRE_DATE + ", MEMBER_MOD_DATE="
-				+ MEMBER_MOD_DATE + ", MEMBER_SIGN_CHECK=" + MEMBER_SIGN_CHECK + ", MEMBER_GRADE=" + MEMBER_GRADE
-				+ ", MEMBER_DEL_FLAG=" + MEMBER_DEL_FLAG + "]";
+		return "QnaBoardDto [qna_board_no=" + qna_board_no + ", qna_board_mno=" + qna_board_mno + ", qna_board_title="
+				+ qna_board_title + ", qna_board_contents=" + qna_board_contents + ", qna_board_cre_date="
+				+ qna_board_cre_date + ", qna_board_mod_date=" + qna_board_mod_date + ", qna_board_answer_date="
+				+ qna_board_answer_date + ", qna_board_answer_status=" + qna_board_answer_status + ", qna_comment_no="
+				+ qna_comment_no + ", qna_comment_qbno=" + qna_comment_qbno + ", qna_comment_mno=" + qna_comment_mno
+				+ ", qna_comment_comments=" + qna_comment_comments + ", qna_comment_cre_date=" + qna_comment_cre_date
+				+ ", qna_comment_mod_date=" + qna_comment_mod_date + ", member_no=" + member_no + ", member_name="
+				+ member_name + ", member_nick=" + member_nick + ", member_email=" + member_email + ", member_pwd="
+				+ member_pwd + ", member_phone=" + member_phone + ", member_check_question=" + member_check_question
+				+ ", member_check_answer=" + member_check_answer + ", member_comments=" + member_comments
+				+ ", member_cre_date=" + member_cre_date + ", member_mod_date=" + member_mod_date
+				+ ", member_sign_check=" + member_sign_check + ", member_grade=" + member_grade + ", member_del_flag="
+				+ member_del_flag + ", profile_table_no=" + profile_table_no + ", profile_table_mno="
+				+ profile_table_mno + ", profile_table_original_name=" + profile_table_original_name
+				+ ", profile_table_stored_name=" + profile_table_stored_name + "]";
 	}
 
 	
-    
-    
 
 }

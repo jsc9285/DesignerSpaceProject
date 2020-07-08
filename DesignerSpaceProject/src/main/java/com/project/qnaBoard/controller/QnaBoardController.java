@@ -1,6 +1,8 @@
 package com.project.qnaBoard.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.qnaBoard.model.QnaBoardDto;
 import com.project.qnaBoard.service.QnaBoardService;
+import com.project.util.CommentPaging;
 
 @Controller
 public class QnaBoardController {
@@ -22,26 +26,251 @@ public class QnaBoardController {
 	@Autowired
 	private QnaBoardService qnaBoardService;
 	
+	
+	// qna게시판 목록
 	@RequestMapping(value = "qnaBoard/list.do", method = RequestMethod.GET)
-	public String qnaBoardList(Model model) {
-		log.info("Welcome MemberList!");
+	public String qnaBoardList(@RequestParam(defaultValue = "1") int curPage
+							 , @RequestParam(defaultValue = "0") int qna_board_no
+							 , @RequestParam(defaultValue = "titleAndContent") String searchOption
+							 , @RequestParam(defaultValue = "") String keyword
+							 , Model model) {
+		log.info("Welcome qnaBoardList! " + curPage + " : ????"
+				+ searchOption + " : " + keyword);
 		
-		List<QnaBoardDto> qnaBoardList = qnaBoardService.qnaBoardSelectList();
+		if("writer".equals(searchOption)) {
+			searchOption = "member_nick";
+		}
+		
+		if("title".equals(searchOption)) {
+			searchOption = "qna_board_title";
+		}
+		
+		if("content".equals(searchOption)) {
+			searchOption = "qna_board_contents";
+		}
+		
+		int totalCount = 
+				qnaBoardService.qnaBoardSelectTotalCount(searchOption, keyword);
+		
+		if(qna_board_no != 0) {
+			curPage 
+				= qnaBoardService.qnaSelectCurPage(searchOption, keyword, qna_board_no);
+		}
+		
+		com.project.util.Paging qnaBoardPaging = new com.project.util.Paging(totalCount, curPage);
+		int start = qnaBoardPaging.getPageBegin();
+		int end = qnaBoardPaging.getPageEnd();
+				
+		List<QnaBoardDto> qnaBoardList = qnaBoardService.qnaBoardSelectList(
+				searchOption, keyword, start, end);
+		
+//		 화면의 form의 이름을 맞추기 위한 작업
+		if("member_nick".equals(searchOption)) {
+			searchOption = "writer";
+		}
+		
+		if("qna_board_title".equals(searchOption)) {
+			searchOption = "title";
+		}
+		
+		if("qna_board_contents".equals(searchOption)) {
+			searchOption = "content";
+		}
+		
+		// 검색
+		HashMap<String, Object> searchMap 
+			= new HashMap<String, Object>();
+		searchMap.put("searchOption", searchOption);
+		searchMap.put("keyword", keyword);
+		
+		// 페이징
+		Map<String, Object> pagingMap = new HashMap<>();
+		pagingMap.put("totalCount", totalCount);
+		pagingMap.put("paging", qnaBoardPaging);
+
+		model.addAttribute("qnaBoardList", qnaBoardList);
+		model.addAttribute("pagingMap", pagingMap);
+		model.addAttribute("searchMap", searchMap);
 		
 		model.addAttribute("qnaBoardList", qnaBoardList);
 		
 		return "board/qna/qnaBoardList";
 	}
 	
+	// qna 게시판 상세조회
+	@RequestMapping(value = "qnaBoard/listDetail.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public String qnaBoardListDetail(@RequestParam(defaultValue = "1") int curPage
+			 , @RequestParam(defaultValue = "0") int qna_board_no
+			 , @RequestParam(defaultValue = "titleAndContent") String searchOption
+			 , @RequestParam(defaultValue = "") String keyword
+			 , Model model) {
+		
+		log.info("Welcome qnaBoardListDetail! " + curPage + " : ????"
+				+ searchOption + " : " + keyword);
+		
+		QnaBoardDto qnaBoardDto = qnaBoardService.qnaBoardSelectDetail(qna_board_no);
+		
+		model.addAttribute("qnaBoardDto", qnaBoardDto);
+		log.info("ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ");
+		log.info(qnaBoardDto.toString());
+		log.info("ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ");
+		int totalCount = 
+				qnaBoardService.qnaBoardCommentSelectTotalCount(qna_board_no);
+		
+		CommentPaging qnaCommentPaging = new CommentPaging(totalCount, curPage);
+//		int start = commentPaging.getPageBegin();
+		int end = qnaCommentPaging.getPageEnd();
+				
+		List<QnaBoardDto> qnaBoardCommentList = 
+				qnaBoardService.qnaBoardCommentSelectList(qna_board_no, end);
+		for (QnaBoardDto qnaBoardDto2 : qnaBoardCommentList) {
+			log.info("ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ");
+			log.info(qnaBoardDto2.toString());
+			log.info("ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ");
+		}
+		model.addAttribute("qnaBoardCommentList", qnaBoardCommentList);
+		model.addAttribute("qnaCommentPaging", qnaCommentPaging);
+		
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
+		
+//		log.info("---------------------------------");
+//		log.info(qnaBoardDto.toString());
+//		log.info("---------------------------------");
+		return "board/qna/qnaBoardDetail";
+	}
+	
+	@RequestMapping(value = "qnaBoard/add.do", method = RequestMethod.GET)
+	public String qnaBoardAdd(Model model) {
+		
+		log.info("call qnaBoardAdd!");
+		
+//		QnaBoardDto qnaBoardDto = qnaBoardService.qnaBoardInsertNick(QNA_BOARD_NO);
+		
+//		model.addAttribute("qnaBoardDto", qnaBoardDto);
+		
+		return "board/qna/qnaBoardAdd";
+	}
+	
+	@RequestMapping(value = "qnaBoard/addCtr.do", method = RequestMethod.POST)
+	public String qnaBoardAddCtr(QnaBoardDto qnaBoardDto, Model model) {
+		
+		log.info("call qnaBoardAdd_ctr! {}", qnaBoardDto);
+		
+		qnaBoardService.qnaBoardInsertOne(qnaBoardDto);
+		
+		return "redirect:./list.do";
+	}
+	
+	// qna 게시물 수정
 	@RequestMapping(value = "qnaBoard/update.do", method = RequestMethod.GET)
-	public String qnaBoardListDetail(int QNA_BOARD_NO, Model model) {
+	public String qnaBoardUpdate(int qna_board_no, Model model) {
 		
-		log.info("call qnaBoardListDetail! {}", QNA_BOARD_NO);
+		log.info("call qnaBoardUpdate! {}", qna_board_no);
 		
-		QnaBoardDto qnaBoardDto = qnaBoardService.qnaBoardSelectDetail(QNA_BOARD_NO);
+		QnaBoardDto qnaBoardDto = qnaBoardService.qnaBoardSelectDetail(qna_board_no);
 		
 		model.addAttribute("qnaBoardDto", qnaBoardDto);
 		
-		return "board/qna/qnaBoardDetail";
+		return "board/qna/qnaBoardUpdate";
 	}
+	
+	// qna 게시물 수정 로직
+	@RequestMapping(value = "qnaBoard/updateCtr.do", method = RequestMethod.POST)
+	public String qnaBoardUpdateCtr(QnaBoardDto qnaBoardDto, Model model) {
+		
+		log.info("call qnaBoardUpdateCtr! " + qnaBoardDto);
+		
+		qnaBoardService.qnaBoardUpdateOne(qnaBoardDto);
+		
+		model.addAttribute("qnaBoardDto", qnaBoardDto);
+		
+		return "redirect:list.do";
+	}
+	
+	@RequestMapping(value = "qnaBoard/deleteCtr.do", method = RequestMethod.GET)
+	public String qnaBoardDeleteCtr(int qna_board_no, Model model) {
+		
+		log.info("call qnaBoardDelete_ctr! " + qna_board_no);
+		
+		qnaBoardService.qnaBoardDeleteOne(qna_board_no);
+		
+		return "redirect:list.do";
+	}
+	
+//	@RequestMapping(value="qnaBoard/commentAddCtr.do", method = RequestMethod.GET)
+//	public String qnaBoardCommentAddCtr(QnaBoardDto qnaBoardDto, String searchOption, 
+//			String keyword, int curPage, Model model) {
+//		
+//		log.info("call qnaBoardCommentAdd_ctr! {}", qnaBoardDto);
+//		
+//		qnaBoardService.qnaBoardCommentInsertOne(qnaBoardDto);
+//		
+//		int totalCount = 
+//				qnaBoardService.qnaBoardCommentSelectTotalCount(qnaBoardDto.getQNA_BOARD_NO());
+//		CommentPaging qnaCommentPaging = new CommentPaging(totalCount, curPage);
+//		int end = qnaCommentPaging.getPageEnd();
+//		
+//		qnaBoardDto = qnaBoardService.qnaBoardSelectDetail(qnaBoardDto.getQNA_BOARD_NO());
+//		List<QnaBoardDto> qnaBoardCommentList = 
+//				qnaBoardService.qnaBoardCommentSelectList(qnaBoardDto.getQNA_BOARD_NO(), end);
+//		
+////		log.info("머가 뜨지" + curPage + totalCount + end);
+//		
+//		model.addAttribute("qnaBoardCommentList", qnaBoardCommentList);
+//		model.addAttribute("qnaBoardDto", qnaBoardDto);
+//		model.addAttribute("searchOption", searchOption);
+//		model.addAttribute("keyword", keyword);
+//		model.addAttribute("totalCount", totalCount);
+//		model.addAttribute("curPage", curPage);
+//		model.addAttribute("end", end);
+//		
+//		return "board/qna/qnaBoardDetail";
+//	}
+	
+	@RequestMapping(value="qnaBoard/commentAddCtr.do", method = RequestMethod.GET)
+	public String qnaBoardCommentAddCtr(int qna_comment_mno, int qna_comment_qbno, String searchOption
+			,String keyword ,String qna_comment_comments, Model model) {
+		
+		log.info("call qnaBoardCommentAdd_ctr! {} {} ", qna_comment_mno, qna_comment_qbno);
+		
+		qnaBoardService.qnaBoardCommentInsertOne(qna_comment_qbno, qna_comment_mno, qna_comment_comments);
+		
+		return "forward:/qnaBoard/listDetail.do";
+	}
+	
+	@RequestMapping(value = "qnaBoard/commentDeleteCtr.do", method = RequestMethod.GET)
+	public String qnaBoardCommentDeleteCtr(int qna_comment_no, Model model) {
+		
+		log.info("call qnaBoardCommentDelete_ctr! " + qna_comment_no);
+		
+		qnaBoardService.qnaCommentDeleteOne(qna_comment_no);
+		
+		return "forward:/qnaBoard/listDetail.do";
+	}
+	
+//   @RequestMapping(value="/freeBoard/freeBoardCommentUpdateCtr.do", method = RequestMethod.GET) 
+//   public String freeBoardCommentUpdateCtr(
+//         @RequestParam(defaultValue="0") int no
+//         ,String title
+//         ,String searchOption
+//         ,String keyword
+//         ,String comments
+//         ,int fcno) {
+//      log.info("댓글 수정 "+fcno +"댓글 내용" + comments);
+//      freeBoardService.freeBoardCommentUpdate(fcno, comments);
+//      return "forward:/freeBoard/freeBoardListOne.do";
+//   }
+	
+	@RequestMapping(value = "qnaBoard/commentUpdateCtr.do", method = RequestMethod.GET)
+	public String qnaBoardCommentUpdateCtr(int qna_comment_no, String searchOption
+											, String keyword, String qna_comment_comments, Model model) {
+		
+		log.info("call qnaBoardCommentUpdate_ctr! " + qna_comment_no);
+		
+		qnaBoardService.qnaCommentUpdateOne(qna_comment_no, qna_comment_comments);
+		
+		return "forward:/qnaBoard/listDetail.do";
+	}
+	
 }
