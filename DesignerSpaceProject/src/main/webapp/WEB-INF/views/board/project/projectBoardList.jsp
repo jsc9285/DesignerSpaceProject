@@ -188,7 +188,7 @@
 							</div>
 						</div>						
 						<div style="float: left;">
-							<div class="profilePic" style="background-image: url('<%=request.getContextPath()%>/resources/projectImg/${projectBoardDto.PROFILE_TABLE_STORED_NAME}');"></div>
+							<div class="profilePic" style="background-image: url(<c:url value='/profileImg/${projectBoardDto.PROFILE_TABLE_STORED_NAME}'/>);"></div>						
 							<span class="profileNic">${projectBoardDto.member_nick}</span>
 						</div>												
 						<div style="float: right; padding-top: 10px;">

@@ -16,7 +16,7 @@
 		</div>
 	</c:when>
 	
-	<c:when test="${memberDto.member_grade eq '0'}">
+	<c:when test="${memberDto.member_grade eq 0}">
 		<!-- ======================================  회원 헤더  =============================================== -->
 		<div id="header">
 		   <div id="header_inner">
@@ -31,13 +31,13 @@
 		      
 		      <nav id="h_service_area">
 		         <ul>
-		         	<li><a class="h_menuLink" href="#"><img id="h_logo_img" src="<%=request.getContextPath()%>/resources/img/butterfly.png"></a></li>
+		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/main/member.do'><img id="h_logo_img" src="<%=request.getContextPath()%>/resources/img/butterfly.png"></a></li>
 		         	<li class="h_menu_line"></li>
-		         	<li><a class="h_menuLink" href="#">작품</a></li>
+		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/projectBoard/list.do'>작품</a></li>
 		         	<li class="h_menu_line"></li>
-		         	<li><a class="h_menuLink" href="#">자유게시판</a></li>
+		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/freeBoard/free.do'>자유게시판</a></li>
 		         	<li class="h_menu_line"></li>
-		         	<li><a class="h_menuLink" href="#">QnA</a></li>
+		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/qnaBoard/list.do'>QnA</a></li>
 		         </ul>
 		      </nav>
 		      
@@ -78,7 +78,7 @@
 		</div>
 	</c:when>
 	
-	<c:when test="${memberDto.member_grade eq '1'}">
+	<c:when test="${memberDto.member_grade eq 1}">
 		<!-- =======================================  관리자 헤더  ==============================================  -->
 		<div id="header">
 		   <div id="header_inner">
@@ -93,21 +93,21 @@
 		      
 		      <nav id="h_admin_service_area">
 		         <ul>
-		         	<li><a class="h_menuLink" href="#"><img id="h_logo_img" src="<%=request.getContextPath()%>/resources/img/flower.png"></a></li>
+		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/main/admin.do'><img id="h_logo_img" src="<%=request.getContextPath()%>/resources/img/flower.png"></a></li>
 		         	<li class="h_menu_line"></li>
-		         	<li><a class="h_menuLink" href="#">작품</a></li>
+		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/projectBoard/management.do'>작품</a></li>
 		         	<li class="h_menu_line"></li>
-		         	<li><a class="h_menuLink" href="#">자유게시판</a></li>
+		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/freeBoard/free.do'>자유게시판</a></li>
 		         	<li class="h_menu_line"></li>
-		         	<li><a class="h_menuLink" href="#">회원관리</a></li>
+		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/listAdmin.do'>회원관리</a></li>
 		         	<li class="h_menu_line"></li>
-		         	<li><a class="h_menuLink" href="#">QnA</a></li>
+		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/qnaBoard/list.do'>QnA</a></li>
 		         	<li class="h_menu_line"></li>
-		         	<li><a class="h_menuLink" href="#">신고관리</a></li>
+		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/reportBoard/list.do'>신고관리</a></li>
 		         </ul>
 		      </nav>
 		      
-		      <a href="#none">
+		      <a href="<%=request.getContextPath()%>/logout.do">
 		      	<img id="h_profile" src="<%=request.getContextPath()%>/resources/img/logoutIcon.png">
 		      </a>
 		      
