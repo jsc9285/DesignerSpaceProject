@@ -35,13 +35,14 @@ public class memberController {
 		
 		log.info("로그인 메인페이지 이동");
 		
-		System.out.println(member_email);
+		
 		model.addAttribute("member_email",member_email);
-		System.out.println(member_email);
+		log.info(member_email);
+		
 		return "login/loginMain";
 	}
 	
-	@RequestMapping(value = "/loginCtr.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/member/loginCtr.do", method = RequestMethod.POST)
 	public String mainboard(String member_email, String member_pwd, HttpSession session, Model model) {
 		log.info("로그인 완료페이지 이동");
 		
@@ -50,16 +51,16 @@ public class memberController {
 		session.setAttribute("memberDto",memberDto);
 		
 		if(memberDto.getMember_grade()==0) {
-			return "/main/member.do";	
+			return "redirect:/main/member.do";	
 		}else {
-			return "/main/admin.do";	
+			return "redirect:/main/admin.do";	
 		}
 		//return /login/loginDone
 		
 	}
 	
 	// 로그아웃
-		@RequestMapping(value = "/logout.do", method = RequestMethod.GET)
+		@RequestMapping(value = "/member/logout.do", method = RequestMethod.GET)
 		public String logout(HttpSession session, Model model) {
 			log.info("로그아웃 gogo");
 
@@ -69,13 +70,13 @@ public class memberController {
 		}
 	
 	
-	@RequestMapping(value = "/join.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/member/join.do", method = RequestMethod.GET)
 	public String memberJoin(Model model) {
 		log.info("회원가입페이지 이동");
 		return "/login/memberJoin";
 	}
 	
-	@RequestMapping(value = "/joinCtr.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/member/joinCtr.do", method = RequestMethod.POST)
 	public String memberList(MemberDto memberDto, MultipartHttpServletRequest mulRequest, Model model) {
 		log.info("회원가입 진행"+memberDto);
 		
@@ -86,13 +87,13 @@ public class memberController {
 		return "/login/alert/successAlert";
 	}
 	
-	@RequestMapping(value = "/findId.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/member/findId.do", method = RequestMethod.GET)
 	public String findId(Model model) {
 		log.info("아이디 찾기페이지로 이동");
 		return "/login/findId";
 	}
 	
-	@RequestMapping(value = "/findIdCtr.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/member/findIdCtr.do", method = RequestMethod.POST)
 	public String idInput(String member_name, String member_phone, Model model) {
 		log.info("회원정보입력(아이디)");
 		
@@ -106,13 +107,13 @@ public class memberController {
 	}
 	
 	
-	@RequestMapping(value = "findPwd.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/member/findPwd.do", method = RequestMethod.GET)
 	public String findPwd(Model model) {
 		log.info("비밀번호 찾기페이지로 이동");
 		return "/login/findPwd";
 	}
 	
-	@RequestMapping(value = "/findPwdCtr.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/member/findPwdCtr.do", method = RequestMethod.POST)
 	public String pwdInput(String member_email, int member_check_question, String member_check_answer, Model model) {
 		log.info("회원정보입력(비밀번호)");
 		
@@ -126,7 +127,7 @@ public class memberController {
 	
 	
 	//회원정보조회
-	@RequestMapping(value = "/info.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/member/info.do", method = RequestMethod.GET)
 	public String memberInfo(HttpSession session, Model model) {
 		log.info("회원정보 조회 페이지 이동");
 		
@@ -142,7 +143,7 @@ public class memberController {
 	}
 		
 	//회원정보 수정
-	@RequestMapping(value = "/modInfo.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/member/modInfo.do", method = RequestMethod.GET)
 	public String memberMod(HttpSession session, Model model) {
 		log.info("회원정보 수정 페이지 이동");
 		
@@ -160,7 +161,7 @@ public class memberController {
 	}
 	
 	//회원정보 수정 상세
-		@RequestMapping(value = "/modInfoDetail.do", method = RequestMethod.GET)
+		@RequestMapping(value = "/member/modInfoDetail.do", method = RequestMethod.GET)
 		public String memberModDetail(HttpSession session, Model model) {
 			log.info("회원정보 상세수정 페이지 이동");
 			
@@ -176,14 +177,14 @@ public class memberController {
 			return "/member/memberModifyDetail";
 		}
 		
-		@RequestMapping(value = "/modInfoDetailCtr.do", method = RequestMethod.POST)
-		public String memberUpdate(MemberDto memberDto, MultipartHttpServletRequest mulRequest,
+		@RequestMapping(value = "/member/modInfoDetailCtr.do", method = RequestMethod.POST)
+		public String memberUpdate(MemberDto memberDto, String change, MultipartHttpServletRequest mulRequest,
 			HttpSession session, Model model){
 			
 			log.info("회원정보 수정 가즈아"+memberDto);
 			
 			
-			memberService.memberUpdate(memberDto, mulRequest);
+			memberService.memberUpdate(memberDto, change, mulRequest);
 			
 			System.out.println("●▅▇█▇▅▄▄▌●▅▇█▇▅▄▄▌성공●▅▇█▇▅▄▄▌●▅▇█▇▅▄▄▌");
 			
@@ -192,7 +193,7 @@ public class memberController {
 			
 			return "/member/alert/updateSuccess";
 		}
-		
+		//----------------------------------------------------------------------
 		@RequestMapping(value = "/myBoard.do", method = RequestMethod.GET)
 		public String myBoard(MemberDto memberDto, HttpSession session, Model model){
 			
@@ -223,7 +224,7 @@ public class memberController {
 			return "/member/myQna";
 		}
 		
-		@RequestMapping(value = "/listAdmin.do", method = RequestMethod.GET)
+		@RequestMapping(value = "/admin/listAdmin.do", method = RequestMethod.GET)
 		public String memberList(HttpSession session, Model model){
 			
 			log.info("관리자용 회원관리");

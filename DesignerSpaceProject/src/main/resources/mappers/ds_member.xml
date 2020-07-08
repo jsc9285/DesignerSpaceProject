@@ -29,6 +29,10 @@
 		<result column="profile_table_mno" property="profile_table_mno"/>
 		<result column="profile_table_original_name" property="profile_table_original_name"/>
 		<result column="profile_table_stored_name" property="profile_table_stored_name"/>
+		
+		<result column="boardCnt" property="boardCnt"/>
+		<result column="viewCnt" property="viewCnt"/>
+		<result column="likeCnt" property="likeCnt"/>
 	</resultMap>
 	
 	
@@ -73,8 +77,21 @@
 	</insert>
 	
 	<select id="memberList" resultMap="memberResultMap">
-		SELECT MEMBER_NO, MEMBER_NICK, MEMBER_NAME, MEMBER_EMAIL, MEMBER_CRE_DATE
-		FROM MEMBER
+		SELECT MEMBER_NO, MEMBER_NICK, MEMBER_EMAIL, BOARDCNT, VIEWCNT, LIKECNT, MEMBER_CRE_DATE, MEMBER_GRADE
+			FROM MEMBER 
+			LEFT JOIN 
+			    (SELECT PROJECT_BOARD_MNO, BOARDCNT, VIEWCNT, LIKECNT
+			        FROM 
+			            (SELECT PROJECT_BOARD_MNO, COUNT(PROJECT_BOARD_TITLE) BOARDCNT, SUM(PROJECT_BOARD_VIEWS) VIEWCNT
+			            FROM PROJECT_BOARD
+			            GROUP BY PROJECT_BOARD_MNO)
+			        LEFT JOIN 
+			            (SELECT PROJECT_LIKE_MNO, COUNT(PROJECT_LIKE_MNO) LIKECNT
+			            FROM PROJECT_LIKE
+			            WHERE PROJECT_LIKE_FLAG = 'Y'
+			            GROUP BY PROJECT_LIKE_MNO)
+		        ON PROJECT_BOARD_MNO = PROJECT_LIKE_MNO)
+			ON MEMBER_NO = PROJECT_BOARD_MNO
 	</select>
 	
 	<insert id="profileAdd" parameterType="map">
@@ -88,8 +105,8 @@
 	
 	<select id="memberInfo" parameterType="int" 
 		resultMap="memberResultMap">
-		SELECT MEMBER_NO, MEMBER_NICK, MEMBER_EMAIL, MEMBER_NAME, MEMBER_PHONE, PROFILE_TABLE_STORED_NAME,
-			MEMBER_COMMENTS
+		SELECT MEMBER_NO, MEMBER_NICK, MEMBER_EMAIL, MEMBER_NAME, MEMBER_PHONE, 
+			PROFILE_TABLE_ORIGINAL_NAME, PROFILE_TABLE_STORED_NAME, MEMBER_COMMENTS
 		FROM MEMBER LEFT JOIN PROFILE_TABLE 
         ON MEMBER_NO = PROFILE_TABLE_MNO
 		WHERE MEMBER_NO =#{member_no}

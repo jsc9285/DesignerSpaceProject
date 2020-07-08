@@ -11,16 +11,32 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 
+	<style type="text/css">
+
+		tr,td,th{
+			border: 1px solid black;
+		}
+
+	</style>
+
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 	
-<style type="text/css">
+	
+	<script type="text/javascript">
+	
+		window.onload = function(){
+			
+			
+			if($('#board_cnt').val == null){
+				$('#get_board_cnt').val =$('#board_cnt').val;
+				
+			}
+			
+		}
+	
+	</script>
 
-	tr,td,th{
-		border: 1px solid black;
-	}
-
-</style>
 	
 </head>
 
@@ -42,13 +58,15 @@
 				<tr>
 					<td>회원번호</td>
 					<td>닉네임</td>
-					<td>성명</td>
 					<td>이메일</td>
+					<td>작품수</td>
+					<td>좋아요</td>	
 					<td>가입일자</td>	
+						
 				<c:choose>
 		<c:when test="${empty memberList}">
 			<tr>
-				<td colspan="5" style="text-align: center;">
+				<td colspan="6" style="text-align: center;">
 					등록된 게시글이 없습니다.
 				</td>
 			</tr>
@@ -58,11 +76,29 @@
 			<tr>
 				<td>${memberDto.member_no}</td>
 				<td>${memberDto.member_nick}</td>
-				<td>${memberDto.member_name}</td>
 				<td>${memberDto.member_email}</td>
+				<c:choose>
+					<c:when test="${empty memberDto.boardCnt}">
+						<td id="board_cnt">0</td>
+					</c:when>
+					<c:otherwise>
+						<td id="board_cnt">${memberDto.boardCnt}</td>
+					</c:otherwise>
+				</c:choose>
+				<c:choose>
+					<c:when test="${empty memberDto.likeCnt}">
+						<td id="like_cnt">0</td>
+					</c:when>
+					<c:otherwise>
+						<td id="like_cnt">${memberDto.likeCnt}</td>
+					</c:otherwise>
+				</c:choose>
+				
 				<td>
-				<fmt:formatDate value="${memberDto.member_cre_date}" 
-						pattern="yyyy년MM월dd일 hh시mm분"/>
+					<h5><fmt:formatDate value="${memberDto.member_cre_date}" 
+						pattern="yyyy.MM.dd"/></h5>
+					<h5><fmt:formatDate value="${memberDto.member_cre_date}" 
+						pattern="hh:mm"/></h5>
 				</td>
 			</tr>
 			</c:forEach>
