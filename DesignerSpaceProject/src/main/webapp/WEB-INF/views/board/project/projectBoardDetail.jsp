@@ -162,7 +162,7 @@
 	<div id="wrap">
 		<div id="innerWrap">
 			<div id="projectInfo">
-				<div class="profileImg" style="background-image: url('<%=request.getContextPath()%>/resources/projectImg/${projectBoardDto.PROFILE_TABLE_STORED_NAME}');"></div>
+				<div class="profileImg" style="background-image: url(<c:url value='/profileImg/${projectBoardDto.PROFILE_TABLE_STORED_NAME}'/>);"></div>
 				<h1>${projectBoardDto.project_board_title}</h1>
 				<span>${projectBoardDto.member_nick}</span>
 			</div>
@@ -191,7 +191,7 @@
 							
 				<h6>${projectBoardDto.project_board_cre_date}</h6>
 				
-				<div class="profileImg" style="background-image: url('<%=request.getContextPath()%>/resources/img/examImg.jpeg');"></div>
+				<div class="profileImg" style="background-image: url(<c:url value='/profileImg/${projectBoardDto.PROFILE_TABLE_STORED_NAME}'/>);"></div>
 				<div style="height: 150px; text-align: left;">
 					<h1>${projectBoardDto.member_nick}</h1>
 					<span>${projectBoardDto.project_board_contents}</span>

@@ -42,24 +42,28 @@
 	<div id="wrap">
 		<div id="innerWrap">
 			
-			<div style="width: 608px; height: 363px; background-color: green;">
+			
+			<div style="width: 608px; height: 363px; background-color: green; margin: auto;">
 			
 			</div>
+			<br>
+			<br>
 			
 			
-			<div>
+			<div style="text-align: center;">
 				<form action="./loginCtr.do" method="post">
 					<c:choose>
 						<c:when test="${empty member_email}">
-							<input id="emailInput" type="text" name='member_email' placeholder="이메일 입력" value="dda">
+							<input id="emailInput" type="text" name='member_email' placeholder="이메일 입력" >
 						</c:when>
 						<c:otherwise>
 							<input id="emailInput" type="text" name='member_email' placeholder="이메일 입력" value="${member_email}">
 						</c:otherwise>
 					</c:choose>
 					<br>
-					<input type="text" name='member_pwd' placeholder="비밀번호 입력" value="dd"><br>
-					
+					<br>
+					<input type="text" name='member_pwd' placeholder="비밀번호 입력"><br>
+					<br><br>
 					<button>로그인</button>
 				</form>
 					<a href="findId.do">아이디찾기</a>
