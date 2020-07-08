@@ -5,6 +5,7 @@ import java.util.Date;
 public class ProjectBoardDto {
 	
 	private int project_board_no;
+	private int project_board_mno;
 	private String project_board_title;
 	private String project_board_contents;
 	private int project_board_like;
@@ -21,6 +22,7 @@ public class ProjectBoardDto {
 	private String PROFILE_TABLE_ORIGINAL_NAME;
 	private String PROFILE_TABLE_STORED_NAME;
 	
+	private int project_comment_cnt;
 	private String project_comment_comments;
 	private Date project_comment_cre_date;
 	private Date project_comment_mod_date;
@@ -29,14 +31,16 @@ public class ProjectBoardDto {
 		super();
 	}
 
-	public ProjectBoardDto(int project_board_no, String project_board_title, String project_board_contents,
-			int project_board_like, int project_board_views, String project_board_category, Date project_board_cre_date,
-			Date project_board_mod_date, String project_board_del_flag, String member_nick,
-			String fILE_TABLE_ORIGINAL_FILE_NAME, String fILE_TABLE_STORED_FILE_NAME,
-			String pROFILE_TABLE_ORIGINAL_NAME, String pROFILE_TABLE_STORED_NAME, String project_comment_comments,
-			Date project_comment_cre_date, Date project_comment_mod_date) {
+	public ProjectBoardDto(int project_board_no, int project_board_mno, String project_board_title,
+			String project_board_contents, int project_board_like, int project_board_views,
+			String project_board_category, Date project_board_cre_date, Date project_board_mod_date,
+			String project_board_del_flag, String member_nick, String fILE_TABLE_ORIGINAL_FILE_NAME,
+			String fILE_TABLE_STORED_FILE_NAME, String pROFILE_TABLE_ORIGINAL_NAME, String pROFILE_TABLE_STORED_NAME,
+			int project_comment_cnt, String project_comment_comments, Date project_comment_cre_date,
+			Date project_comment_mod_date) {
 		super();
 		this.project_board_no = project_board_no;
+		this.project_board_mno = project_board_mno;
 		this.project_board_title = project_board_title;
 		this.project_board_contents = project_board_contents;
 		this.project_board_like = project_board_like;
@@ -50,6 +54,7 @@ public class ProjectBoardDto {
 		FILE_TABLE_STORED_FILE_NAME = fILE_TABLE_STORED_FILE_NAME;
 		PROFILE_TABLE_ORIGINAL_NAME = pROFILE_TABLE_ORIGINAL_NAME;
 		PROFILE_TABLE_STORED_NAME = pROFILE_TABLE_STORED_NAME;
+		this.project_comment_cnt = project_comment_cnt;
 		this.project_comment_comments = project_comment_comments;
 		this.project_comment_cre_date = project_comment_cre_date;
 		this.project_comment_mod_date = project_comment_mod_date;
@@ -61,6 +66,14 @@ public class ProjectBoardDto {
 
 	public void setProject_board_no(int project_board_no) {
 		this.project_board_no = project_board_no;
+	}
+
+	public int getProject_board_mno() {
+		return project_board_mno;
+	}
+
+	public void setProject_board_mno(int project_board_mno) {
+		this.project_board_mno = project_board_mno;
 	}
 
 	public String getProject_board_title() {
@@ -167,6 +180,14 @@ public class ProjectBoardDto {
 		PROFILE_TABLE_STORED_NAME = pROFILE_TABLE_STORED_NAME;
 	}
 
+	public int getProject_comment_cnt() {
+		return project_comment_cnt;
+	}
+
+	public void setProject_comment_cnt(int project_comment_cnt) {
+		this.project_comment_cnt = project_comment_cnt;
+	}
+
 	public String getProject_comment_comments() {
 		return project_comment_comments;
 	}
@@ -193,16 +214,18 @@ public class ProjectBoardDto {
 
 	@Override
 	public String toString() {
-		return "ProjectBoardDto [project_board_no=" + project_board_no + ", project_board_title=" + project_board_title
-				+ ", project_board_contents=" + project_board_contents + ", project_board_like=" + project_board_like
-				+ ", project_board_views=" + project_board_views + ", project_board_category=" + project_board_category
-				+ ", project_board_cre_date=" + project_board_cre_date + ", project_board_mod_date="
-				+ project_board_mod_date + ", project_board_del_flag=" + project_board_del_flag + ", member_nick="
-				+ member_nick + ", FILE_TABLE_ORIGINAL_FILE_NAME=" + FILE_TABLE_ORIGINAL_FILE_NAME
-				+ ", FILE_TABLE_STORED_FILE_NAME=" + FILE_TABLE_STORED_FILE_NAME + ", PROFILE_TABLE_ORIGINAL_NAME="
-				+ PROFILE_TABLE_ORIGINAL_NAME + ", PROFILE_TABLE_STORED_NAME=" + PROFILE_TABLE_STORED_NAME
-				+ ", project_comment_comments=" + project_comment_comments + ", project_comment_cre_date="
-				+ project_comment_cre_date + ", project_comment_mod_date=" + project_comment_mod_date + "]";
+		return "ProjectBoardDto [project_board_no=" + project_board_no + ", project_board_mno=" + project_board_mno
+				+ ", project_board_title=" + project_board_title + ", project_board_contents=" + project_board_contents
+				+ ", project_board_like=" + project_board_like + ", project_board_views=" + project_board_views
+				+ ", project_board_category=" + project_board_category + ", project_board_cre_date="
+				+ project_board_cre_date + ", project_board_mod_date=" + project_board_mod_date
+				+ ", project_board_del_flag=" + project_board_del_flag + ", member_nick=" + member_nick
+				+ ", FILE_TABLE_ORIGINAL_FILE_NAME=" + FILE_TABLE_ORIGINAL_FILE_NAME + ", FILE_TABLE_STORED_FILE_NAME="
+				+ FILE_TABLE_STORED_FILE_NAME + ", PROFILE_TABLE_ORIGINAL_NAME=" + PROFILE_TABLE_ORIGINAL_NAME
+				+ ", PROFILE_TABLE_STORED_NAME=" + PROFILE_TABLE_STORED_NAME + ", project_comment_cnt="
+				+ project_comment_cnt + ", project_comment_comments=" + project_comment_comments
+				+ ", project_comment_cre_date=" + project_comment_cre_date + ", project_comment_mod_date="
+				+ project_comment_mod_date + "]";
 	}
-	
+		
 }

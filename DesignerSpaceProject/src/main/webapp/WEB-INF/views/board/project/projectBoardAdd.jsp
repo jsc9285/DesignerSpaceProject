@@ -80,10 +80,71 @@
 		#contextArea input:hover{
 			background-color: #4AD674;
 		}
+		.exProjectPic{
+			width: 1350px;
+			height: 600px;
+			margin-bottom: 10px;
+			background-repeat: no-repeat;
+			background-position: center;
+			background-size: cover;
+			background-color: gray;
+		}
 	</style>
 	
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
+	
+	<script type="text/javascript">
+ 		var createFlag = false;
+
+ 		function fileAddFnc() { 			 
+ 			if(!createFlag){
+	 			
+ 			var str = "<a>";
+			str += "<div class='exProjectPic' style=''></div>";
+			str += "<input type='file' value='파일선택' accept='image/*' onchange='setThumbnailFnc(event, this);'>";
+			str += "<button name='delete' onclick='fileDelFnc($(this));'>파일삭제</button>";
+			str += "</a>";
+			
+
+			if($("button[name='delete']").length < 5){
+				$('#projectPicArea').append(str);
+			}
+				
+			createFlag = true;
+ 			}
+			
+ 		}
+ 		
+ 		function fileDelFnc(obj) {
+			obj.parent().remove();			
+			
+			createFlag = false;
+		}
+ 		
+ 		function fileNamingFnc() {
+			var projectList = document.getElementById('projectPicArea').children;
+			var projectSize = projectList.length;
+			
+			for (var i = 0; i < projectSize; i++) {
+				projectList[i].children[1].setAttribute('name', 'file_' + (i+1));
+			}
+		}
+ 		
+ 		function setThumbnailFnc(event, obj) { 
+		      var reader = new FileReader(); 
+		      var imgObj = obj.parentNode.children[0];
+		      
+		      reader.onload = function(event) { 
+		         imgObj.setAttribute("src", event.target.result);
+		         imgObj.setAttribute("style", 'background-image: url(' + event.target.result +')');        
+		         
+		    	 createFlag = false;
+		      }; 
+		      
+		      reader.readAsDataURL(event.target.files[0]); 
+ 		}
+	</script>
 	
 </head>
 
@@ -94,28 +155,31 @@
 	<div id="wrap">
 		<div id="innerWrap">
 			<div id="innerPage">
-				<div id="projectPicArea">
-					<div id="exProjectPic">
-
-					</div>
-					<input type="file" value="파일선택">
-					<div id="exProjectPic2" style="background-image: url('<%=request.getContextPath()%>/resources/img/examImg.jpeg');">
-	
-					</div>
-					<input type="file" value="파일선택">
-					<button>파일삭제</button>					
-				</div>
-				<input id="addFileBtn" type="button" value="파일추가">
-				
-				<div id="contextArea">
-					<h1>제목</h1>
-					<textarea style="height: 120px;"></textarea>
-					<h1>설명</h1>
-					<textarea style="height: 360px;"></textarea>
+				<form action="./addCtr.do" method="post"
+					enctype="multipart/form-data">
+					<div id="projectPicArea">
 					
-					<input type="submit" value="확인">
-					<input type="button" value="취소">
-				</div>
+										    									
+					</div>
+					<input id="addFileBtn" type="button" value="파일추가"
+						onclick="fileAddFnc();">
+					
+					<div id="contextArea">
+						<input type="hidden" name="project_board_mno" value="${memberDto.member_no}">
+						<h1>제목</h1>
+						<textarea name="project_board_title" style="height: 120px;"></textarea>
+						<h1>설명</h1>
+						<textarea name="project_board_contents" style="height: 360px;"></textarea>
+						
+						<div>
+							사진<input type="radio" name='project_board_category' value="p"/>
+							일러스트<input type='radio' name='project_board_category' value="i"/>
+						</div>
+						
+						<input type="submit" value="확인" onclick="fileNamingFnc();">
+						<input type="button" value="취소" onclick="location.href='./list.do'">
+					</div>
+				</form>
 			</div>
 
 		</div>

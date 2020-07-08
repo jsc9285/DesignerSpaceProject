@@ -54,12 +54,14 @@
 		#projectArea input:hover{
 			background-color: #4AD674;
 		}
-		#exProjectPic{
-			background-color: #D3D3D3;
+		#exProjectPic2{
 			height: 700px;
 			margin-bottom: 10px;
+			background-repeat: no-repeat;
+			background-position: center;
+			background-size: cover;
 		}
-		#exProjectPic2{
+		.exProjectPic{
 			height: 700px;
 			margin-bottom: 10px;
 			background-repeat: no-repeat;
@@ -138,6 +140,19 @@
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 	
+	<script type="text/javascript">
+		function projectDeleteFnc() {		
+			var deleteProjectNum = document.getElementById('deleteProjectNum').value;
+
+		 	if(confirm('정말로 삭제하시겠습니까?')){
+		 		
+		 		location.href='./deleteCtr.do?project_board_no=' + deleteProjectNum;
+		 	}else{
+		 		return false;
+		 	}	
+		}
+	</script>
+	
 </head>
 
 <body>
@@ -152,11 +167,13 @@
 				<span>${projectBoardDto.member_nick}</span>
 			</div>
 			<div id="projectArea">
-<!-- 				<div id="exProjectPic"></div> -->
-				<div id="exProjectPic2" style="background-image: url('<%=request.getContextPath()%>/resources/projectImg/${projectBoardDto.FILE_TABLE_STORED_FILE_NAME}');"></div>
+				<c:forEach var="projectBoardFileDto" items="${projectBoardFileList}">
+					<div class="exProjectPic" style="background-image: url(<c:url value='/projectImg/${projectBoardFileDto.FILE_TABLE_STORED_FILE_NAME}'/>)"></div>
+				</c:forEach>				
 				
-				<input type="button" onclick="location.href='./update.do'" value="수정">			
-				<input type="button" onclick="confirm('정말로 삭제하시겠습니까?')" value="삭제">			
+				<input type="hidden" id='deleteProjectNum' value="${projectBoardDto.project_board_no}">
+				<input type="button" onclick="location.href='./update.do?project_board_no=${projectBoardDto.project_board_no}'" value="수정">			
+				<input type="button" onclick="projectDeleteFnc();" value="삭제">			
 				<input type="button" onclick="location.href='./list.do'" value="목록">			
 			</div>
 			<div id="projectInfoArea">
@@ -170,7 +187,7 @@
 				<img src="<%=request.getContextPath()%>/resources/img/iconView_grey.png">
 				<span>${projectBoardDto.project_board_views}</span>
 				<img src="<%=request.getContextPath()%>/resources/img/iconChat_grey.png">
-				<span>3</span>
+				<span>${projectBoardDto.project_comment_cnt}</span>
 							
 				<h6>${projectBoardDto.project_board_cre_date}</h6>
 				

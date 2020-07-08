@@ -1,107 +1,117 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>        
 <!-- ====================================  비로그인 헤더  ================================================= -->
-<!-- <div id="h_noneHeader"> -->
-<!--    <div id="header_inner">		   		   	 -->
-<!--    		<div id="h_bigLogo_area"> -->
-<!--    			<a class="h_reset_hyperLink" href="#"> -->
-<%--    				<img id="h_bigLogo_img" src="<%=request.getContextPath()%>/resources/img/butterfly.png"> --%>
-<!--    			</a>	 -->
-<!--    			<a class="h_reset_hyperLink" href="#"><span id="h_bigLabel">Designer's Space</span></a>	 -->
-<!--    		</div>   			 -->
-<!--    </div> -->
-<!-- </div> -->
-<!-- ======================================  회원 헤더  =============================================== -->
-<div id="header">
-   <div id="header_inner">
-   
-      <div id="h_logo_area">
-         <span>
-            Designer's Space
-         </span>
-      </div>
-      
-      <div id="h_areaLine"></div>
-      
-      <nav id="h_service_area">
-         <ul>
-         	<li><a class="h_menuLink" href="#"><img id="h_logo_img" src="<%=request.getContextPath()%>/resources/img/butterfly.png"></a></li>
-         	<li class="h_menu_line"></li>
-         	<li><a class="h_menuLink" href="#">작품</a></li>
-         	<li class="h_menu_line"></li>
-         	<li><a class="h_menuLink" href="#">자유게시판</a></li>
-         	<li class="h_menu_line"></li>
-         	<li><a class="h_menuLink" href="#">QnA</a></li>
-         </ul>
-      </nav>
-      
-      <a href="#none">
-      	<img id="h_profile" src="<%=request.getContextPath()%>/resources/img/profile.png" 
-      		onmouseover="this.src='<%=request.getContextPath()%>/resources/img/profileC.png'"
-      		onmouseout="this.src='<%=request.getContextPath()%>/resources/img/profile.png'">
-      </a>
-      
-   </div>
-</div>
-
-<div id="h_myPage">
-	<div id="h_inner_myPage">
-		<a id="h_myPage_back" href="#none"><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/backIcon.png"></a>
-		<span id="h_myPage_logo">Designer's Space</span>
-				
-		<div id="h_myPage_profile">
-			<div id="h_myPage_profileImg" style="background-image: url('<%=request.getContextPath()%>/resources/img/examImg.jpeg');"></div>
-			<h6 id="h_myPage_profileName">Steven Gerrard</h6>
+<c:choose>
+	<c:when test="${memberDto eq null}">
+		<div id="h_noneHeader">
+		   <div id="header_inner">		   		   	
+		   		<div id="h_bigLogo_area">
+		   			<a class="h_reset_hyperLink" href="#">
+		   				<img id="h_bigLogo_img" src="<%=request.getContextPath()%>/resources/img/butterfly.png">
+		   			</a>	
+		   			<a class="h_reset_hyperLink" href="#"><span id="h_bigLabel">Designer's Space</span></a>	
+		   		</div>   			
+		   </div>
 		</div>
+	</c:when>
+	
+	<c:when test="${memberDto.member_grade eq '0'}">
+		<!-- ======================================  회원 헤더  =============================================== -->
+		<div id="header">
+		   <div id="header_inner">
+		   
+		      <div id="h_logo_area">
+		         <span>
+		            Designer's Space
+		         </span>
+		      </div>
+		      
+		      <div id="h_areaLine"></div>
+		      
+		      <nav id="h_service_area">
+		         <ul>
+		         	<li><a class="h_menuLink" href="#"><img id="h_logo_img" src="<%=request.getContextPath()%>/resources/img/butterfly.png"></a></li>
+		         	<li class="h_menu_line"></li>
+		         	<li><a class="h_menuLink" href="#">작품</a></li>
+		         	<li class="h_menu_line"></li>
+		         	<li><a class="h_menuLink" href="#">자유게시판</a></li>
+		         	<li class="h_menu_line"></li>
+		         	<li><a class="h_menuLink" href="#">QnA</a></li>
+		         </ul>
+		      </nav>
+		      
+		      <a href="#none">
+		      	<img id="h_profile" src="<%=request.getContextPath()%>/resources/img/profile.png" 
+		      		onmouseover="this.src='<%=request.getContextPath()%>/resources/img/profileC.png'"
+		      		onmouseout="this.src='<%=request.getContextPath()%>/resources/img/profile.png'">
+		      </a>
+		      
+		   </div>
+		</div>
+		
+		<div id="h_myPage">
+			<div id="h_inner_myPage">
+				<a id="h_myPage_back" href="#none"><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/backIcon.png"></a>
+				<span id="h_myPage_logo">Designer's Space</span>
+						
+				<div id="h_myPage_profile">
+<%-- 					<div id="h_myPage_profileImg" style="background-image: url('<%=request.getContextPath()%>/resources/profileImg/${memberDto.profile_table_stored_name}');"></div> --%>
+					<h6 id="h_myPage_profileName">${memberDto.member_nick}</h6>
+				</div>
+						
+				<div class="h_myPage_areaLine"></div>
 				
-		<div class="h_myPage_areaLine"></div>
-		
-		<nav>
-			<ul>
-				<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage1.png"><a>회원정보수정</a></li>
-				<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage2.png"><a>글 목록</a></li>
-				<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage3.png"><a>QnA 조회</a></li>
-				<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage4.png"><a>신고글 조회</a></li>
-			</ul>
-		</nav>
-		
-		<div class="h_myPage_areaLine"></div>
-		
-		<img id="h_myPage_logout" class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/logoutIcon.png">
-	</div>
-</div>
-<!-- =======================================  관리자 헤더  ==============================================  -->
-<!-- <div id="header"> -->
-<!--    <div id="header_inner"> -->
-   
-<!--       <div id="h_logo_area"> -->
-<!--          <span> -->
-<!--             Designer's Space -->
-<!--          </span> -->
-<!--       </div> -->
-      
-<!--       <div id="h_areaLine"></div> -->
-      
-<!--       <nav id="h_admin_service_area"> -->
-<!--          <ul> -->
-<%--          	<li><a class="h_menuLink" href="#"><img id="h_logo_img" src="<%=request.getContextPath()%>/resources/img/flower.png"></a></li> --%>
-<!--          	<li class="h_menu_line"></li> -->
-<!--          	<li><a class="h_menuLink" href="#">작품</a></li> -->
-<!--          	<li class="h_menu_line"></li> -->
-<!--          	<li><a class="h_menuLink" href="#">자유게시판</a></li> -->
-<!--          	<li class="h_menu_line"></li> -->
-<!--          	<li><a class="h_menuLink" href="#">회원관리</a></li> -->
-<!--          	<li class="h_menu_line"></li> -->
-<!--          	<li><a class="h_menuLink" href="#">QnA</a></li> -->
-<!--          	<li class="h_menu_line"></li> -->
-<!--          	<li><a class="h_menuLink" href="#">신고관리</a></li> -->
-<!--          </ul> -->
-<!--       </nav> -->
-      
-<!--       <a href="#none"> -->
-<%--       	<img id="h_profile" src="<%=request.getContextPath()%>/resources/img/logoutIcon.png"> --%>
-<!--       </a> -->
-      
-<!--    </div> -->
-<!-- </div> -->
+				<nav id="h_myPage_link">
+					<ul>
+						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage1.png"><a href='<%=request.getContextPath()%>/info.do'>회원정보조회</a></li>
+						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage2.png"><a href='<%=request.getContextPath()%>/myBoard.do'>글 목록</a></li>
+						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage3.png"><a href='<%=request.getContextPath()%>/myQna.do'>QnA 조회</a></li>
+						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage4.png"><a href='<%=request.getContextPath()%>/myReport.do'>신고글 조회</a></li>
+					</ul>
+				</nav>
+				
+				<div class="h_myPage_areaLine"></div>
+				
+				<a href='<%=request.getContextPath()%>/logout.do'><img id="h_myPage_logout" class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/logoutIcon.png"></a>
+			</div>
+		</div>
+	</c:when>
+	
+	<c:when test="${memberDto.member_grade eq '1'}">
+		<!-- =======================================  관리자 헤더  ==============================================  -->
+		<div id="header">
+		   <div id="header_inner">
+		   
+		      <div id="h_logo_area">
+		         <span>
+		            Designer's Space
+		         </span>
+		      </div>
+		      
+		      <div id="h_areaLine"></div>
+		      
+		      <nav id="h_admin_service_area">
+		         <ul>
+		         	<li><a class="h_menuLink" href="#"><img id="h_logo_img" src="<%=request.getContextPath()%>/resources/img/flower.png"></a></li>
+		         	<li class="h_menu_line"></li>
+		         	<li><a class="h_menuLink" href="#">작품</a></li>
+		         	<li class="h_menu_line"></li>
+		         	<li><a class="h_menuLink" href="#">자유게시판</a></li>
+		         	<li class="h_menu_line"></li>
+		         	<li><a class="h_menuLink" href="#">회원관리</a></li>
+		         	<li class="h_menu_line"></li>
+		         	<li><a class="h_menuLink" href="#">QnA</a></li>
+		         	<li class="h_menu_line"></li>
+		         	<li><a class="h_menuLink" href="#">신고관리</a></li>
+		         </ul>
+		      </nav>
+		      
+		      <a href="#none">
+		      	<img id="h_profile" src="<%=request.getContextPath()%>/resources/img/logoutIcon.png">
+		      </a>
+		      
+		   </div>
+		</div>
+	</c:when>
+</c:choose>

@@ -90,6 +90,15 @@
     		opacity: 0;
     		transition: all 0.3s;
 		}
+		.projectList .thumbnailPic img{
+			position: absolute;
+			right: 10px;
+			top: 10px;
+			width: 32px;
+			height: 32px;
+    		opacity: 0;
+    		transition: all 0.3s;
+		}
 		.projectList img{
 			vertical-align: middle;
 		}
@@ -151,6 +160,7 @@
 					<button>전체</button>
 					<button>그림</button>
 					<button>사진</button>
+					<button style="cursor:pointer; margin-left: 50px; position: absolute; background-color: red;" onclick="location.href='./add.do'">테스트용 글작성</button>
 				</div>
 				
 				<select>
@@ -163,7 +173,16 @@
 			<div id="projectView">
 				<c:forEach var="projectBoardDto" items="${projectBoardList}">
 					<div class="projectList">
-						<div class="thumbnailPic" onclick="location.href='./detail.do?project_board_no=${projectBoardDto.project_board_no}'" style="background-image: url('<%=request.getContextPath()%>/resources/projectImg/${projectBoardDto.FILE_TABLE_STORED_FILE_NAME}');">
+						<div class="thumbnailPic" onclick="location.href='./detail.do?project_board_no=${projectBoardDto.project_board_no}'"
+							 style="background-image: url(<c:url value='/projectImg/${projectBoardDto.FILE_TABLE_STORED_FILE_NAME}'/>);">
+							<c:choose>
+								<c:when test="${projectBoardDto.project_board_category eq 'p'}">
+									<img src="<%=request.getContextPath()%>/resources/img/pIcon.png">
+								</c:when>
+								<c:when test="${projectBoardDto.project_board_category eq 'i'}">
+									<img src="<%=request.getContextPath()%>/resources/img/iIcon.png">
+								</c:when>
+							</c:choose>
 							<div>
 								<a>${projectBoardDto.project_board_title}</a>
 							</div>
@@ -174,7 +193,7 @@
 						</div>												
 						<div style="float: right; padding-top: 10px;">
 							<img src="<%=request.getContextPath()%>/resources/img/iconLike.png">
-							<span>100</span>
+							<span>${projectBoardDto.project_board_like}</span>
 							<img src="<%=request.getContextPath()%>/resources/img/iconView.png">
 							<span>${projectBoardDto.project_board_views}</span>
 						</div>						

@@ -55,12 +55,12 @@
 	<div id="wrap">
 		<div id="innerWrap">
 			<div id="buttonWrap">
-				<button><img src="<%=request.getContextPath()%>/resources/img/editIcon.png" style="width: 32px; vertical-align: -7px;">작품 관리</button>
-				<button><img src="<%=request.getContextPath()%>/resources/img/iconImage.png">자유게시판 관리</button>
-				<button><img src="<%=request.getContextPath()%>/resources/img/userIcon.png">회원 관리</button>
-				<button><img src="<%=request.getContextPath()%>/resources/img/iconBox.png">QnA 관리</button>
-				<button><img src="<%=request.getContextPath()%>/resources/img/iconInfo.png">신고글 관리</button>
-				<button><img src="<%=request.getContextPath()%>/resources/img/iconProfile.png">관리자정보 수정</button>
+				<button onclick="location.href='<%=request.getContextPath()%>/projectBoard/management.do'"><img src="<%=request.getContextPath()%>/resources/img/editIcon.png" style="width: 32px; vertical-align: -7px;">작품 관리</button>
+				<button onclick="location.href='<%=request.getContextPath()%>/freeBoard/free.do'"><img src="<%=request.getContextPath()%>/resources/img/iconImage.png">자유게시판 관리</button>
+				<button onclick="location.href='<%=request.getContextPath()%>/listAdmin.do'"><img src="<%=request.getContextPath()%>/resources/img/userIcon.png">회원 관리</button>
+				<button onclick="location.href='<%=request.getContextPath()%>/qnaBoard/list.do'"><img src="<%=request.getContextPath()%>/resources/img/iconBox.png">QnA 관리</button>
+				<button onclick="location.href='<%=request.getContextPath()%>/reportBoard/list.do'"><img src="<%=request.getContextPath()%>/resources/img/iconInfo.png">신고글 관리</button>
+				<button onclick="location.href='<%=request.getContextPath()%>/info.do'"><img src="<%=request.getContextPath()%>/resources/img/iconProfile.png">관리자정보 수정</button>
 			</div>
 		</div>
 	</div>
