@@ -76,7 +76,24 @@
 		objImg.src = imgArray[imgNum];
 	}
 
-
+	function loginOrderFnc() {
+		
+		
+		var email = document.getElementById("email_input");
+		var pwd = document.getElementById("email_pwd");
+		
+		alert(email.value);
+		
+		if (email.value=="") {
+			email.focus();
+			return false;
+		}else if(pwd.value==""){
+			pwd.focus();
+			return false;
+		}
+		
+		
+	}
 
 	</script>
 	
@@ -101,17 +118,18 @@
 					<form action="./member/loginCtr.do" method="post">
 						<c:choose>
 							<c:when test="${empty member_email}">
-								<input id="email_input" type="text" name='member_email' placeholder="이메일 입력" >
+								<input id="email_input" type="email" name='member_email' placeholder="이메일 입력" >
 							</c:when>
 							<c:otherwise>
-								<input id="email_input" type="text" name='member_email' placeholder="이메일 입력" value="${member_email}">
+								<input id="email_input" type="password" name='member_email' placeholder="이메일 입력" value="${member_email}">
 							</c:otherwise>
 						</c:choose>
 						<br>
 						
-						<input type="text" name='member_pwd' placeholder="비밀번호 입력" style="margin-bottom: 20px;"><br>
+						<input type="text" id="pwd_input" name='member_pwd' placeholder="비밀번호 입력" 
+							style="margin-bottom: 20px;"><br>
 				
-						<button>로그인</button>
+						<button onclick="loginOrderFnc();">로그인</button>
 					</form>
 						<a href="member/findId.do">아이디찾기</a>
 						<a style="margin: 7px;">|</a>
