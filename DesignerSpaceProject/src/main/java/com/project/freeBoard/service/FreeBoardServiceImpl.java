@@ -102,7 +102,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 	}
 
 	@Override
-	public List<Object> freeBoardLikeSelectList(int no, int mno) {
+	public String freeBoardLikeSelectList(int no, int mno) {
 		// TODO Auto-generated method stub
 				
 		
@@ -163,6 +163,26 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 	public void freeBoardUpdate(int no, String title, String contents) {
 		// TODO Auto-generated method stub
 		freeBoardDao.freeBoardUpdate(no, title, contents);
+	}
+
+	@Override
+	public void freeBoardCommentUpdate(int fcno, String comments) {
+		// TODO Auto-generated method stub
+		freeBoardDao.freeBoardCommentUpdate(fcno,comments);
+		
+	}
+
+	@Override
+	public void freeBoardCommentOneDelete(int fcno) {
+		// TODO Auto-generated method stub
+		freeBoardDao.freeBoardCommentOneDelete(fcno);
+		
+	}
+
+	@Override
+	public int freeBoardCommentTotalCount(int no) {
+		// TODO Auto-generated method stub
+		return freeBoardDao.freeBoardCommentTotalCount(no);
 	}
 
 	

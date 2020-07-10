@@ -4,7 +4,7 @@
 
 
 <style type="text/css">
-nav > ul {
+#navList > ul {
  	list-style-type: none; 
     padding: 0;
     overflow: hidden;
@@ -15,11 +15,11 @@ nav > ul {
     
 }
 
-nav > ul > li {
+#navList > ul > li {
 	float: left;
 }
 
-nav > ul > li > a {
+#navList > ul > li > a {
     display: block;
     color: white;  
     text-align: center;
@@ -27,7 +27,7 @@ nav > ul > li > a {
     text-decoration: none;
 } 
 
-nav > ul > li > a:hover { 
+#navList > ul > li > a:hover { 
      color: #FFD9EC; 
      background-color: #5D5D5D; 
      font-weight: bold; 
@@ -47,18 +47,20 @@ nav > ul > li > a:hover {
 
 <script type="text/javascript">
 	function goPageFnc(pageNumber){
-
+		
 		var curPage = $('#curPage');
 
 		curPage.val(pageNumber);
 		
 		var pagingForm = $('#pagingForm');
+
 		pagingForm.submit();
+		
 	}
-	
+		
 </script>
 
-	<nav>
+	<nav id="navList">
 		<ul>
 			<li>	
 			<c:choose>
@@ -66,6 +68,12 @@ nav > ul > li > a:hover {
 					<a href="#"
 						onclick="goPageFnc(${freeBoardCommentPaging.curPage + 1});">
 						<span>더보기</span>
+					</a>
+				</c:when>
+					<c:when test="${freeBoardCommentPaging.curPage eq freeBoardCommentPaging.totPage && freeBoardCommentPaging.totPage ne '1'}">
+					<a href="#"
+						onclick="goPageFnc(1);">
+						<span>접기</span>
 					</a>
 				</c:when>
 			</c:choose>
