@@ -33,25 +33,27 @@ public class FreeBoardDaoImpl implements FreeBoardDao{
 	}
 
 	@Override
-	public int freeBoardSelectCurPage(String searchOption, String keyword, int no) {
+	public int freeBoardSelectCurPage(String searchOption, String keyword, int no, String lineTitle) {
 		// TODO Auto-generated method stub
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("searchOption", searchOption);
 		paramMap.put("keyword", keyword);
 		paramMap.put("no", no);
+		paramMap.put("lineTitle", lineTitle);
 			
 		return sqlSession.selectOne(namespace 
 				+ "freeBoardSelectCurPage", paramMap);
 	}
 
 	@Override
-	public List<FreeBoardDto> freeBoardSelectList(String searchOption, String keyword, int start, int end) {
+	public List<FreeBoardDto> freeBoardSelectList(String searchOption, String keyword, int start, int end, String lineTitle) {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = new HashMap<>();
 		map.put("searchOption", searchOption);
 		map.put("keyword", keyword);
 		map.put("start", start);
 		map.put("end", end);
+		map.put("lineTitle", lineTitle);
 		
 		List<FreeBoardDto> freeBoardList = 
 				sqlSession.selectList(namespace + "freeBoardSelectList"
@@ -219,6 +221,41 @@ public class FreeBoardDaoImpl implements FreeBoardDao{
 	public int freeBoardCommentTotalCount(int no) {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne(namespace + "freeBoardCommentTotalCount", no);
+	}
+
+	@Override
+	public int selectTotalMoveCount(String searchOption, String keyword, String lineTitle) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("searchOption", searchOption);
+		map.put("keyword", keyword);
+		map.put("lineTitle", lineTitle);
+		
+		return sqlSession.selectOne(namespace + "selectTotalMoveCount", map);
+	}
+
+	@Override
+	public FreeBoardDto selectPrePage(String searchOption, String keyword, String lineTitle, int rnum) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("searchOption", searchOption);
+		map.put("keyword", keyword);
+		map.put("lineTitle", lineTitle);
+		map.put("rnum", rnum);
+		
+		return sqlSession.selectOne(namespace + "selectPrePage",map);
+	}
+
+	@Override
+	public FreeBoardDto selectNextPage(String searchOption, String keyword, String lineTitle, int rnum) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("searchOption", searchOption);
+		map.put("keyword", keyword);
+		map.put("lineTitle", lineTitle);
+		map.put("rnum", rnum);
+		
+		return sqlSession.selectOne(namespace + "selectNextPage",map);
 	}
 	
 
