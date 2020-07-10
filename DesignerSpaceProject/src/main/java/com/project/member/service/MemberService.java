@@ -19,5 +19,5 @@ public interface MemberService {
 	public MemberDto memberInfo(int member_no);
 	public String memberMod(int member_no);
 	public MemberDto memberModDetail(int member_no);
-	void memberUpdate(MemberDto memberDto, MultipartHttpServletRequest mulRequest);
+	void memberUpdate(MemberDto memberDto, String change, MultipartHttpServletRequest mulRequest);
 }

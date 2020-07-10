@@ -11,23 +11,69 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 
-	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
-	
 	<style type="text/css">
-		#pImage{
-		width: 100px;
-		height: 100px;
-		border-radius: 50%;
+		body {
+			font-size: 20px;
+			font-weight: bold;
+			color: #60524E;
 		}
-		
-		#imgDiv{
-			border:1px solid black;
+		input {
+			width: 292px;
+			height: 30px;
+			margin-top : 10px;
+			margin-bottom: 20px;
+			border-radius: 5px;
+			border: 1px solid #60524E
+		}
+		button {
+			width: 300px;
+			height: 35px;
+			color: #FFFFFF;
+			margin-bottom: 10px;
+			background-color: #60524E;
+			font-weight: bold;
+			border: 1px solid #60524E;
+			border-radius: 5px;
+		}
+		.input_span{
+			color: #60524E;
+			font-size: 20px;
+			font-weight: bold;
+		}
+		#join_div{
+			width : 300px;
+			text-align: left; 
+			margin: auto;
+		}	
+		#p_image{
 			width: 100px;
 			height: 100px;
 			border-radius: 50%;
 		}
+		
+		#img_div{
+			border:1px solid black;
+			width: 100px;
+			height: 100px;
+			border-radius: 50%;
+			margin: auto;
+			margin-bottom: 20px;
+		}
+	
 	</style>
+	
+	
+	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
+	
+	<script type="text/javascript">
+		
+		function backMoveFnc() {
+			location.href='<%=request.getContextPath()%>/projectBoard/list.do';
+		}
+	
+	</script>
+	
 </head>
 
 <body>
@@ -36,37 +82,40 @@
 	
 	<div id="wrap">
 		<div id="innerWrap">
-			<p style="font-size: 20px; font-weight: bold;">회원정보 수정</p>
-			<br>
-			<br>
-			
-			프로필 이미지<br>
-			<div id="imgDiv">
-			<c:choose>
-				<c:when test="${empty memberDto.profile_table_stored_name}">
-					<img id="pImage" alt="기본 프로필 이미지"  src="<%=request.getContextPath()%>/resources/img/profile.png">
-				</c:when>
-				<c:otherwise>
-					<img id="pImage" alt="프로필 이미지" 
-						src="<c:url value='/profileImg/${memberDto.profile_table_stored_name}'/>">
-				</c:otherwise>
-			</c:choose>
+			<div id="innerPage" style="padding: 60px 0px;">
+				<div style="margin-bottom: 80px; text-align: center;">
+					<span style="font-size: 50px;">회원정보 수정</span>
+				</div> 
+				
+				<div id="join_div">
+					<div id="img_div">
+					<c:choose>
+						<c:when test="${empty memberDto.profile_table_stored_name}">
+							<img id="p_image" alt="기본 프로필 이미지"  src="<%=request.getContextPath()%>/resources/img/profile.png">
+						</c:when>
+						<c:otherwise>
+							<img id="p_image" alt="프로필 이미지" 
+								src="<c:url value='/profileImg/${memberDto.profile_table_stored_name}'/>">
+						</c:otherwise>
+					</c:choose>
+					</div>
+				
+					<input type="hidden" value="${member_no}" name='member_no'>
+					
+					
+					
+					<input type="password" id="chkpwd" placeholder="비밀번호를 입력해주세요">
+					
+					<input type="hidden" value="${member_pwd}" name='member_pwd'>
+				
+					
+					
+					<button onclick="location.href='modInfoDetail.do'" style="margin-top: 30px;">
+						확인</button>
+					<button style="background-color: #FFFFFF;
+						color: #60524E;" onclick="backMoveFnc()">취소</button>
+				</div>
 			</div>
-			<br>
-			<input type="text" value="${member_no}" name='member_no'>
-			<br>
-			비밀번호
-			<br>
-			<input type="text" id="chkpwd" value="비밀번호를 입력해주세요">
-			<br>
-			<br>
-			<input type="text" value="${member_pwd}" name='member_pwd'>
-			<br>
-			
-			
-			<button onclick="location.href='modInfoDetail.do'">확인</button>
-			<button >취소</button>
-			
 		</div>
 	</div>
 	

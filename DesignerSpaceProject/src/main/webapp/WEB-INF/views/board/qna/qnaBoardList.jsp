@@ -132,6 +132,28 @@
 
 		return false;
 	}
+	
+	function sortOptionChangeFnc(e) {
+		var sortOption = document.getElementById('sortOption');
+		
+		if(e.value == "qna_board_whole"){
+			sortOption.value = e.value;
+		}else if(e.value == "qna_board_accept"){
+			sortOption.value = e.value;
+		}else if(e.value == "qna_board_answer"){
+			sortOption.value = e.value;
+		}else if (e.value == "qna_board_time_limit") {
+			sortOption.value = e.value;
+		}else if (e.value == "qna_board_answer_complete") {
+			sortOption.value = e.value;
+		}
+		
+		var curPage = document.getElementById('curPage');
+		curPage.value = 1;
+		
+		var pagingForm = document.getElementById('pagingForm'); 
+		pagingForm.submit();						
+	}
 </script>
 
 </head>
@@ -180,12 +202,44 @@
 				<input type="submit" value="검색" id='searchButton'>
 				<input type="button" value="작성" id='writeButton' onclick="writeButtonFnc();">
 				
-				<select id='selectProcessStatus'>
-					<option>전체</option>
-					<option>접수중</option>
-					<option>답변중</option>
-					<option>기한만료</option>
-					<option>답변완료</option>
+				<select id='selectProcessStatus' onchange="sortOptionChangeFnc(this);">
+					<c:choose>
+						<c:when test="${searchMap.sortOption eq 'qna_board_whole'}">
+							<option value="qna_board_whole" selected="selected">전체</option>
+							<option value="qna_board_accept">접수중</option>
+							<option value="qna_board_answer">답변중</option>
+							<option value="qna_board_time_limit">기한만료</option>
+							<option value="qna_board_answer_complete">답변완료</option>
+						</c:when>
+						<c:when test="${searchMap.sortOption eq 'qna_board_accept'}">
+							<option value="qna_board_whole">전체</option>
+							<option value="qna_board_accept" selected="selected">접수중</option>
+							<option value="qna_board_answer">답변중</option>
+							<option value="qna_board_time_limit">기한만료</option>
+							<option value="qna_board_answer_complete">답변완료</option>
+						</c:when>
+						<c:when test="${searchMap.sortOption eq 'qna_board_answer'}">
+							<option value="qna_board_whole">전체</option>
+							<option value="qna_board_accept">접수중</option>
+							<option value="qna_board_answer" selected="selected">답변중</option>
+							<option value="qna_board_time_limit">기한만료</option>
+							<option value="qna_board_answer_complete">답변완료</option>
+						</c:when>
+						<c:when test="${searchMap.sortOption eq 'qna_board_time_limit'}">
+							<option value="qna_board_whole">전체</option>
+							<option value="qna_board_accept">접수중</option>
+							<option value="qna_board_answer">답변중</option>
+							<option value="qna_board_time_limit" selected="selected">기한만료</option>
+							<option value="qna_board_answer_complete">답변완료</option>
+						</c:when>
+						<c:when test="${searchMap.sortOption eq 'qna_board_answer_complete'}">
+							<option value="qna_board_whole">전체</option>
+							<option value="qna_board_accept">접수중</option>
+							<option value="qna_board_answer">답변중</option>
+							<option value="qna_board_time_limit">기한만료</option>
+							<option value="qna_board_answer_complete" selected="selected">답변완료</option>
+						</c:when>					
+					</c:choose>
 				</select>
 			</form>
 			
@@ -209,7 +263,7 @@
 					</c:when>
 					
 					<c:otherwise>
-						<c:forEach var="QnaBoardDto" items="${qnaBoardList}">
+`						<c:forEach var="QnaBoardDto" items="${qnaBoardList}">
 							<tr>
 								<td class="cell2">${QnaBoardDto.qna_board_no}</td>
 								<td class="cell2">
@@ -222,16 +276,16 @@
 								</td>
 								<td class="cell2">
 									<fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
-										pattern="yyyy.MM.dd hh24:mm"/>
+										pattern="yyyy.MM.dd hh:mm"/>
 								</td>
 								<td class="cell2">
 									<c:choose>
-										<c:when test="${empty QnaBoardDto.qna_board_answer_date}">
+										<c:when test="${empty qna_comment_no}">
 											-
 										</c:when>
 										<c:otherwise>
 											<fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
-												pattern="yyyy.MM.dd hh24:mm"/>
+												pattern="yyyy.MM.dd hh:mm"/>
 										</c:otherwise>
 									</c:choose>
 								</td>
@@ -264,6 +318,8 @@
 		</div>
 	</div>
 	
+	<input type="hidden" value="${qna_comment_no}" name="qna_comment_no">
+	
 	<jsp:include page="/WEB-INF/views/common/paging.jsp">
 		<jsp:param value="${pagingMap}" name="pagingMap"/>
 	</jsp:include>
@@ -271,9 +327,10 @@
 	<form action="./list.do" id='pagingForm' method="get">
 		<input type="hidden" id='curPage' name='curPage' 
 			value="${pagingMap.paging.curPage}">
-		<input type="hidden" id='QNA_BOARD_NO' name="QNA_BOARD_NO" value="${QnaBoardDto.qna_board_no}">
+		<input type="hidden" id='qna_board_no' name="qna_board_no" value="${qnaBoardDto.qna_board_no}">
 		<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
 		<input type="hidden" id='keyword' name="keyword" value="${keyword}">
+		<input type="hidden" id='sortOption' name='sortOption' value="${sortOption}">	
 	</form>
 	
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>

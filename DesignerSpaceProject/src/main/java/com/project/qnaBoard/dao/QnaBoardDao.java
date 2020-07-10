@@ -6,7 +6,8 @@ import com.project.qnaBoard.model.QnaBoardDto;
 
 public interface QnaBoardDao {
 
-	public List<QnaBoardDto> qnaBoardSelectList(String searchOption, String keyword, int start, int end);
+	public List<QnaBoardDto> qnaBoardSelectList(String searchOption, String keyword, 
+				String sortOption, int start, int end);
 	
 	public QnaBoardDto qnaBoardSelectDetail(int qna_board_no);
 	
@@ -31,4 +32,6 @@ public interface QnaBoardDao {
 	public int qnaCommentDeleteOne(int qna_comment_no);
 	
 	public void qnaCommentUpdateOne(int qna_comment_no, String qna_comment_comments);
+	
+	public int qnaCommentDelete(int qna_board_no);
 }
