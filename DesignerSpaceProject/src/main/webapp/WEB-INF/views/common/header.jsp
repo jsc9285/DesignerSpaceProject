@@ -7,10 +7,10 @@
 		<div id="h_noneHeader">
 		   <div id="header_inner">		   		   	
 		   		<div id="h_bigLogo_area">
-		   			<a class="h_reset_hyperLink" href="#">
+		   			<a class="h_reset_hyperLink" href="<%=request.getContextPath()%>">
 		   				<img id="h_bigLogo_img" src="<%=request.getContextPath()%>/resources/img/butterfly.png">
 		   			</a>	
-		   			<a class="h_reset_hyperLink" href="#"><span id="h_bigLabel">Designer's Space</span></a>	
+		   			<a class="h_reset_hyperLink" href="<%=request.getContextPath()%>"><span id="h_bigLabel">Designer's Space</span></a>	
 		   		</div>   			
 		   </div>
 		</div>
@@ -56,7 +56,7 @@
 				<span id="h_myPage_logo">Designer's Space</span>
 						
 				<div id="h_myPage_profile">
-<%-- 					<div id="h_myPage_profileImg" style="background-image: url('<%=request.getContextPath()%>/resources/profileImg/${memberDto.profile_table_stored_name}');"></div> --%>
+					<div id="h_myPage_profileImg" style="background-image: url(<c:url value='/profileImg/${memberDto.profile_table_stored_name}'/>);"></div>
 					<h6 id="h_myPage_profileName">${memberDto.member_nick}</h6>
 				</div>
 						
@@ -64,16 +64,16 @@
 				
 				<nav id="h_myPage_link">
 					<ul>
-						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage1.png"><a href='<%=request.getContextPath()%>/info.do'>회원정보조회</a></li>
-						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage2.png"><a href='<%=request.getContextPath()%>/myBoard.do'>글 목록</a></li>
-						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage3.png"><a href='<%=request.getContextPath()%>/myQna.do'>QnA 조회</a></li>
-						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage4.png"><a href='<%=request.getContextPath()%>/myReport.do'>신고글 조회</a></li>
+						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage1.png"><a href='<%=request.getContextPath()%>/member/info.do'>회원정보조회</a></li>
+						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage2.png"><a href='<%=request.getContextPath()%>/member/myBoard.do'>글 목록</a></li>
+						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage3.png"><a href='<%=request.getContextPath()%>/member/myQna.do'>QnA 조회</a></li>
+						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage4.png"><a href='<%=request.getContextPath()%>/member/myReport.do'>신고글 조회</a></li>
 					</ul>
 				</nav>
 				
 				<div class="h_myPage_areaLine"></div>
 				
-				<a href='<%=request.getContextPath()%>/logout.do'><img id="h_myPage_logout" class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/logoutIcon.png"></a>
+				<a onclick="if(confirm('정말로 로그아웃하시겠습니까?')){location.href='<%=request.getContextPath()%>/logout.do';}else{return false;}"><img id="h_myPage_logout" class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/logoutIcon.png"></a>
 			</div>
 		</div>
 	</c:when>
@@ -95,7 +95,7 @@
 		         <ul>
 		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/main/admin.do'><img id="h_logo_img" src="<%=request.getContextPath()%>/resources/img/flower.png"></a></li>
 		         	<li class="h_menu_line"></li>
-		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/projectBoard/management.do'>작품</a></li>
+		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/projectBoard/list.do'>작품</a></li>
 		         	<li class="h_menu_line"></li>
 		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/freeBoard/free.do'>자유게시판</a></li>
 		         	<li class="h_menu_line"></li>
@@ -107,7 +107,7 @@
 		         </ul>
 		      </nav>
 		      
-		      <a href="<%=request.getContextPath()%>/logout.do">
+		      <a onclick="if(confirm('정말로 로그아웃하시겠습니까?')){location.href='<%=request.getContextPath()%>/logout.do';}else{return false;}">
 		      	<img id="h_profile" src="<%=request.getContextPath()%>/resources/img/logoutIcon.png">
 		      </a>
 		      

@@ -112,13 +112,13 @@ public class FreeBoardDaoImpl implements FreeBoardDao{
 	}
 
 	@Override
-	public List<Object> freeBoardLikeSelectList(int no, int mno) {
+	public String freeBoardLikeSelectList(int no, int mno) {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = new HashMap<>();
-		map.put("mno", mno);
 		map.put("no", no);
+		map.put("mno", mno);
 		
-		return sqlSession.selectList(namespace + "freeBoardLikeSelectList", map);
+		return sqlSession.selectOne(namespace + "freeBoardLikeSelectList", map);
 	}
 
 	@Override
@@ -197,6 +197,28 @@ public class FreeBoardDaoImpl implements FreeBoardDao{
 		map.put("title", title);
 		map.put("contents", contents);
 		sqlSession.update(namespace + "freeBoardUpdate", map);
+	}
+
+	@Override
+	public void freeBoardCommentUpdate(int fcno,String comments) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("fcno", fcno);
+		map.put("comments", comments);
+		
+		sqlSession.update(namespace + "freeBoardCommentUpdate", map);
+	}
+
+	@Override
+	public void freeBoardCommentOneDelete(int fcno) {
+		// TODO Auto-generated method stub
+		sqlSession.delete(namespace + "freeBoardCommentOneDelete", fcno);
+	}
+
+	@Override
+	public int freeBoardCommentTotalCount(int no) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace + "freeBoardCommentTotalCount", no);
 	}
 	
 

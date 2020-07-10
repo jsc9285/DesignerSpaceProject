@@ -11,16 +11,6 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 	
 	<style type="text/css">
-		#exProjectPic{
-			background-color: #D3D3D3;
-			height: 700px;
-		}
-		#exProjectPic2{
-			height: 700px;
-			background-repeat: no-repeat;
-			background-position: center;
-			background-size: cover;
-		}
 		#projectPicArea{
 			text-align: right;
 		}
@@ -105,6 +95,7 @@
 			str += "<div class='exProjectPic' style=''></div>";
 			str += "<input type='file' value='파일선택' accept='image/*' onchange='setThumbnailFnc(event, this);'>";
 			str += "<button name='delete' onclick='fileDelFnc($(this));'>파일삭제</button>";
+			str += "<input type='hidden' name='chkListFlag' value='new'>";
 			str += "</a>";
 			
 
@@ -161,10 +152,12 @@
 					<div id="projectPicArea">
 					<c:forEach var="projectBoardFileDto" items="${projectBoardFileList}">
 						<a>
-						<div class='exProjectPic' style='background-image: url(<c:url value='/projectImg/${projectBoardFileDto.FILE_TABLE_STORED_FILE_NAME}'/>)'></div>
-						<input type='file' value='파일선택' accept='image/*' onchange='setThumbnailFnc(event, this);'>
-						<button name='delete' onclick='fileDelFnc($(this));'>파일삭제</button>
-						</a>		
+							<div class='exProjectPic' style="background-image: url(<c:url value='/projectImg/${projectBoardFileDto.FILE_TABLE_STORED_FILE_NAME}'/>)"></div>
+							<input type='file' value='파일선택' accept='image/*' onchange='setThumbnailFnc(event, this);'>
+							<button name='delete' onclick='fileDelFnc($(this));'>파일삭제</button>
+							<input type="hidden" name="chkListFlag" value="old">
+							<input type="hidden" name="chkListFile" value="${projectBoardFileDto.FILE_TABLE_STORED_FILE_NAME}">
+						</a>
 					</c:forEach>
 										    									
 					</div>
@@ -175,9 +168,9 @@
 						<input type="hidden" name="project_board_no" value="${projectBoardDto.project_board_no}">
 						<input type="hidden" name="project_board_mno" value="${memberDto.member_no}">
 						<h1>제목</h1>
-						<textarea name="project_board_title" placeholder="${projectBoardDto.project_board_title}" style="height: 120px;"></textarea>
+						<textarea name="project_board_title" style="height: 120px;">${projectBoardDto.project_board_title}</textarea>
 						<h1>설명</h1>
-						<textarea name="project_board_contents" placeholder="${projectBoardDto.project_board_contents}" style="height: 360px;"></textarea>
+						<textarea name="project_board_contents" style="height: 360px;">${projectBoardDto.project_board_contents}</textarea>
 						
 						<div>
 							<c:choose>

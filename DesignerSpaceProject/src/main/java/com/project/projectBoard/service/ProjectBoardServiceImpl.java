@@ -17,6 +17,7 @@ import com.project.member.model.MemberDto;
 import com.project.projectBoard.dao.ProjectBoardDao;
 import com.project.projectBoard.model.ProjectBoardDto;
 import com.project.projectBoard.model.ProjectBoardFileDto;
+import com.project.projectBoard.model.ProjectCommentDto;
 import com.project.projectBoard.util.FileUtils;
 
 @Service
@@ -32,9 +33,9 @@ public class ProjectBoardServiceImpl implements ProjectBoardService{
 	private FileUtils fileUtil;
 	
 	@Override
-	public List<ProjectBoardDto> projectBoardSelectList() {
+	public List<ProjectBoardDto> projectBoardSelectList(String searchOption, String keyword, String sortOption, String categoryOption, int end) {
 		
-		return projectBoardDao.projectBoardSelectList();
+		return projectBoardDao.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, end);
 	}
 
 	@Override
@@ -81,7 +82,7 @@ public class ProjectBoardServiceImpl implements ProjectBoardService{
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public int projectBoardUpdateOne(ProjectBoardDto projectBoardDto, MultipartHttpServletRequest mulRequest) throws Exception{
+	public int projectBoardUpdateOne(String[] chkListFlag, String[] chkListFile, ProjectBoardDto projectBoardDto, MultipartHttpServletRequest mulRequest) throws Exception{
 		
 		int resultNum = 0;	
 		// 파일 데이터 먼저 변경 하고 
@@ -91,12 +92,18 @@ public class ProjectBoardServiceImpl implements ProjectBoardService{
 			int writerNo = projectBoardDto.getProject_board_mno();
 			
 			List<Map<String, Object>> tempFileList
-			= projectBoardDao.fileSelectStoredFileName(project_board_no);
+				= projectBoardDao.fileSelectStoredFileName(project_board_no);
 			
 			List<Map<String, Object>> list
-			= fileUtil.parseInsertFileInfo(project_board_no, writerNo, mulRequest);
+				= fileUtil.parseInsertFileInfo(project_board_no, writerNo, mulRequest);
 			
-			if(list.isEmpty() == false) {			
+			// 추가 없이 삭제만 한 경우
+			for (int i = 0; i < chkListFile.length; i++) {
+				
+			}
+			// 
+			
+			if(list.isEmpty() == false) {
 				if(tempFileList != null) {
 					projectBoardDao.deleteFile(project_board_no);
 					fileUtil.parseUpdateFileInfo(tempFileList);
@@ -123,6 +130,44 @@ public class ProjectBoardServiceImpl implements ProjectBoardService{
 		
 		projectBoardDao.deleteFile(no);
 		int checkDelete = projectBoardDao.projectBoardDeleteOne(no);
+		
+		return checkDelete;
+	}
+
+	@Override
+	public int projectBoardTotalCount(String searchOption, String keyword, String categoryOption) {
+		
+		int totalCnt = projectBoardDao.projectBoardTotalCount(searchOption, keyword, categoryOption);
+		
+		return totalCnt;
+	}
+
+	@Override
+	public List<ProjectCommentDto> projectCommentSelectList(int no) {
+						
+		return projectBoardDao.projectCommentSelectList(no);
+	}
+
+	@Override
+	public int projectCommentInsertOne(ProjectCommentDto projectCommentDto) {
+
+		int checkInsert = projectBoardDao.projectCommentInsertOne(projectCommentDto);
+		
+		return checkInsert;
+	}
+
+	@Override
+	public int projectCommentUpdateOne(ProjectCommentDto projectCommentDto) {
+		
+		int checkUpdate = projectBoardDao.projectCommentUpdateOne(projectCommentDto);
+		
+		return checkUpdate;
+	}
+
+	@Override
+	public int projectCommentDeleteOne(int no) {
+		
+		int checkDelete = projectBoardDao.projectCommentDeleteOne(no);
 		
 		return checkDelete;
 	}

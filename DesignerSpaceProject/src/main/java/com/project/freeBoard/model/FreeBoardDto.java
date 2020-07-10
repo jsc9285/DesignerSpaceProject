@@ -18,9 +18,24 @@ public class FreeBoardDto {
 	private Date 		freeBoardModDate;
 	private int 		freeBoardLike;
 	private int 		freeBoardRownum;
+	private int 		freeBoardCommentCount;
 	
 
 
+
+
+
+
+	public int getFreeBoardCommentCount() {
+		return freeBoardCommentCount;
+	}
+
+
+
+
+	public void setFreeBoardCommentCount(int freeBoardCommentCount) {
+		this.freeBoardCommentCount = freeBoardCommentCount;
+	}
 
 
 
