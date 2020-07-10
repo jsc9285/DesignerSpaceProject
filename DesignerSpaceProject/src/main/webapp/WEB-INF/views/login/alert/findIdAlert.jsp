@@ -17,7 +17,7 @@
 <script type="text/javascript">
 	
 	$('document').ready(function(){
-		alert('아이디는 ' + $('#findEmail').val() + '입니다');
+		alert('아이디는 ' + $('#find_email').val() + '입니다');
 		document.login.submit();
 	});
 	
@@ -30,8 +30,8 @@
 	
 	<div id="wrap">
 		<div id="innerWrap">
-			<form action="login.do" method="post" name='login'>
-				<input id="findEmail" type="hidden" name="member_email" value="${member_email}">
+			<form action="../login.do" method="post" name='login'>
+				<input id="find_email" type="hidden" name="member_email" value="${member_email}">
 			</form>	
 		</div>
 	</div>

@@ -27,6 +27,7 @@ public class ProjectBoardDto {
 	private Date project_comment_cre_date;
 	private Date project_comment_mod_date;
 	
+	
 	public ProjectBoardDto() {
 		super();
 	}

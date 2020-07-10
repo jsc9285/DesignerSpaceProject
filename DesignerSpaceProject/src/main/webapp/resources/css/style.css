@@ -3,7 +3,9 @@
 body, html{
 	height: 100%;
 }
-
+button, a{
+	cursor: pointer;
+}
 /* 헤더 */
 #header{
     background-color: #fff;
@@ -14,7 +16,7 @@ body, html{
     display: block;
     box-shadow: 0px 0px 20px rgba(0,0,0,0.3);
     transition: all 0.3s;
-    z-index: 1000;
+    z-index: 2000;
 }
 #header.headerC{
 	top: -60px;
@@ -167,6 +169,7 @@ body, html{
     width: 100%;
     display: block;
     box-shadow: 0px 0px 20px rgba(0,0,0,0.3);	
+    z-index: 2000;    
 }
 #h_bigLogo_img{
 	width: 180px;
@@ -207,7 +210,7 @@ body, html{
 /* 기본 공통단 */
 #wrap{	
 	min-height: calc(100% - 120px);
-	background-image: url("../img/background.jpg");
+	background-image: url("../img/background.png");
 	background-size: cover;
 	background-position: 0px -2px;
 }

@@ -68,20 +68,20 @@
 	
 	<nav id="navList">
 		<ul>
-			<li>
-				<a href="#" 
-					onclick="goPageFnc(${pagingMap.paging.prevPage});">
-					<span>≪</span>
-				</a>
-			</li>
-			<li>
-				<c:if test="${pagingMap.paging.blockBegin eq 1 && pagingMap.paging.blockEnd eq 0}">
-					<a href="#">
-						<c:out value="1"/>
-					</a>
-				</c:if>			
-			</li>
-			
+			<c:choose>
+				<c:when test="${pagingMap.paging.blockEnd ne 0}">
+					<li>
+						<a href="#" 
+							onclick="goPageFnc(${pagingMap.paging.prevPage});">
+							<span>≪</span>
+						</a>
+					</li>	
+				</c:when>
+				<c:when test="${pagingMap.paging.blockEnd eq 0}">
+					
+				</c:when>
+			</c:choose>
+
 			<c:forEach var="num" 
 				begin="${pagingMap.paging.blockBegin}" 
 				end="${pagingMap.paging.blockEnd}">
@@ -93,14 +93,21 @@
 				</li>
 				
 			</c:forEach>
-
-			<li>
-				<a href="#"
-					onclick="goPageFnc(${pagingMap.paging.nextPage});">
-					<span>≫</span>
-				</a>
-			</li>
-
+			
+			<c:choose>
+				<c:when test="${pagingMap.paging.blockEnd ne 0}">
+					<li>
+						<a href="#"
+							onclick="goPageFnc(${pagingMap.paging.nextPage});">
+							<span>≫</span>
+						</a>
+					</li>	
+				</c:when>
+				<c:when test="${pagingMap.paging.blockEnd eq 0}">
+					
+				</c:when>
+			</c:choose>
+			
 		</ul>
 	</nav>
 
