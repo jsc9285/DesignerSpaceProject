@@ -22,6 +22,7 @@ import com.project.projectBoard.model.ProjectBoardFileDto;
 import com.project.projectBoard.model.ProjectCommentDto;
 import com.project.projectBoard.service.ProjectBoardService;
 import com.project.util.CommentPaging;
+import com.project.util.Paging;
 import com.project.util.ProjectBoardPaging;
 
 
@@ -62,8 +63,11 @@ public class ProjectController {
 		MemberDto sessionMemberDto = (MemberDto)session.getAttribute("memberDto");
 		int memberNo = sessionMemberDto.getMember_no();
 		int totalCnt = projectBoardService.projectBoardTotalCount(searchOption, keyword, categoryOption, pageOption, memberNo); 
-				
+		
+		System.out.println(totalCnt);
+		
 		ProjectBoardPaging projectBoardPaging = new ProjectBoardPaging(totalCnt, curPage);
+		int start = projectBoardPaging.getPageBegin();
 		int end = projectBoardPaging.getPageEnd();
 		
 //		리스트 조회조건 맵에 저장
@@ -75,7 +79,7 @@ public class ProjectController {
 		
 //		작품 리스트 조회
 		List<ProjectBoardDto> projectBoardList = 
-			projectBoardService.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, end, pageOption, memberNo);
+			projectBoardService.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, start, end, pageOption, memberNo);
 		
 		// 모델로 필요정보 넘김
 		model.addAttribute("projectBoardList", projectBoardList);
@@ -236,23 +240,43 @@ public class ProjectController {
 	
 //	============================== 관리자용 작품관리 
 	@RequestMapping(value = "projectBoard/management.do", method = RequestMethod.GET)
-	public String projectBoardManagement(
-			@RequestParam(defaultValue="project_board_no") String sortOption
+	public String projectBoardManagement(@RequestParam(defaultValue="1") int curPage
+			, @RequestParam(defaultValue="project_board_no") String sortOption
 			, @RequestParam(defaultValue="all") String categoryOption
 			, @RequestParam(defaultValue="member_nick") String searchOption
 			, @RequestParam(defaultValue="") String keyword
-			, @RequestParam(defaultValue="") String pageOption
+			, @RequestParam(defaultValue="admin") String pageOption
 			,HttpSession session, Model model) {		
 						
-		MemberDto sessionMemberDto = (MemberDto)session.getAttribute("memberDto");
-		int memberNo = sessionMemberDto.getMember_no();
+		int memberNo = 1;
+		
+		// 페이징
+		int totalCnt = projectBoardService.projectBoardTotalCount(searchOption, keyword, categoryOption, pageOption, memberNo); 
+		
+		Paging projectBoardPaging = new Paging(totalCnt, curPage);
+		int start = projectBoardPaging.getPageBegin();
+		int end = projectBoardPaging.getPageEnd();
 		
 		// ※※※※※ 작품관리 selectList 변수 수정해야함 ! 페이징화 시키기 !
 		List<ProjectBoardDto> projectBoardList = 
-			projectBoardService.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, 100, pageOption, memberNo);
+			projectBoardService.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, start, end, pageOption, memberNo);		
+		
+//		리스트 조회조건 맵에 저장
+		Map<String, Object> listOptionMap = new HashMap<>();
+//		기타 정렬 이용할 시 사용
+//		listOptionMap.put("sortOption", sortOption); 
+//		listOptionMap.put("categoryOption", categoryOption);
+		listOptionMap.put("searchOption", searchOption);
+		listOptionMap.put("keyword", keyword);
+		
+//		페이징 관련
+		Map<String, Object> pagingMap = new HashMap<>();
+		pagingMap.put("paging", projectBoardPaging);
 		
 		// 모델로 필요정보 넘김
 		model.addAttribute("projectBoardList", projectBoardList);
+		model.addAttribute("pagingMap", pagingMap);
+		model.addAttribute("listOptionMap", listOptionMap);
 		
 		return "board/project/projectBoardManagement";
 	}
@@ -290,6 +314,7 @@ public class ProjectController {
 		int totalCnt = projectBoardService.projectBoardTotalCount(searchOption, keyword, categoryOption, pageOption, memberNo); 
 		
 		CommentPaging projectBoardPaging = new CommentPaging(totalCnt, curPage);
+		int start = projectBoardPaging.getPageBegin();
 		int end = projectBoardPaging.getPageEnd();
 		
 //		리스트 조회조건 맵에 저장
@@ -301,7 +326,7 @@ public class ProjectController {
 		
 //		작품 리스트 조회
 		List<ProjectBoardDto> projectBoardList = 
-			projectBoardService.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, end, pageOption, memberNo);
+			projectBoardService.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, start, end, pageOption, memberNo);
 		
 		// 모델로 필요정보 넘김
 		model.addAttribute("projectBoardList", projectBoardList);

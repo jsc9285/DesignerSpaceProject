@@ -195,23 +195,18 @@
 			var likeFlag = document.getElementById("projectLikeFlag");
 
 			if(likeChk.value == "" || likeFlag.value == 'N'){				
-				alert("좋아요 실행");
 				
 				var likeForm = document.getElementById('like');
 				var likeUpdateForm = document.getElementById('likeUpdate');
 				if(likeChk.value != "" && likeFlag.value == 'N'){
 					//좋아요 업데이트
-					alert("좋아요 업데이트");
 					likeUpdateForm.submit();
 				}else if(likeChk.value == "" && likeFlag.value == ""){
 					//좋아요 새로 생성
-					alert("좋아요 생성");
 					likeForm.submit();
 				}
 			}else{
 				//좋아요삭제
-				
-				alert("좋아요 취소");
 				var likeDeleteForm = document.getElementById('likeDelete');
 				likeDeleteForm.submit();
 			}
@@ -282,17 +277,17 @@
 	<input type="hidden" id="projectLikeChk" value="${projectLikeFlag.PROJECT_LIKE_NO}">
 	<input type="hidden" id="projectLikeFlag" value="${projectLikeFlag.PROJECT_LIKE_FLAG}">
 
-	<form action="./like.do#likeBtn" id="like" method="get">
+	<form action="./like.do#projectInfoArea" id="like" method="get">
 		<input type="hidden" name="project_board_no" value="${projectBoardDto.project_board_no}">
 		<input type="hidden" name="mno" value="${memberDto.member_no}">
 	</form>
 	
-	<form action="./likeUpdate.do#likeBtn" id="likeUpdate" method="get">
+	<form action="./likeUpdate.do#projectInfoArea" id="likeUpdate" method="get">
 		<input type="hidden" name="project_board_no" value="${projectBoardDto.project_board_no}">
 		<input type="hidden" name="mno" value="${memberDto.member_no}">
 	</form>
 	
-	<form action="./likeDelete.do#likeBtn" id="likeDelete" method="get">
+	<form action="./likeDelete.do#projectInfoArea" id="likeDelete" method="get">
 		<input type="hidden" name="project_board_no" value="${projectBoardDto.project_board_no}">
 		<input type="hidden" name="mno" value="${memberDto.member_no}">
 	</form>
@@ -319,7 +314,7 @@
 								<input type="button" onclick="projectDeleteFnc();" value="삭제">					
 							</c:when>
 							<c:when test="${memberDto.member_no ne projectBoardDto.project_board_mno}">
-								<input type="button" onclick="location.href='<%=request.getContextPath()%>/reportBoard/add.do'" value="신고"> 
+								<input type="button" onclick="location.href='<%=request.getContextPath()%>/reportBoard/add.do?project_board_no=${projectBoardDto.project_board_no}'" value="신고"> 
 							</c:when>
 						</c:choose>
 					</c:when>

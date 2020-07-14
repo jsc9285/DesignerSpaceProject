@@ -185,7 +185,7 @@
 			
 <!-- 			검색, 카테고리 선택, 정렬방법 -->
 			<div id="topMenu">
-				<form action="./list.do" method="get">
+				<form action="./list.do" method="get" style="display: table;">
 					<select name="searchOption">
 						<c:choose>
 							<c:when test="${listOptionMap.searchOption eq 'member_nick'}">
@@ -232,6 +232,9 @@
 			
 <!-- 			프로젝트 조회 -->		
 			<div id="projectView">
+				<c:if test="${empty projectBoardList}">
+					작품이 존재하지 않습니다.
+				</c:if>
 				<c:forEach var="projectBoardDto" items="${projectBoardList}">
 					<div class="projectList">
 						<div class="thumbnailPic" onclick="location.href='./projectView.do?project_board_no=${projectBoardDto.project_board_no}'"

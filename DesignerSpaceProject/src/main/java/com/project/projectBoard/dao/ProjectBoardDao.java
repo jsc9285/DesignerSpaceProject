@@ -10,7 +10,7 @@ import com.project.projectBoard.model.ProjectCommentDto;
 
 public interface ProjectBoardDao {
 
-	public List<ProjectBoardDto> projectBoardSelectList(String searchOption, String keyword, String sortOption, String categoryOption, int end, String pageOption, int memberNo);
+	public List<ProjectBoardDto> projectBoardSelectList(String searchOption, String keyword, String sortOption, String categoryOption, int start, int end, String pageOption, int memberNo);
 	public int projectBoardTotalCount(String searchOption, String keyword, String categoryOption, String pageOption, int memberNo);
 	
 	public ProjectBoardDto projectBoardSelectOne(int no);

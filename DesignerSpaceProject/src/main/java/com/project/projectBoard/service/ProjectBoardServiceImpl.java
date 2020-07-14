@@ -33,9 +33,9 @@ public class ProjectBoardServiceImpl implements ProjectBoardService{
 	private FileUtils fileUtil;
 	
 	@Override
-	public List<ProjectBoardDto> projectBoardSelectList(String searchOption, String keyword, String sortOption, String categoryOption, int end, String pageOption, int memberNo) {
+	public List<ProjectBoardDto> projectBoardSelectList(String searchOption, String keyword, String sortOption, String categoryOption, int start, int end, String pageOption, int memberNo) {
 		
-		return projectBoardDao.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, end, pageOption, memberNo);
+		return projectBoardDao.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, start, end, pageOption, memberNo);
 	}
 
 	@Override

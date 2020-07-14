@@ -99,7 +99,7 @@
 		         	<li class="h_menu_line"></li>
 		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/freeBoard/free.do'>자유게시판</a></li>
 		         	<li class="h_menu_line"></li>
-		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/listAdmin.do'>회원관리</a></li>
+		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/admin/listAdmin.do'>회원관리</a></li>
 		         	<li class="h_menu_line"></li>
 		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/qnaBoard/list.do'>QnA</a></li>
 		         	<li class="h_menu_line"></li>

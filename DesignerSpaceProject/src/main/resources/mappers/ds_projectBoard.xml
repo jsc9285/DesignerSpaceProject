@@ -29,6 +29,29 @@
 		</choose>
 	</sql>
 	
+	<sql id="pageOption2">
+		<choose>
+			<when test="pageOption == 'admin'">
+				WHERE RNUM BETWEEN #{start} AND #{end}
+			</when>
+			<otherwise>
+				<![CDATA[WHERE RNUM <= #{end}]]>
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<sql id="searchOption">
+		<choose>
+			<when test="searchOption == 'all'">
+				and (project_board_title like '%' || #{keyword} || '%'
+				or project_board_contents like '%' || #{keyword} || '%')
+			</when>
+			<otherwise>
+				and (${searchOption} like '%' || #{keyword} || '%')
+			</otherwise>
+		</choose>
+	</sql>
+	
 	<resultMap type="com.project.projectBoard.model.ProjectBoardDto"
 		 id="projectBoardResultMap">
 		<result column="project_board_no" property="project_board_no"/>
@@ -95,27 +118,28 @@
 		select (select count(project_comment_no) from project_comment where project_comment.project_comment_pbno = project_board_no) project_comment_cnt, project_board_no, project_board_title, project_board_views, project_board_category, project_board_cre_date, project_board_like, file_table_stored_file_name, member_nick, profile_table_stored_name
 		from member m left join profile_table pt
 		on m.member_no = pt.profile_table_mno
-		join (select FB.rnum, fb.cnt, fb.project_board_no, fb.project_board_title, fb.project_board_views, fb.project_board_category, fb.project_board_cre_date, fb.project_board_like, fb.file_table_stored_file_name, fb.project_board_mno
-		      from (select rownum rnum, f.cnt, f.project_board_no, f.project_board_title, f.project_board_views, f.project_board_category, f.project_board_cre_date, f.project_board_like, f.file_table_stored_file_name,f.project_board_mno
-		            from (select pb.cnt, pb.project_board_mno ,pb.project_board_no, pb.project_board_title, pb.project_board_views, pb.project_board_category, pb.project_board_cre_date, pb.project_board_like, ft.file_table_stored_file_name
+		join (select FB.rnum, fb.cnt, fb.project_board_no, fb.project_board_contents, fb.project_board_title, fb.project_board_views, fb.project_board_category, fb.project_board_cre_date, fb.project_board_like, fb.file_table_stored_file_name, fb.project_board_mno
+		      from (select rownum rnum, f.cnt, f.project_board_no, f.project_board_contents, f.project_board_title, f.project_board_views, f.project_board_category, f.project_board_cre_date, f.project_board_like, f.file_table_stored_file_name,f.project_board_mno
+		            from (select pb.cnt, pb.project_board_mno, pb.project_board_contents, pb.project_board_del_flag ,pb.project_board_no, pb.project_board_title, pb.project_board_views, pb.project_board_category, pb.project_board_cre_date, pb.project_board_like, ft.file_table_stored_file_name
 		                  ,DENSE_RANK() OVER (PARTITION BY pb.project_board_no
 		                  ORDER BY ft.file_table_no) r
-		                  from (select (select count(project_board_no) from project_board) cnt, p.project_board_mno , p.project_board_no, p.project_board_title, p.project_board_views, p.project_board_category, p.project_board_cre_date, count(project_like_no) project_board_like
+		                  from (select (select count(project_board_no) from project_board) cnt, p.project_board_mno, p.project_board_contents, p.project_board_del_flag, p.project_board_no, p.project_board_title, p.project_board_views, p.project_board_category, p.project_board_cre_date, count(project_like_no) project_board_like
 		                        from project_board p left join project_like pl
 		                        on p.project_board_no = pl.project_like_pbno
 		                        and pl.project_like_flag = 'Y'
 		                        and p.project_board_mno = pl.project_like_mno
-		                        group by p.project_board_mno , p.project_board_no, p.project_board_title, p.project_board_views, p.project_board_category, p.project_board_cre_date order by ${sortOption} desc) pb, file_table ft
-		                  where pb.project_board_no = ft.file_table_pbno 
+		                        group by p.project_board_mno, p.project_board_contents, p.project_board_del_flag, p.project_board_no, p.project_board_title, p.project_board_views, p.project_board_category, p.project_board_cre_date order by ${sortOption} desc) pb, file_table ft
+		                  where pb.project_board_no = ft.file_table_pbno(+) 
 		                  <include refid="pageOption"></include>
 		                  order by ${sortOption} desc) f
 		                  where f.r = 1  
+		                  and project_board_del_flag = 'N'
 		                  <include refid="categoryOption"></include>		                           
 		                   ) FB 
 		                   ) PBM
 		on m.member_no = PBM.project_board_mno
-		<![CDATA[WHERE RNUM <= #{end}]]>
-		and (${searchOption} like '%' || #{keyword} || '%')		
+		<include refid="pageOption2"></include>
+		<include refid="searchOption"></include>
 		order by ${sortOption} desc
 	</select>
 	
@@ -124,7 +148,8 @@
 		SELECT count(*)
 		from project_board pb left join member m
 		on pb.project_board_mno = m.member_no
-		where (${searchOption} like '%' || #{keyword} || '%')
+		where pb.project_board_del_flag = 'N'
+		<include refid="searchOption"></include>		
 		<include refid="categoryOption"></include>
 		<include refid="pageOption"></include>
 	</select>

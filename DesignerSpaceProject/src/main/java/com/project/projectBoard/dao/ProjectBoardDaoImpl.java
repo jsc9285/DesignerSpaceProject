@@ -23,13 +23,14 @@ public class ProjectBoardDaoImpl implements ProjectBoardDao{
 	String namespace = "com.project.projectBoard.";
 
 	@Override
-	public List<ProjectBoardDto> projectBoardSelectList(String searchOption, String keyword, String sortOption, String categoryOption, int end, String pageOption, int memberNo) {
+	public List<ProjectBoardDto> projectBoardSelectList(String searchOption, String keyword, String sortOption, String categoryOption, int start, int end, String pageOption, int memberNo) {
 		
 		Map<String, Object> listOptionMap = new HashMap<>();
 		listOptionMap.put("searchOption", searchOption);
 		listOptionMap.put("keyword", keyword);
 		listOptionMap.put("sortOption", sortOption);
 		listOptionMap.put("categoryOption", categoryOption);
+		listOptionMap.put("start", start);
 		listOptionMap.put("end", end);
 		listOptionMap.put("pageOption", pageOption);
 		listOptionMap.put("memberNo", memberNo);
