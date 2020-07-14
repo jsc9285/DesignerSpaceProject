@@ -10,12 +10,12 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 
 	<style type="text/css">
-		body {
+		#innerWrap {
 			font-size: 20px;
 			font-weight: bold;
 			color: #60524E;
 		}
-		input {
+		.input {
 			width: 292px;
 			height: 30px;
 			margin-top : 10px;
@@ -23,16 +23,39 @@
 			border-radius: 5px;
 			border: 1px solid #60524E
 		}
-		button {
+		#button {
 			width: 300px;
 			height: 35px;
 			color: #FFFFFF;
 			margin-bottom: 10px;
 			background-color: #60524E;
 			font-weight: bold;
-			border: 1px solid #60524E;
+			border: 0px;
 			border-radius: 5px;
+			cursor: pointer;
 		}
+		#cancel{
+			width: 300px;
+			height: 35px;
+			color: #FFFFFF;
+			margin-bottom: 10px;
+			background-color: #60524E;
+			font-weight: bold;
+			border: 0px;
+			border-radius: 5px;
+			cursor: pointer;
+			background-color: #fff;
+			color: #000
+		}
+		
+		#button:hover{
+			background-color: #4AD674;
+		}
+		#cancel:hover{
+			color: #fff;
+			background-color: #4AD674;
+		}
+
 		.input_span{
 			color: #60524E;
 			font-size: 20px;
@@ -54,6 +77,27 @@
 		function backMoveFnc() {
 			location.href='<%=request.getContextPath()%>/login.do';
 		}
+		
+		function findIdOrderFnc() {
+			
+			var findIdForm = document.findIdForm;
+			var name = document.getElementById("input_name");
+			var phone = document.getElementById("input_phone");
+			
+		    
+
+			if (name.value==""||name.value==null) {
+				alert('성명을 입력해주세요');
+				name.focus();
+				return false;
+			}else if(phone.value==""||phone.value==null){
+				alert('전화번호를 입력해주세요');
+				phone.focus();
+				return false;
+			}else{
+				findIdForm.submit();
+			}
+		}
 	</script>
 
 </head>
@@ -72,15 +116,19 @@
 			</div>
 			
 			<div id="find_id_div">
-				<form action="findIdCtr.do" method="post">
-					<span class="input_span">이름</span><br>
-					<input name="member_name" value="관리자"><br>
-					<span class="input_span">휴대폰번호</span><br>
-					<input name="member_phone" value="010-0000-0000"><br>
-					<button style="margin-top: 50px;">아이디 찾기</button>
+				<form name="findIdForm" action="findIdCtr.do" method="post">
+					<span class="input_span">이름</span>
+					<input type="text" class="input" id="input_name" name="member_name"
+						maxlength="10" placeholder="이름을 입력해주세요"><br>
+					<span class="input_span">휴대폰번호</span>
+					<input type="text" class="input" id="input_phone" name="member_phone" 
+						placeholder=" '-'을 제외한 숫자만 입력" maxlength="15"
+						onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/><br>
+					<input type="button" id="button" value="아이디찾기" onclick="findIdOrderFnc()"
+						style="margin-top: 50px;">
 				</form>
-					<button style="background-color: #FFFFFF;
-						color: #60524E;" onclick="backMoveFnc()">취소</button>
+					<input type="button" id="cancel" value="취소" onclick="backMoveFnc()">
+					
 			</div>
 			
 		</div>

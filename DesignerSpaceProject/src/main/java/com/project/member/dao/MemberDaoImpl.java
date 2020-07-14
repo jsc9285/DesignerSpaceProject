@@ -3,11 +3,13 @@ package com.project.member.dao;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.project.member.model.MemberBoardDto;
 import com.project.member.model.MemberDto;
 
 
@@ -74,16 +76,6 @@ public class MemberDaoImpl implements MemberDao{
 		return memberDto;
 	}
 	
-	//회원목록 
-	@Override
-	public List<MemberDto> getMemberList() {
-	
-		
-		List<MemberDto> memberList = 
-				sqlSession.selectList(namespace + "memberList");
-		
-		return memberList;
-	}
 	
 	@Override
 	public void profileAdd(Map<String, Object> map) {
@@ -147,6 +139,80 @@ public class MemberDaoImpl implements MemberDao{
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne(namespace 
 				+ "profileSelectStoredFileName", profile_table_mno);
+	}
+
+	@Override
+	public int memberSelectTotalCount(String searchOption, String keyword) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		
+		paramMap.put("searchOption", searchOption);
+		paramMap.put("keyword", keyword);
+		
+		return sqlSession.selectOne(namespace + "memberSelectTotalCount"
+				, paramMap);
+	}
+
+	@Override
+	public List<MemberBoardDto> memberSelectList(String searchOption, String keyword, int start, int end) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("searchOption", searchOption);
+		map.put("keyword", keyword);
+		map.put("start", start);
+		map.put("end", end);
+		
+		List<MemberBoardDto> memberList = 
+				sqlSession.selectList(namespace + "memberSelectList"
+				, map);
+		
+		return memberList;
+	}
+
+	@Override
+	public int memberSelectCurPage(String searchOption, String keyword, int no) {
+		// TODO Auto-generated method stub
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("searchOption", searchOption);
+		paramMap.put("keyword", keyword);
+		paramMap.put("no", no);
+			
+		return sqlSession.selectOne(namespace 
+				+ "memberSelectCurPage", paramMap);
+	}
+
+	@Override
+	public void memberRemove(int member_no) {
+		// TODO Auto-generated method stub
+		
+		System.out.println("memberRemove들어왔다");
+		
+		sqlSession.insert(namespace + "memberRemove", member_no);
+		
+	}
+
+	@Override
+	public int checkNick(String nick) {
+		// TODO Auto-generated method stub
+		
+		System.out.println("checkNick들어왔다"+nick);
+		
+		return sqlSession.selectOne(namespace + "checkNick", nick);
+		
+	}
+
+	@Override
+	public int checkEmail(String email) {
+		// TODO Auto-generated method stub
+		System.out.println("checkEmail들어왔다"+email);
+		
+		return sqlSession.selectOne(namespace + "checkEmail", email);
+	}
+
+	@Override
+	public int checkPhone(String phone) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace + "checkPhone", phone);
 	}
 
 }

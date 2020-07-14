@@ -1,6 +1,8 @@
 package com.project.member.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,10 +14,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.project.member.model.MemberBoardDto;
 import com.project.member.model.MemberDto;
 import com.project.member.service.MemberService;
+import com.project.projectBoard.model.ProjectBoardDto;
+import com.project.projectBoard.service.ProjectBoardService;
+import com.project.util.CommentPaging;
+import com.project.util.Paging;
 
 
 @Controller
@@ -29,6 +37,9 @@ public class memberController {
 
 	@Autowired
 	private MemberService memberService;	
+	
+	@Autowired
+	private ProjectBoardService projectBoardService;
 	
 	@RequestMapping(value = "/login.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public String mainLogin(@RequestParam(defaultValue = "")String member_email, Model model) {
@@ -48,13 +59,18 @@ public class memberController {
 		
 		MemberDto memberDto = memberService.memberExist(member_email, member_pwd);
 		System.out.println("dddddddddddddddddddd"+memberDto);
-		session.setAttribute("memberDto",memberDto);
 		
-		if(memberDto.getMember_grade()==0) {
-			return "redirect:/main/member.do";	
-		}else {
-			return "redirect:/main/admin.do";	
+		if (memberDto == null) {
+			return "login/alert/missLogin";
+		}else{
+			session.setAttribute("memberDto",memberDto);
+			if(memberDto.getMember_grade()==0) {
+				return "redirect:/main/member.do";	
+			}else {
+				return "redirect:/main/admin.do";	
+			}
 		}
+		
 		//return /login/loginDone
 		
 	}
@@ -100,10 +116,18 @@ public class memberController {
 		MemberDto memberDto = memberService.memberIdFind(member_name, member_phone);
 		System.out.println("ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ"+memberDto);
 		
-		model.addAttribute("member_email",memberDto.getMember_email());
-		System.out.println(memberDto.getMember_email());
 		
-		return "/login/alert/findIdAlert";
+		
+		if (memberDto==null) {
+			return "/login/alert/failIdAlert";
+		}else {
+			model.addAttribute("member_email",memberDto.getMember_email());
+			System.out.println(memberDto.getMember_email());
+			return "/login/alert/findIdAlert";
+		}
+		
+		
+		
 	}
 	
 	
@@ -112,17 +136,23 @@ public class memberController {
 		log.info("비밀번호 찾기페이지로 이동");
 		return "/login/findPwd";
 	}
-	
+	//비밀번호 조회
 	@RequestMapping(value = "/member/findPwdCtr.do", method = RequestMethod.POST)
 	public String pwdInput(String member_email, int member_check_question, String member_check_answer, Model model) {
 		log.info("회원정보입력(비밀번호)");
 		
 		MemberDto memberDto = memberService.memberPwdFind(member_email, member_check_question, member_check_answer);
-		System.out.println("ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ"+memberDto);
-		model.addAttribute("member_pwd",memberDto.getMember_pwd());
-		System.out.println(memberDto.getMember_pwd());
+				
+		log.info("회원비밀번호 : " +memberDto);
 		
-		return "/login/alert/findPwdAlert";
+		
+		if (memberDto==null) {
+			return "/login/alert/failPwdAlert";
+		}else {
+			model.addAttribute("member_pwd",memberDto.getMember_pwd());
+			return "/login/alert/findPwdAlert";
+
+		}
 	}
 	
 	
@@ -194,18 +224,53 @@ public class memberController {
 			return "/member/alert/updateSuccess";
 		}
 		//----------------------------------------------------------------------
-		@RequestMapping(value = "/myBoard.do", method = RequestMethod.GET)
-		public String myBoard(MemberDto memberDto, HttpSession session, Model model){
-			
-			log.info("내글목록보기"+memberDto);
-			
-			
-			
-			
-			return "/member/myBoard";
-		}
 		
-		@RequestMapping(value = "/myReport.do", method = RequestMethod.GET)
+		
+		//내글목록
+		@RequestMapping(value = "member/myBoard.do", method = RequestMethod.GET)
+		   public String projectBoardMyPage(int mno
+		         , @RequestParam(defaultValue="1") int curPage
+		         , @RequestParam(defaultValue="project_board_no") String sortOption
+		         , @RequestParam(defaultValue="all") String categoryOption
+		         , @RequestParam(defaultValue="project_board_title") String searchOption
+		         , @RequestParam(defaultValue="") String keyword
+		         , @RequestParam(defaultValue="my") String pageOption
+		         , HttpSession session, Model model) {      
+
+		      //개인 정보 조회
+		      MemberDto myMemberDto = projectBoardService.profileSelectOne(mno);
+		      
+		      // 전체 작품리스트 조회      
+//		      작품 페이징 관련
+		      
+		      int totalCnt = projectBoardService.projectBoardTotalCount(searchOption, keyword, categoryOption, pageOption, mno); 
+		      
+		      CommentPaging projectBoardPaging = new CommentPaging(totalCnt, curPage);
+		      int start = projectBoardPaging.getPageBegin();
+		      int end = projectBoardPaging.getPageEnd();
+		      
+//		      리스트 조회조건 맵에 저장
+		      Map<String, Object> listOptionMap = new HashMap<>();
+		      listOptionMap.put("sortOption", sortOption);
+		      listOptionMap.put("categoryOption", categoryOption);
+		      listOptionMap.put("searchOption", searchOption);
+		      listOptionMap.put("keyword", keyword);
+		      
+//		      작품 리스트 조회
+		      List<ProjectBoardDto> projectBoardList = 
+		         projectBoardService.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, start, end, pageOption, mno);
+		      
+		      // 모델로 필요정보 넘김
+		      model.addAttribute("projectBoardList", projectBoardList);
+		      model.addAttribute("projectBoardPaging", projectBoardPaging);
+		      model.addAttribute("listOptionMap", listOptionMap);   
+		      model.addAttribute("myMemberDto", myMemberDto);
+		      model.addAttribute("mno", mno);
+		      
+		      return "member/myBoard";
+		   }
+		
+		@RequestMapping(value = "/member/myReport.do", method = RequestMethod.GET)
 		public String myNotify(MemberDto memberDto, HttpSession session, Model model){
 			
 			log.info("내 신고글 보기"+memberDto);
@@ -216,7 +281,7 @@ public class memberController {
 			return "/member/myReport";
 		}
 		
-		@RequestMapping(value = "/myQna.do", method = RequestMethod.GET)
+		@RequestMapping(value = "/member/myQna.do", method = RequestMethod.GET)
 		public String myQna(MemberDto memberDto, HttpSession session, Model model){
 			
 			log.info("내 QNA 보기"+memberDto);
@@ -224,26 +289,146 @@ public class memberController {
 			return "/member/myQna";
 		}
 		
-		@RequestMapping(value = "/admin/listAdmin.do", method = RequestMethod.GET)
-		public String memberList(HttpSession session, Model model){
+		@RequestMapping(value = "/admin/listAdmin.do", method = {RequestMethod.GET, RequestMethod.POST})
+		public String memberList(HttpSession session, @RequestParam(defaultValue = "1") 
+			int curPage
+			, @RequestParam(defaultValue = "0") int no
+			, @RequestParam(defaultValue = "all") String searchOption
+			, @RequestParam(defaultValue = "") String keyword
+			, Model model){
 			
 			log.info("관리자용 회원관리");
 			
-			List<MemberDto> memberList = memberService.getMemberList();
+//			List<MemberBoardDto> memberList = memberService.getMemberList();
+//			
+//			model.addAttribute("memberList", memberList);
 			
+			log.info("관리자용 회원관리! " + "curPage" + curPage+"\\\\"
+					+ searchOption + " : " + keyword);
+			
+			
+				
+			// 화면의 form의 이름을 마바티스에 편하게 맞추기 위한 로직
+//			if("name".equals(searchOption)) {
+//				searchOption = "member_name";
+//			}
+			
+			// 페이징을 위한 전체 회원목록 갯수
+			int totalCount = 
+				memberService.memberSelectTotalCount(
+						searchOption, keyword
+			);
+			
+			// 이전 페이지로 회원의 번호가 명확하게 나온 경우
+			// 자신의 curPage 찾는 로직 
+			if(no != 0) {
+				curPage 
+					= memberService.memberSelectCurPage(
+							searchOption, keyword, no);
+			}
+			
+//						
+//						System.out.println("????????: " + curPage);
+			
+			Paging memberPaging = new Paging(totalCount, curPage);
+			int start = memberPaging.getPageBegin();
+			int end = memberPaging.getPageEnd();
+			
+			List<MemberBoardDto> memberList = 
+				memberService.memberSelectList(searchOption, keyword
+					, start, end);
+
+			// 화면의 form의 이름을 맞추기 위한 작업
+//			if("mname".equals(searchOption)) {
+//				searchOption = "member_name";
+//			}
+			
+			// 검색
+			HashMap<String, Object> searchMap 
+				= new HashMap<String, Object>();
+			searchMap.put("searchOption", searchOption);
+			searchMap.put("keyword", keyword);
+			
+			// 페이징
+			Map<String, Object> pagingMap = new HashMap<>();
+			pagingMap.put("totalCount", totalCount);
+			pagingMap.put("paging", memberPaging);
+			
+
 			model.addAttribute("memberList", memberList);
-			
+			model.addAttribute("pagingMap", pagingMap);
+			model.addAttribute("searchMap", searchMap);
+					
+	
+	
+	
 			return "/member/memberListAdmin";
 		}
 		
 		
 		
-		@RequestMapping(value = "/listOneAdmin.do", method = RequestMethod.GET)
-		public String memberOne(MemberDto memberDto, HttpSession session, Model model){
+		@RequestMapping(value = "/admin/listOneAdmin.do", method = RequestMethod.GET)
+		public String memberOne(int member_no, HttpSession session, Model model){
 			
-			log.info("관리자용 회원정보보기"+memberDto);
+			log.info("관리자용 회원정보보기"+member_no);
 			
-			return "/member/memberOneAdmin";
+			MemberDto memberDto = memberService.memberModDetail(member_no);
+			
+			model.addAttribute("memberDto", memberDto);
+			
+			return "/member/memberInfoAdmin";
+		}
+		
+		@RequestMapping(value = "/member/remove.do", method = RequestMethod.GET)
+		public String removeOne(int[] member_chk, 
+				@RequestParam(defaultValue = "0") int member_no, HttpSession session){
+			
+			log.info("내글목록보기"+member_no);
+			
+			if(member_no==0) {
+				
+				System.out.println(member_chk.length);
+				
+				for (int i = 0; i < member_chk.length; i++) {
+					memberService.memberRemove(member_chk[i]);
+				}
+				
+			}else {
+				memberService.memberRemove(member_no);
+			}
+			
+			
+			
+			
+			return "redirect:../admin/listAdmin.do";
+		}
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/member/checkNick.do", method = RequestMethod.GET)
+		public int checkNick(@RequestParam("nick") String nick) {
+	
+			log.info("닉네임 중복체크 {}", nick);
+	      
+			return memberService.checkNick(nick);
+		}
+		
+		@ResponseBody
+		@RequestMapping(value = "/member/checkEmail.do", method = RequestMethod.GET)
+		public int checkEmail(@RequestParam("email") String email) {
+	
+			log.info("이메일 중복체크 {}", email);
+	      
+			return memberService.checkEmail(email);
+		}
+		
+		@ResponseBody
+		@RequestMapping(value = "/member/checkPhone.do", method = RequestMethod.GET)
+		public int checkPhone(@RequestParam("phone") String phone) {
+	
+			log.info("번호 중복체크 {}", phone);
+	      
+			return memberService.checkPhone(phone);
 		}
 		
 }

@@ -33,9 +33,9 @@ public class ProjectBoardServiceImpl implements ProjectBoardService{
 	private FileUtils fileUtil;
 	
 	@Override
-	public List<ProjectBoardDto> projectBoardSelectList(String searchOption, String keyword, String sortOption, String categoryOption, int end) {
+	public List<ProjectBoardDto> projectBoardSelectList(String searchOption, String keyword, String sortOption, String categoryOption, int start, int end, String pageOption, int memberNo) {
 		
-		return projectBoardDao.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, end);
+		return projectBoardDao.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, start, end, pageOption, memberNo);
 	}
 
 	@Override
@@ -91,28 +91,45 @@ public class ProjectBoardServiceImpl implements ProjectBoardService{
 			int project_board_no = projectBoardDto.getProject_board_no();
 			int writerNo = projectBoardDto.getProject_board_mno();
 			
-			List<Map<String, Object>> tempFileList
-				= projectBoardDao.fileSelectStoredFileName(project_board_no);
+//			List<Map<String, Object>> tempFileList
+//				= projectBoardDao.fileSelectStoredFileName(project_board_no);
 			
 			List<Map<String, Object>> list
 				= fileUtil.parseInsertFileInfo(project_board_no, writerNo, mulRequest);
 			
-			// 추가 없이 삭제만 한 경우
-			for (int i = 0; i < chkListFile.length; i++) {
-				
-			}
-			// 
+			int fileListCnt = 0;
+			int tempFileListCnt = 0;
 			
-			if(list.isEmpty() == false) {
-				if(tempFileList != null) {
-					projectBoardDao.deleteFile(project_board_no);
-					fileUtil.parseUpdateFileInfo(tempFileList);
+			for (int i = 0; i < chkListFlag.length; i++) {
+				
+				if(chkListFlag[i].equals("old")) {
+					System.out.println("old처리");
+				}else if(chkListFlag[i].equals("update")) {
+					System.out.println("update처리");
+					projectBoardDao.deleteFileName(chkListFile[tempFileListCnt]);
+					fileUtil.parseDeleteFileInfo(chkListFile[tempFileListCnt++]);
+					projectBoardDao.insertFile(list.get(fileListCnt++));
+				}else if(chkListFlag[i].equals("new")) {
+					System.out.println("new처리");
+					projectBoardDao.insertFile(list.get(fileListCnt++));
+				}else if(chkListFlag[i].equals("delete")) {
+					System.out.println("delete처리");
+					projectBoardDao.deleteFileName(chkListFile[tempFileListCnt]);
+					fileUtil.parseDeleteFileInfo(chkListFile[tempFileListCnt++]);
 				}
 				
-				for(Map<String, Object> map : list) {
-					projectBoardDao.insertFile(map);
-				}
 			}
+			
+//			if(list.isEmpty() == false) {
+//				if(tempFileList != null) {
+//					projectBoardDao.deleteFile(project_board_no);
+//					fileUtil.parseUpdateFileInfo(tempFileList);
+//				}
+//				
+//				for(Map<String, Object> map : list) {
+//					projectBoardDao.insertFile(map);
+//				}
+//			}
 
 			// 프로젝트 데이터 변경
 			resultNum = projectBoardDao.projectBoardUpdateOne(projectBoardDto);
@@ -128,16 +145,19 @@ public class ProjectBoardServiceImpl implements ProjectBoardService{
 	@Override
 	public int projectBoardDeleteOne(int no) {
 		
-		projectBoardDao.deleteFile(no);
-		int checkDelete = projectBoardDao.projectBoardDeleteOne(no);
+		int checkDelete = projectBoardDao.projectCommentDelete(no);
+		
+		projectBoardDao.deleteFile(no);		
+		checkDelete = projectBoardDao.projectBoardDeleteOne(no);
+		
 		
 		return checkDelete;
 	}
 
 	@Override
-	public int projectBoardTotalCount(String searchOption, String keyword, String categoryOption) {
+	public int projectBoardTotalCount(String searchOption, String keyword, String categoryOption, String pageOption, int memberNo) {
 		
-		int totalCnt = projectBoardDao.projectBoardTotalCount(searchOption, keyword, categoryOption);
+		int totalCnt = projectBoardDao.projectBoardTotalCount(searchOption, keyword, categoryOption, pageOption, memberNo);
 		
 		return totalCnt;
 	}
@@ -170,6 +190,42 @@ public class ProjectBoardServiceImpl implements ProjectBoardService{
 		int checkDelete = projectBoardDao.projectCommentDeleteOne(no);
 		
 		return checkDelete;
+	}
+
+	@Override
+	public MemberDto profileSelectOne(int no) {
+				
+		return projectBoardDao.profileSelectOne(no);
+	}
+
+	@Override
+	public int projectView(int no) {
+
+		return projectBoardDao.projectView(no);
+	}
+
+	@Override
+	public int projectLike(int no, int mno) {
+
+		return projectBoardDao.projectLike(no, mno);
+	}
+
+	@Override
+	public int projectLikeUpdate(int no, int mno) {
+
+		return projectBoardDao.projectLikeUpdate(no, mno);
+	}
+
+	@Override
+	public int projectLikeDelete(int no, int mno) {
+
+		return projectBoardDao.projectLikeDelete(no, mno);
+	}
+
+	@Override
+	public Map<String, Object> projectLikeFlag(int no, int mno) {
+
+		return projectBoardDao.projectLikeFlag(no, mno);
 	}
 	
 }

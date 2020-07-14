@@ -21,6 +21,8 @@ import com.project.projectBoard.model.ProjectBoardDto;
 import com.project.projectBoard.model.ProjectBoardFileDto;
 import com.project.projectBoard.model.ProjectCommentDto;
 import com.project.projectBoard.service.ProjectBoardService;
+import com.project.util.CommentPaging;
+import com.project.util.Paging;
 import com.project.util.ProjectBoardPaging;
 
 
@@ -52,14 +54,20 @@ public class ProjectController {
 			, @RequestParam(defaultValue="all") String categoryOption
 			, @RequestParam(defaultValue="member_nick") String searchOption
 			, @RequestParam(defaultValue="") String keyword
+			, @RequestParam(defaultValue="") String pageOption
 			, HttpSession session
 			, Model model) {
 		
 		// 전체 작품리스트 조회		
 //		작품 페이징 관련
-		int totalCnt = projectBoardService.projectBoardTotalCount(searchOption, keyword, categoryOption); 
-				
+		MemberDto sessionMemberDto = (MemberDto)session.getAttribute("memberDto");
+		int memberNo = sessionMemberDto.getMember_no();
+		int totalCnt = projectBoardService.projectBoardTotalCount(searchOption, keyword, categoryOption, pageOption, memberNo); 
+		
+		System.out.println(totalCnt);
+		
 		ProjectBoardPaging projectBoardPaging = new ProjectBoardPaging(totalCnt, curPage);
+		int start = projectBoardPaging.getPageBegin();
 		int end = projectBoardPaging.getPageEnd();
 		
 //		리스트 조회조건 맵에 저장
@@ -71,7 +79,7 @@ public class ProjectController {
 		
 //		작품 리스트 조회
 		List<ProjectBoardDto> projectBoardList = 
-			projectBoardService.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, end);
+			projectBoardService.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, start, end, pageOption, memberNo);
 		
 		// 모델로 필요정보 넘김
 		model.addAttribute("projectBoardList", projectBoardList);
@@ -79,6 +87,40 @@ public class ProjectController {
 		model.addAttribute("listOptionMap", listOptionMap);
 		
 		return "board/project/projectBoardList";
+	}
+	
+	@RequestMapping(value = "projectBoard/projectView.do", method = RequestMethod.GET)
+	public String projectView(int project_board_no, HttpSession session, Model model) {
+		
+		projectBoardService.projectView(project_board_no);
+		
+		model.addAttribute("project_board_no", project_board_no);
+		
+		return "forward:/projectBoard/detail.do";
+	}
+	
+	@RequestMapping(value = "projectBoard/like.do", method = RequestMethod.GET)
+	public String like(int project_board_no, int mno, HttpSession session, Model model) {
+				
+		projectBoardService.projectLike(project_board_no, mno);
+				
+		return "forward:/projectBoard/detail.do";
+	}
+	
+	@RequestMapping(value = "projectBoard/likeUpdate.do", method = RequestMethod.GET)
+	public String likeUpdate(int project_board_no, int mno, HttpSession session, Model model) {
+		
+		projectBoardService.projectLikeUpdate(project_board_no, mno);
+
+		return "forward:/projectBoard/detail.do";
+	}
+	
+	@RequestMapping(value = "projectBoard/likeDelete.do", method = RequestMethod.GET)
+	public String likeDelete(int project_board_no, int mno, HttpSession session, Model model) {
+
+		projectBoardService.projectLikeDelete(project_board_no, mno);	
+
+		return "forward:/projectBoard/detail.do";
 	}
 	
 	@RequestMapping(value = "projectBoard/detail.do", method = RequestMethod.GET)
@@ -92,10 +134,16 @@ public class ProjectController {
 		// 작품에 대한 댓글정보 전달
 		List<ProjectCommentDto> projectCommentList = projectBoardService.projectCommentSelectList(project_board_no); 
 		
+		// 좋아요 체크
+		MemberDto sessionMemberDto = (MemberDto)session.getAttribute("memberDto");
+		int member_no = sessionMemberDto.getMember_no();
+		Map<String, Object> projectLikeFlag = projectBoardService.projectLikeFlag(project_board_no, member_no); 
+		
 		// 모델로 필요정보 넘김
 		model.addAttribute("projectBoardDto", projectBoardDto);
 		model.addAttribute("projectBoardFileList", projectBoardFileList);
 		model.addAttribute("projectCommentList", projectCommentList);
+		model.addAttribute("projectLikeFlag", projectLikeFlag);
 		
 		return "board/project/projectBoardDetail";
 	}
@@ -133,19 +181,12 @@ public class ProjectController {
 	@RequestMapping(value = "projectBoard/updateCtr.do", method = RequestMethod.POST)
 	public String projectBoardUpdateCtr(String[] chkListFlag, String[] chkListFile, ProjectBoardDto projectBoardDto, MultipartHttpServletRequest mulRequest, HttpSession session, Model model) {
 		
-		for (int i = 0; i < chkListFlag.length; i++) {
-			log.info(chkListFlag[i]);
-		}		
-		for (int i = 0; i < chkListFile.length; i++) {
-			log.info(chkListFile[i]);
-		}		
-		
-//		try {
-//			int checkUpdate = projectBoardService.projectBoardUpdateOne(chkListFlag, chkListFile, projectBoardDto, mulRequest);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		try {
+			int checkUpdate = projectBoardService.projectBoardUpdateOne(chkListFlag, chkListFile, projectBoardDto, mulRequest);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// 모델로 필요정보 넘김
 		model.addAttribute("project_board_no", projectBoardDto.getProject_board_no());
@@ -199,13 +240,43 @@ public class ProjectController {
 	
 //	============================== 관리자용 작품관리 
 	@RequestMapping(value = "projectBoard/management.do", method = RequestMethod.GET)
-	public String projectBoardManagement(HttpSession session, Model model) {		
-				
+	public String projectBoardManagement(@RequestParam(defaultValue="1") int curPage
+			, @RequestParam(defaultValue="project_board_no") String sortOption
+			, @RequestParam(defaultValue="all") String categoryOption
+			, @RequestParam(defaultValue="member_nick") String searchOption
+			, @RequestParam(defaultValue="") String keyword
+			, @RequestParam(defaultValue="admin") String pageOption
+			,HttpSession session, Model model) {		
+						
+		int memberNo = 1;
+		
+		// 페이징
+		int totalCnt = projectBoardService.projectBoardTotalCount(searchOption, keyword, categoryOption, pageOption, memberNo); 
+		
+		Paging projectBoardPaging = new Paging(totalCnt, curPage);
+		int start = projectBoardPaging.getPageBegin();
+		int end = projectBoardPaging.getPageEnd();
+		
 		// ※※※※※ 작품관리 selectList 변수 수정해야함 ! 페이징화 시키기 !
-		List<ProjectBoardDto> projectBoardList = projectBoardService.projectBoardSelectList("member_nick", "", "project_board_no", "all", 100);
+		List<ProjectBoardDto> projectBoardList = 
+			projectBoardService.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, start, end, pageOption, memberNo);		
+		
+//		리스트 조회조건 맵에 저장
+		Map<String, Object> listOptionMap = new HashMap<>();
+//		기타 정렬 이용할 시 사용
+//		listOptionMap.put("sortOption", sortOption); 
+//		listOptionMap.put("categoryOption", categoryOption);
+		listOptionMap.put("searchOption", searchOption);
+		listOptionMap.put("keyword", keyword);
+		
+//		페이징 관련
+		Map<String, Object> pagingMap = new HashMap<>();
+		pagingMap.put("paging", projectBoardPaging);
 		
 		// 모델로 필요정보 넘김
 		model.addAttribute("projectBoardList", projectBoardList);
+		model.addAttribute("pagingMap", pagingMap);
+		model.addAttribute("listOptionMap", listOptionMap);
 		
 		return "board/project/projectBoardManagement";
 	}
@@ -219,5 +290,50 @@ public class ProjectController {
 		}
 		
 		return "redirect:/projectBoard/management.do";
+	}
+	
+//	============================== 테스트용 ( 마이 페이지 - 내글목록 )
+	
+	@RequestMapping(value = "projectBoard/MyPage.do", method = RequestMethod.GET)
+	public String projectBoardMyPage(@RequestParam(defaultValue="1") int curPage
+			, @RequestParam(defaultValue="project_board_no") String sortOption
+			, @RequestParam(defaultValue="all") String categoryOption
+			, @RequestParam(defaultValue="member_nick") String searchOption
+			, @RequestParam(defaultValue="") String keyword
+			, @RequestParam(defaultValue="my") String pageOption
+			, HttpSession session, Model model) {		
+			
+		MemberDto sessionMemberDto = (MemberDto)session.getAttribute("memberDto");
+		int memberNo = sessionMemberDto.getMember_no();
+		//개인 정보 조회
+		MemberDto myMemberDto = projectBoardService.profileSelectOne(memberNo);
+		
+		// 전체 작품리스트 조회		
+//		작품 페이징 관련
+		
+		int totalCnt = projectBoardService.projectBoardTotalCount(searchOption, keyword, categoryOption, pageOption, memberNo); 
+		
+		CommentPaging projectBoardPaging = new CommentPaging(totalCnt, curPage);
+		int start = projectBoardPaging.getPageBegin();
+		int end = projectBoardPaging.getPageEnd();
+		
+//		리스트 조회조건 맵에 저장
+		Map<String, Object> listOptionMap = new HashMap<>();
+		listOptionMap.put("sortOption", sortOption);
+		listOptionMap.put("categoryOption", categoryOption);
+		listOptionMap.put("searchOption", searchOption);
+		listOptionMap.put("keyword", keyword);
+		
+//		작품 리스트 조회
+		List<ProjectBoardDto> projectBoardList = 
+			projectBoardService.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, start, end, pageOption, memberNo);
+		
+		// 모델로 필요정보 넘김
+		model.addAttribute("projectBoardList", projectBoardList);
+		model.addAttribute("projectBoardPaging", projectBoardPaging);
+		model.addAttribute("listOptionMap", listOptionMap);	
+		model.addAttribute("myMemberDto", myMemberDto);
+		
+		return "member/myBoard";
 	}
 }

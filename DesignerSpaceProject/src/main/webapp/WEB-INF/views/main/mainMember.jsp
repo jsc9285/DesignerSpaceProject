@@ -55,7 +55,7 @@
 		
 		<div id="buttonWrap">
 			<button onclick="location.href='<%=request.getContextPath()%>/projectBoard/add.do'"><img src="<%=request.getContextPath()%>/resources/img/editIcon.png" style="width: 32px; vertical-align: -7px;">글작성</button>
-			<button onclick="location.href='<%=request.getContextPath()%>/myBoard.do'"><img src="<%=request.getContextPath()%>/resources/img/userIcon.png">내 글목록</button>
+			<button onclick="location.href='<%=request.getContextPath()%>/member/myBoard.do'"><img src="<%=request.getContextPath()%>/resources/img/userIcon.png">내 글목록</button>
 		</div>
 	</div>
 	

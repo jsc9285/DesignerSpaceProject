@@ -5,6 +5,21 @@
   
   
 <mapper namespace="com.project.member">
+
+	<sql id="search">
+		<choose>
+        	<!-- 검색옵션이 전체 검색일 경우  -->
+        	<when test="searchOption == 'all'">
+        		WHERE (MEMBER_NICK LIKE '%' || #{keyword} || '%'
+        		OR    MEMBER_EMAIL LIKE '%' || #{keyword} || '%')
+        	</when>
+        	
+        	<!-- 전체 검색이 아닐 경우 -->
+        	<otherwise>
+        		WHERE ${searchOption} LIKE '%' || #{keyword} || '%'
+        	</otherwise>
+        </choose>
+	</sql>
 	
 	<resultMap type="com.project.member.model.MemberDto" 
 		id="memberResultMap">
@@ -30,9 +45,19 @@
 		<result column="profile_table_original_name" property="profile_table_original_name"/>
 		<result column="profile_table_stored_name" property="profile_table_stored_name"/>
 		
-		<result column="boardCnt" property="boardCnt"/>
-		<result column="viewCnt" property="viewCnt"/>
-		<result column="likeCnt" property="likeCnt"/>
+	</resultMap>
+	
+	<resultMap type="com.project.member.model.MemberBoardDto" 
+		id="memberListResultMap">
+		<id column="MEMBER_NO" property="member_no"/>
+		<result column="MEMBER_NICK" property="member_nick"/>
+		<result column="MEMBER_EMAIL" property="member_email"/>
+		<result column="MEMBER_CRE_DATE" property="member_cre_date"
+			javaType="java.util.Date"/>
+		<result column="MEMBER_GRADE" property="member_grade"/>
+				
+		<result column="BOARD_CNT" property="board_cnt"/>
+		<result column="LIKE_CNT" property="like_cnt"/>
 	</resultMap>
 	
 	
@@ -76,22 +101,34 @@
 		
 	</insert>
 	
-	<select id="memberList" resultMap="memberResultMap">
-		SELECT MEMBER_NO, MEMBER_NICK, MEMBER_EMAIL, BOARDCNT, VIEWCNT, LIKECNT, MEMBER_CRE_DATE, MEMBER_GRADE
-			FROM MEMBER 
-			LEFT JOIN 
-			    (SELECT PROJECT_BOARD_MNO, BOARDCNT, VIEWCNT, LIKECNT
-			        FROM 
-			            (SELECT PROJECT_BOARD_MNO, COUNT(PROJECT_BOARD_TITLE) BOARDCNT, SUM(PROJECT_BOARD_VIEWS) VIEWCNT
-			            FROM PROJECT_BOARD
-			            GROUP BY PROJECT_BOARD_MNO)
-			        LEFT JOIN 
-			            (SELECT PROJECT_LIKE_MNO, COUNT(PROJECT_LIKE_MNO) LIKECNT
-			            FROM PROJECT_LIKE
-			            WHERE PROJECT_LIKE_FLAG = 'Y'
-			            GROUP BY PROJECT_LIKE_MNO)
-		        ON PROJECT_BOARD_MNO = PROJECT_LIKE_MNO)
-			ON MEMBER_NO = PROJECT_BOARD_MNO
+	<select id="memberSelectList" parameterType="map" resultMap="memberListResultMap">
+		SELECT RNUM, MEMBER_NO, MEMBER_NICK, MEMBER_EMAIL, BOARD_CNT, 
+			LIKE_CNT, MEMBER_CRE_DATE, MEMBER_GRADE
+		FROM 
+		    (SELECT ROWNUM RNUM, MEMBER_NO, MEMBER_NICK, MEMBER_EMAIL, MEMBER_DEL_FLAG,
+		    	MEMBER_CRE_DATE, MEMBER_GRADE
+		    FROM MEMBER
+		    
+		    <include refid="search"></include>
+		    
+		    AND MEMBER_DEL_FLAG = 'N'
+		    ORDER BY MEMBER_NO DESC)
+		LEFT JOIN 
+		    (SELECT PROJECT_BOARD_MNO, BOARD_CNT, VIEW_CNT, LIKE_CNT
+		        FROM 
+		            (SELECT PROJECT_BOARD_MNO, COUNT(PROJECT_BOARD_TITLE) BOARD_CNT, 
+		            	SUM(PROJECT_BOARD_VIEWS) VIEW_CNT
+		            FROM PROJECT_BOARD
+		            GROUP BY PROJECT_BOARD_MNO)
+		        LEFT JOIN 
+		            (SELECT PROJECT_LIKE_MNO, COUNT(PROJECT_LIKE_MNO) LIKE_CNT
+		            FROM PROJECT_LIKE
+		            WHERE PROJECT_LIKE_FLAG = 'Y'
+		            GROUP BY PROJECT_LIKE_MNO)
+		    ON PROJECT_BOARD_MNO = PROJECT_LIKE_MNO)
+		ON MEMBER_NO = PROJECT_BOARD_MNO
+		WHERE RNUM BETWEEN #{start} AND #{end}
+		ORDER BY RNUM ASC
 	</select>
 	
 	<insert id="profileAdd" parameterType="map">
@@ -149,6 +186,82 @@
 		SELECT profile_table_no, profile_table_stored_name
 		FROM PROFILE_TABLE
 		WHERE profile_table_mno = #{profile_table_mno}
+	</select>
+	
+	
+	<select id="memberSelectTotalCount" resultType="int" 
+		parameterType="map">
+		SELECT COUNT(*)
+		FROM MEMBER
+		<include refid="search"></include>
+	</select>
+	
+	<select id="memberSelectCurPage" parameterType="map"
+		resultType="int">
+		SELECT floor((RNUM-1) / 10)+1 no
+		FROM
+			(SELECT RNUM, MEMBER_NO, MEMBER_NICK, MEMBER_EMAIL, BOARD_CNT, 
+				LIKE_CNT, MEMBER_CRE_DATE, MEMBER_GRADE
+			FROM 
+			    (SELECT ROWNUM RNUM, MEMBER_NO, MEMBER_NICK, MEMBER_EMAIL, MEMBER_DEL_FLAG,
+			    	MEMBER_CRE_DATE, MEMBER_GRADE
+			    FROM MEMBER
+			    
+			    <include refid="search"></include>
+			   
+			    AND MEMBER_DEL_FLAG = 'N'
+			    
+			    ORDER BY MEMBER_NO DESC)
+			LEFT JOIN 
+			    (SELECT PROJECT_BOARD_MNO, BOARD_CNT, VIEW_CNT, LIKE_CNT
+			        FROM 
+			            (SELECT PROJECT_BOARD_MNO, COUNT(PROJECT_BOARD_TITLE) BOARD_CNT, 
+			            	SUM(PROJECT_BOARD_VIEWS) VIEW_CNT
+			            FROM PROJECT_BOARD
+			            GROUP BY PROJECT_BOARD_MNO)
+			        LEFT JOIN 
+			            (SELECT PROJECT_LIKE_MNO, COUNT(PROJECT_LIKE_MNO) LIKE_CNT
+			            FROM PROJECT_LIKE
+			            WHERE PROJECT_LIKE_FLAG = 'Y'
+			            GROUP BY PROJECT_LIKE_MNO)
+			    ON PROJECT_BOARD_MNO = PROJECT_LIKE_MNO)
+			ON MEMBER_NO = PROJECT_BOARD_MNO
+			WHERE RNUM BETWEEN #{start} AND #{end}
+			ORDER BY RNUM ASC)
+		WHERE MEMBER_NO = #{no}
+	</select>
+	
+	<update id="memberRemove" parameterType="int">
+		UPDATE MEMBER
+		<set>
+			 MEMBER_DEL_FLAG = 'Y'
+		</set>
+		WHERE MEMBER_NO =#{member_no}
+	</update>
+	
+<!-- 	중복체크   -->
+	<select id="checkNick" parameterType="String" 
+		resultType="int">
+		
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE MEMBER_NICK = #{nick}
+	</select>
+	
+	<select id="checkEmail" parameterType="String" 
+		resultType="int">
+		
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE MEMBER_EMAIL = #{email}
+	</select>
+	
+	<select id="checkPhone" parameterType="String" 
+		resultType="int">
+		
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE MEMBER_PHONE = #{phone}
 	</select>
 	
 </mapper>

@@ -12,22 +12,27 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 	
 	<style type="text/css">
-		input {
+		.input {
 			width: 292px;
 			height: 30px;
 			margin-bottom: 10px;
 			border-radius: 5px;
 			border: 1px solid #60524E
 		}
-		button {
+		#button {
 			width: 300px;
 			height: 35px;
 			color: #FFFFFF;
 			margin-bottom: 10px;
 			background-color: #60524E;
 			font-weight: bold;
-			border: 1px solid #60524E;
+			border: 0px;
 			border-radius: 5px;
+			cursor: pointer;
+		}
+		#button:hover{
+			color: #fff;
+			background-color: #4AD674;
 		}
 		.input_span{
 			font-size: 20px;
@@ -35,7 +40,7 @@
 			color: #60524E;
 		}
 		
-		a{
+		.aTag{
 			text-decoration:none; 
 			color: #60524E;
 		}
@@ -76,7 +81,27 @@
 		objImg.src = imgArray[imgNum];
 	}
 
-
+	function loginOrderFnc() {
+		
+		var loginForm = document.loginForm;
+		var email = document.getElementById("email_input");
+		var pwd = document.getElementById("pwd_input");
+		
+		
+		if (email.value==""||email.value==null) {
+			alert('이메일을 입력해주세요');
+			email.focus();
+			return false;
+		}else if(pwd.value==""||pwd.value==null){
+			alert('비밀번호를 입력해주세요');
+			pwd.focus();
+			return false;
+		}else{
+			
+			return true;
+		}
+		
+	}
 
 	</script>
 	
@@ -98,29 +123,31 @@
 			
 			<div>
 				<div id="login_main_div">
-					<form action="./member/loginCtr.do" method="post">
+					<form name="loginForm" action="./member/loginCtr.do" method="post" onsubmit="return loginOrderFnc();">
 						<c:choose>
 							<c:when test="${empty member_email}">
-								<input id="email_input" type="text" name='member_email' placeholder="이메일 입력" >
+								<input id="email_input" class="input" type="email" name='member_email' 
+									maxlength="20" placeholder="이메일 입력" >
 							</c:when>
 							<c:otherwise>
-								<input id="email_input" type="text" name='member_email' placeholder="이메일 입력" value="${member_email}">
+								<input id="email_input" class="input" type="email" name='member_email' 
+									maxlength="20" placeholder="이메일 입력" value="${member_email}">
 							</c:otherwise>
 						</c:choose>
-						<br>
 						
-						<input type="text" name='member_pwd' placeholder="비밀번호 입력" style="margin-bottom: 20px;"><br>
-				
-						<button>로그인</button>
+						
+						<input type="password" class="input" id="pwd_input" name='member_pwd' placeholder="비밀번호 입력" 
+							style="margin-bottom: 20px;" maxlength="16">
+						
+						<input id="button" class="input" type="submit" value="로그인" >
 					</form>
-						<a href="member/findId.do">아이디찾기</a>
-						<a style="margin: 7px;">|</a>
-						<a href="member/findPwd.do">비밀번호찾기</a>
-						<a style="margin: 7px;">|</a>
-						<a href="member/join.do">회원가입</a>
-						<br>
-						<br>
-						<a href="admin/listAdmin.do" style="color : red;">회원목록</a>
+						<a class="aTag" href="member/findId.do">아이디찾기</a>
+						<a class="aTag" style="margin: 7px;">|</a>
+						<a class="aTag" href="member/findPwd.do">비밀번호찾기</a>
+						<a class="aTag" style="margin: 7px;">|</a>
+						<a class="aTag" href="member/join.do">회원가입</a>
+						<a class="aTag" href="admin/listAdmin.do" style="color : red;">회원목록</a>
+						
 				</div>
 			</div>
 			

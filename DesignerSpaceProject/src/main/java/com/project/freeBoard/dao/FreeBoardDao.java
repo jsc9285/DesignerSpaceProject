@@ -9,9 +9,9 @@ public interface FreeBoardDao {
 	
 	public int freeBoardSelectTotalCount(String searchOption, String keyword);
 
-	public int freeBoardSelectCurPage(String searchOption, String keyword, int no);
+	public int freeBoardSelectCurPage(String searchOption, String keyword, int no, String lineTitle );
 
-	public List<FreeBoardDto> freeBoardSelectList(String searchOption, String keyword, int start, int end);
+	public List<FreeBoardDto> freeBoardSelectList(String searchOption, String keyword, int start, int end, String lineTitle);
 	
 	public FreeBoardDto freeBoardSelectOne(int no);
 
@@ -50,6 +50,12 @@ public interface FreeBoardDao {
 	public void freeBoardCommentOneDelete(int fcno);
 
 	public int freeBoardCommentTotalCount(int no);
+
+	public int selectTotalMoveCount(String searchOption, String keyword, String lineTitle);
+
+	public FreeBoardDto selectPrePage(String searchOption, String keyword, String lineTitle, int rnum);
+
+	public FreeBoardDto selectNextPage(String searchOption, String keyword, String lineTitle, int rnum);
 
 }
 
