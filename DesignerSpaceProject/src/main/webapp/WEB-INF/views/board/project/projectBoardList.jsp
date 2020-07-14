@@ -234,7 +234,7 @@
 			<div id="projectView">
 				<c:forEach var="projectBoardDto" items="${projectBoardList}">
 					<div class="projectList">
-						<div class="thumbnailPic" onclick="location.href='./detail.do?project_board_no=${projectBoardDto.project_board_no}'"
+						<div class="thumbnailPic" onclick="location.href='./projectView.do?project_board_no=${projectBoardDto.project_board_no}'"
 							 style="background-image: url(<c:url value='/projectImg/${projectBoardDto.FILE_TABLE_STORED_FILE_NAME}'/>);">
 							<c:choose>
 								<c:when test="${projectBoardDto.project_board_category eq 'p'}">

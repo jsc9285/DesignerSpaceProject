@@ -21,6 +21,14 @@
         </choose>
 	</sql>
 	
+	<sql id="pageOption">
+		<choose>
+			<when test="pageOption == 'my'">
+				and project_board_mno = #{memberNo}
+			</when>
+		</choose>
+	</sql>
+	
 	<resultMap type="com.project.projectBoard.model.ProjectBoardDto"
 		 id="projectBoardResultMap">
 		<result column="project_board_no" property="project_board_no"/>
@@ -73,6 +81,15 @@
 		<result column="profile_table_stored_name" property="profile_table_stored_name"/>
 	</resultMap>
 	
+	<resultMap type="com.project.member.model.MemberDto" 
+		id="memberDtoResultMap">
+		<result column="member_no" property="member_no"/>
+		<result column="member_nick" property="member_nick"/>
+		<result column="member_email" property="member_email"/>
+		<result column="member_comments" property="member_comments"/>
+		<result column="member_cre_date" property="member_cre_date"/>
+	</resultMap>
+	
 	<select id="projectBoardSelectList" parameterType="map"
 		resultMap="projectBoardResultMap">
 		select (select count(project_comment_no) from project_comment where project_comment.project_comment_pbno = project_board_no) project_comment_cnt, project_board_no, project_board_title, project_board_views, project_board_category, project_board_cre_date, project_board_like, file_table_stored_file_name, member_nick, profile_table_stored_name
@@ -86,9 +103,12 @@
 		                  from (select (select count(project_board_no) from project_board) cnt, p.project_board_mno , p.project_board_no, p.project_board_title, p.project_board_views, p.project_board_category, p.project_board_cre_date, count(project_like_no) project_board_like
 		                        from project_board p left join project_like pl
 		                        on p.project_board_no = pl.project_like_pbno
+		                        and pl.project_like_flag = 'Y'
 		                        and p.project_board_mno = pl.project_like_mno
 		                        group by p.project_board_mno , p.project_board_no, p.project_board_title, p.project_board_views, p.project_board_category, p.project_board_cre_date order by ${sortOption} desc) pb, file_table ft
-		                  where pb.project_board_no = ft.file_table_pbno order by ${sortOption} desc) f
+		                  where pb.project_board_no = ft.file_table_pbno 
+		                  <include refid="pageOption"></include>
+		                  order by ${sortOption} desc) f
 		                  where f.r = 1  
 		                  <include refid="categoryOption"></include>		                           
 		                   ) FB 
@@ -106,6 +126,7 @@
 		on pb.project_board_mno = m.member_no
 		where (${searchOption} like '%' || #{keyword} || '%')
 		<include refid="categoryOption"></include>
+		<include refid="pageOption"></include>
 	</select>
 	
 	<select id="projectBoardSelectOne" parameterType="int"
@@ -115,8 +136,8 @@
 		     (select count(project_like_no) project_board_like, pb.project_board_no
 		     from project_board pb left join project_like pl
 		     on pb.project_board_no = pl.project_like_pbno
-		     where pb.project_board_mno = all (select project_like_mno from project_like where project_like_pbno = #{no})
-		     and pb.project_board_no = #{no}
+		     and pl.project_like_flag = 'Y'
+		     where pb.project_board_no = #{no}
 		     group by pb.project_board_no) L
 		where pb.project_board_mno = m.member_no
 		and m.member_no = pt.profile_table_mno(+)
@@ -182,10 +203,11 @@
 		WHERE FILE_TABLE_PBNO = #{project_board_no}
 	</select>
 	
-	<delete id="projectBoardDeleteOne" parameterType="int">
-		delete from project_board
+	<update id="projectBoardDeleteOne" parameterType="int">
+		update project_board
+		set project_board_del_flag = 'Y'
 		where project_board_no = #{no}
-	</delete>
+	</update>
 	
 	<insert id="projectCommentInsertOne" parameterType="com.project.projectBoard.model.ProjectCommentDto">
 		insert into project_comment
@@ -204,5 +226,56 @@
 		delete from project_comment
 		where project_comment_no = #{no}
 	</delete>
+	
+	<delete id="projectCommentDelete">
+		delete from project_comment
+		where project_comment_pbno = #{no}
+	</delete>
+	
+	<delete id="deleteFileName" parameterType="String">
+		delete from file_table
+		where file_table_stored_file_name = #{str}
+	</delete>
+	
+	<select id="profileSelectOne" parameterType="int"
+		resultMap="memberDtoResultMap">
+		select member_no, member_nick, member_email, member_comments, member_cre_date
+		from member
+		where member_no = #{no}
+	</select>
+	
+	<update id="projectView" parameterType="int">
+		update project_board
+		set project_board_views =  project_board_views +1
+		where project_board_no = #{no}
+	</update>
+	
+	<insert id="projectLike" parameterType="map">
+		insert into project_like
+		value(project_like_no, project_like_mno, project_like_pbno, project_like_flag)
+		values(project_like_plno_seq.nextval, #{mno}, #{no}, 'Y')
+	</insert>
+	
+	<update id="projectLikeUpdate" parameterType="map">
+		update project_like
+		set project_like_flag ='Y'
+		where project_like_mno = #{mno}
+		and project_like_pbno= #{no}
+	</update>
+	
+	<update id="projectLikeDelete" parameterType="map">
+		update project_like
+		set project_like_flag ='N'
+		where project_like_mno = #{mno}
+		and project_like_pbno= #{no}
+	</update>
+	
+	<select id="projectLikeFlag" parameterType="map"
+		resultType="map">
+		select project_like_no, project_like_flag
+		from project_like
+		where project_like_mno = #{mno}
+		and project_like_pbno = #{no}
+	</select>
 	
 </mapper>

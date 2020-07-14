@@ -93,4 +93,17 @@ public class FileUtils {
 		
 	}
 	
+	public void parseDeleteFileInfo(String storedFileName) 
+			throws Exception{
+			// TODO Auto-generated method stub			
+			
+			File file = new File(FILE_PATH + "/" + storedFileName);
+			
+			if(file.exists()) {
+				file.delete();
+			}else {
+				System.out.println("파일이 존재하지 않습니다.");
+				throw new Exception();
+			}
+	}
 }

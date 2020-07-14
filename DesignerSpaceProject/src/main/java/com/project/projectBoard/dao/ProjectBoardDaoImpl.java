@@ -8,6 +8,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.project.member.model.MemberDto;
 import com.project.projectBoard.model.ProjectBoardDto;
 import com.project.projectBoard.model.ProjectBoardFileDto;
 import com.project.projectBoard.model.ProjectCommentDto;
@@ -22,7 +23,7 @@ public class ProjectBoardDaoImpl implements ProjectBoardDao{
 	String namespace = "com.project.projectBoard.";
 
 	@Override
-	public List<ProjectBoardDto> projectBoardSelectList(String searchOption, String keyword, String sortOption, String categoryOption, int end) {
+	public List<ProjectBoardDto> projectBoardSelectList(String searchOption, String keyword, String sortOption, String categoryOption, int end, String pageOption, int memberNo) {
 		
 		Map<String, Object> listOptionMap = new HashMap<>();
 		listOptionMap.put("searchOption", searchOption);
@@ -30,6 +31,8 @@ public class ProjectBoardDaoImpl implements ProjectBoardDao{
 		listOptionMap.put("sortOption", sortOption);
 		listOptionMap.put("categoryOption", categoryOption);
 		listOptionMap.put("end", end);
+		listOptionMap.put("pageOption", pageOption);
+		listOptionMap.put("memberNo", memberNo);
 		
 		List<ProjectBoardDto> projectBoardList = sqlSession.selectList(namespace + "projectBoardSelectList", listOptionMap); 
 		
@@ -93,18 +96,20 @@ public class ProjectBoardDaoImpl implements ProjectBoardDao{
 	@Override
 	public int projectBoardDeleteOne(int no) {
 		
-		int checkDelete = sqlSession.delete(namespace + "projectBoardDeleteOne", no);
+		int checkDelete = sqlSession.update(namespace + "projectBoardDeleteOne", no);
 		
 		return checkDelete;
 	}
 
 	@Override
-	public int projectBoardTotalCount(String searchOption, String keyword, String categoryOption) {
+	public int projectBoardTotalCount(String searchOption, String keyword, String categoryOption, String pageOption, int memberNo) {
 		
 		Map<String, Object> listOptionMap = new HashMap<>();
 		listOptionMap.put("searchOption", searchOption);
 		listOptionMap.put("keyword", keyword);
 		listOptionMap.put("categoryOption", categoryOption);
+		listOptionMap.put("pageOption", pageOption);
+		listOptionMap.put("memberNo", memberNo);
 		
 		int totalCnt = sqlSession.selectOne(namespace + "projectBoardTotalCount", listOptionMap);
 		
@@ -142,6 +147,74 @@ public class ProjectBoardDaoImpl implements ProjectBoardDao{
 		int checkDelete = sqlSession.delete(namespace + "projectCommentDeleteOne", no);
 		
 		return checkDelete;
+	}
+
+	@Override
+	public int deleteFileName(String str) {
+		
+		int checkDeleteFile = sqlSession.delete(namespace + "deleteFileName", str);
+		
+		return checkDeleteFile;
+	}
+
+	@Override
+	public MemberDto profileSelectOne(int no) {
+	
+		return sqlSession.selectOne(namespace + "profileSelectOne", no);
+	}
+
+	@Override
+	public int projectCommentDelete(int no) {
+		
+		int checkDelete = sqlSession.delete(namespace + "projectCommentDelete", no);
+		
+		return checkDelete;
+	}
+
+	@Override
+	public int projectView(int no) {
+		
+		return sqlSession.update(namespace + "projectView", no);
+	}
+
+	@Override
+	public int projectLike(int no, int mno) {
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("no", no);
+		map.put("mno", mno);
+			
+		return sqlSession.insert(namespace + "projectLike", map);
+	}
+
+	@Override
+	public int projectLikeUpdate(int no, int mno) {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("no", no);
+		map.put("mno", mno);
+		
+		return sqlSession.update(namespace + "projectLikeUpdate", map);
+	}
+
+	@Override
+	public int projectLikeDelete(int no, int mno) {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("no", no);
+		map.put("mno", mno);
+		
+		return sqlSession.update(namespace + "projectLikeDelete", map);
+	}
+
+	@Override
+	public Map<String, Object> projectLikeFlag(int no, int mno) {
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("no", no);
+		map.put("mno", mno);
+		
+		return sqlSession.selectOne(namespace + "projectLikeFlag", map);
 	}
 
 }
