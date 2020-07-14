@@ -32,6 +32,26 @@
 		border-collapse: collapse;
 	}
 	
+	#boardTitle:hover{
+		font-size: 80px;
+		font-weight: bold;
+		color: #7D7500;
+		text-align: center;
+	}
+	
+	#listButton:hover{
+		margin-bottom: 50px;
+		width: 150px; 
+		height: 50px;
+		margin-top: -40px; 
+		text-align: center; 
+		font-size: 20px; 
+		background-color: #7D7500;
+		color: white; 
+		border-collapse: collapse;
+	}
+	
+	
 	hr{
 		text-align: center;
 		width: 80%;
@@ -54,12 +74,60 @@
 		 color: white;"
 		 box-shadow: none;
 	}
+	
+	textarea {
+		resize: none;
+	}
+	
 </style>
 
 <script type="text/javascript">
+	
 	function pageMoveListFnc(){
 		location.href = './free.do';
 	}
+	
+	function checkAddFnc() {
+		if($('#title').val() == '') {
+			alert('제목을 입력해주세용');
+			return false;
+		}else if($('#contents').val() == ''){
+			alert('내용을 입력해주세용');
+			return false;
+		}else{	
+			return true;
+		}
+	}
+	
+	$(document).ready(function () {
+		
+		$('#title').keyup(function(e) {
+			var title = $(this).val();
+			if(title.length > 20){
+				alert('제목은 최대 20자까지입니당');
+				$(this).val(title.substring(0, 20));
+			}
+		})
+		
+		
+		
+		$('#contents').keyup(function (e){
+			var content = $(this).val();
+			$('#numCount').html("("+content.length+" / 최대 200자)");
+			
+			if(content.length > 200){
+				alert('내용은 최대 200자까지입니당.');
+				$(this).val(content.substring(0, 200));
+				$('#numCount').html("(200 / 최대 200자)");
+			}
+		});
+	});
+	
+	
+	
+	
+		
+	
 </script>
 
 </head>
@@ -68,9 +136,9 @@
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>	
 	<div id="wrap">
 		<div id="innerWrap">
-			<div id='boardTitle'>자유 게시판 작성</div>
+			<div id='boardTitle'>자유게시판  글작성</div>
 				<div id="innerPage" style="height: 809px; margin-top: 40px;">
-					<form action='./freeBoardAddCtr.do' method='post' 
+					<form action='./freeBoardAddCtr.do' onsubmit="return checkAddFnc();" method='post' 
 						enctype="multipart/form-data">
 						<br>
 						<br>
@@ -88,7 +156,8 @@
 						<div style="margin-left: 200px;">
 							<span style="width: 200px;">제목</span>
 							<input type='text' style="margin-left: 86px;
-								width: 850px; height: 50px;"  placeholder="제목을 입력해 주세요" id="title" name='title'>
+								width: 780px; height: 50px;"  placeholder="제목을 입력해 주세요" id="title" name='title'>
+							
 						</div>
 						<br>
 						<hr>
@@ -96,8 +165,11 @@
 						<br>
 						<div style="margin-left: 200px; height: 400px;">
 							<span style="width: 200px;">내용</span>
-							<textarea id="contents" name='contents' style="margin-left: 86px; 
+							<textarea id="contents" name='contents'
+							placeholder="최대 200자까지 입력해주세용" style="margin-left: 86px; 
 								vertical-align: top;" cols="115" rows="25"></textarea>
+							<br>
+							<span id="numCount" style="margin-left: 123px">(0 / 최대 200자)</span>
 						</div>
 						<br>
 						<hr>
