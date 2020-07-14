@@ -17,8 +17,8 @@
 <script type="text/javascript">
 	
 	$('document').ready(function(){
-		alert('비밀번호는 ' + $('#findpwd').val() + '입니다');
-		 location.href="./login.do";
+		alert('비밀번호는 ' + $('#find_pwd').val() + '입니다');
+		 location.href="../login.do";
 	});
 	
 
@@ -31,7 +31,7 @@
 	<div id="wrap">
 		<div id="innerWrap">
 			
-				<input id="findpwd" type="hidden" name="member_pwd" value="${member_pwd}">
+				<input id="find_pwd" type="hidden" name="member_pwd" value="${member_pwd}">
 
 		</div>
 	</div>

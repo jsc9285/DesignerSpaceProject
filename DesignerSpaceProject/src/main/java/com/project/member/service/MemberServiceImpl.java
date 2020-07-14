@@ -130,55 +130,59 @@ public class MemberServiceImpl implements MemberService{
 
 	
 	@Override
-	public void memberUpdate(MemberDto memberDto, 
+	public void memberUpdate(MemberDto memberDto, String change,
 			MultipartHttpServletRequest mulRequest) {
 		// TODO Auto-generated method stub
 		
-		
-	
-			int profile_table_mno = memberDto.getMember_no();
-			
-			System.out.println("memberServiceimple"+profile_table_mno);
-			
-			Map<String, Object> tempFileMap //존재하는 파일명
-				= memberDao.profileSelectStoredFileName(profile_table_mno);
-			System.out.println("0000000000000000000000000000000000000000000000000000");
-			System.out.println(tempFileMap);
-			
-			
-			try {
-				System.out.println("안들어옴");
-				List<Map<String, Object>> profileList = 
-					profileUtils.parseInsertFileInfo(profile_table_mno
-						, mulRequest);
+			if(change.equals("Y")) {
+				int profile_table_mno = memberDto.getMember_no();
 				
-				System.out.println(profileList);
+				System.out.println("memberServiceimple"+profile_table_mno);
 				
-				if(tempFileMap == null && profileList != null ) {//없고 있고
-					System.out.println("1");
-					for (int i = 0; i < profileList.size(); i++) {
-						System.out.println("4");
-						memberDao.profileAdd(profileList.get(i));
+				Map<String, Object> tempFileMap //존재하는 파일명
+					= memberDao.profileSelectStoredFileName(profile_table_mno);
+				System.out.println("0000000000000000000000000000000000000000000000000000");
+				System.out.println(tempFileMap);
+				
+				
+				try {
+					System.out.println("안들어옴");
+					List<Map<String, Object>> profileList = 
+						profileUtils.parseInsertFileInfo(profile_table_mno
+							, mulRequest);
+					
+					System.out.println(profileList);
+					
+					if(tempFileMap == null && profileList != null ) {//없고 있고
+						System.out.println("1");
+						for (int i = 0; i < profileList.size(); i++) {
+							System.out.println("4");
+							memberDao.profileAdd(profileList.get(i));
+						}
+					}else if(tempFileMap!=null && profileList!=null) {//있고 있고
+						System.out.println("2");
+						profileUtils.UpdateProfile(tempFileMap);
+						memberDao.profileDelete(profile_table_mno);
+						memberDao.profileAdd(profileList.get(0));
+					}else if(tempFileMap !=null && profileList==null) {//있고 없고
+						System.out.println("3");
+						profileUtils.UpdateProfile(tempFileMap);
+						memberDao.profileDelete(profile_table_mno);
+					}else {//없고 없고
+						System.out.println("●▅▇█▇▅▄▄▌●▅▇█▇▅▄▄▌프로필은 변하지 않는다●▅▇█▇▅▄▄▌●▅▇█▇▅▄▄▌");
 					}
-				}else if(tempFileMap!=null && profileList!=null) {//있고 있고
-					System.out.println("2");
-					profileUtils.UpdateProfile(tempFileMap);
-					memberDao.profileDelete(profile_table_mno);
-					memberDao.profileAdd(profileList.get(0));
-				}else if(tempFileMap !=null && profileList==null) {//있고 없고
-					System.out.println("3");
-					profileUtils.UpdateProfile(tempFileMap);
-					memberDao.profileDelete(profile_table_mno);
-				}else {//없고 없고
-					System.out.println("●▅▇█▇▅▄▄▌●▅▇█▇▅▄▄▌프로필은 변하지 않는다●▅▇█▇▅▄▄▌●▅▇█▇▅▄▄▌");
+					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					System.out.println("문제 생기면 처리할꺼 정하자");
+					System.out.println("일단 여긴 파일 처리 중 문제 발생한 거야");
+					e.printStackTrace();
 				}
 				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				System.out.println("문제 생기면 처리할꺼 정하자");
-				System.out.println("일단 여긴 파일 처리 중 문제 발생한 거야");
-				e.printStackTrace();
+			}else {
+				System.out.println("변화 없음");
 			}
+	
 			
 			
 			
