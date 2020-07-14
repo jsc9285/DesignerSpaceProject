@@ -100,7 +100,6 @@
 		#likeBtn h5{
 			font-size: 20px;
 			color: #4AD674;
-			opacity: 0;
 			margin-top: 10px;
 		}
 		#contextArea{
@@ -192,17 +191,24 @@
 		
 		function projectLikeFnc() {
 			var likeBtnObj = document.getElementById('likeBtn');
-			
-			if(likeBtnObj.children[0].getAttribute('src') == '<%=request.getContextPath()%>' + "/resources/img/iconLike_Brown.png"){
-				likeBtnObj.children[0].setAttribute('src', '<%=request.getContextPath()%>' + "/resources/img/iconLike_Green.png");
-				likeBtnObj.style.backgroundColor = "#60524E";
-				likeBtnObj.children[0].style.marginTop = "40px";
-				likeBtnObj.children[1].style.opacity = "1";
+			var likeChk = document.getElementById('projectLikeChk');
+			var likeFlag = document.getElementById("projectLikeFlag");
+
+			if(likeChk.value == "" || likeFlag.value == 'N'){				
+				
+				var likeForm = document.getElementById('like');
+				var likeUpdateForm = document.getElementById('likeUpdate');
+				if(likeChk.value != "" && likeFlag.value == 'N'){
+					//좋아요 업데이트
+					likeUpdateForm.submit();
+				}else if(likeChk.value == "" && likeFlag.value == ""){
+					//좋아요 새로 생성
+					likeForm.submit();
+				}
 			}else{
-				likeBtnObj.children[0].setAttribute('src', '<%=request.getContextPath()%>' + "/resources/img/iconLike_Brown.png");
-				likeBtnObj.style.backgroundColor = "#4AD674";
-				likeBtnObj.children[0].style.marginTop = "54px";
-				likeBtnObj.children[1].style.opacity = "0";
+				//좋아요삭제
+				var likeDeleteForm = document.getElementById('likeDelete');
+				likeDeleteForm.submit();
 			}
 		}
 		
@@ -268,6 +274,23 @@
 <body>
 <!-- 	삭제용 작품번호 저장 -->
 	<input type="hidden" id='deleteProjectNum' value="${projectBoardDto.project_board_no}">
+	<input type="hidden" id="projectLikeChk" value="${projectLikeFlag.PROJECT_LIKE_NO}">
+	<input type="hidden" id="projectLikeFlag" value="${projectLikeFlag.PROJECT_LIKE_FLAG}">
+
+	<form action="./like.do#projectInfoArea" id="like" method="get">
+		<input type="hidden" name="project_board_no" value="${projectBoardDto.project_board_no}">
+		<input type="hidden" name="mno" value="${memberDto.member_no}">
+	</form>
+	
+	<form action="./likeUpdate.do#projectInfoArea" id="likeUpdate" method="get">
+		<input type="hidden" name="project_board_no" value="${projectBoardDto.project_board_no}">
+		<input type="hidden" name="mno" value="${memberDto.member_no}">
+	</form>
+	
+	<form action="./likeDelete.do#projectInfoArea" id="likeDelete" method="get">
+		<input type="hidden" name="project_board_no" value="${projectBoardDto.project_board_no}">
+		<input type="hidden" name="mno" value="${memberDto.member_no}">
+	</form>
 	
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>	
 	
@@ -291,7 +314,7 @@
 								<input type="button" onclick="projectDeleteFnc();" value="삭제">					
 							</c:when>
 							<c:when test="${memberDto.member_no ne projectBoardDto.project_board_mno}">
-								<input type="button" onclick="location.href='<%=request.getContextPath()%>/reportBoard/add.do'" value="신고"> 
+								<input type="button" onclick="location.href='<%=request.getContextPath()%>/reportBoard/add.do?project_board_no=${projectBoardDto.project_board_no}'" value="신고"> 
 							</c:when>
 						</c:choose>
 					</c:when>
@@ -302,11 +325,20 @@
 				<input type="button" onclick="location.href='./list.do'" value="목록">			
 			</div>
 			<div id="projectInfoArea">
-				<div id="likeBtn" onclick="projectLikeFnc();">
-					<img src="<%=request.getContextPath()%>/resources/img/iconLike_Brown.png">
-					<h5>${projectBoardDto.project_board_like}</h5>
-				</div>
-				<h1>${projectBoardDto.project_board_title}</h1>
+				<c:choose>
+					<c:when test="${projectLikeFlag eq null || projectLikeFlag.PROJECT_LIKE_FLAG eq 'N'}">
+						<div id="likeBtn" onclick="projectLikeFnc();">
+							<img src="<%=request.getContextPath()%>/resources/img/iconLike_Brown.png">
+						</div>
+					</c:when>
+					<c:otherwise>
+						<div id="likeBtn" onclick="projectLikeFnc();" style="background-color: #60524E;">
+							<img src="<%=request.getContextPath()%>/resources/img/iconLike_Green.png" style="margin-top: 40px;">
+							<h5>${projectBoardDto.project_board_like}</h5>
+						</div>
+					</c:otherwise>
+				</c:choose>				
+				<h1>${projectBoardDto.project_board_title}</h1>					
 					
 				<img src="<%=request.getContextPath()%>/resources/img/iconLike_grey.png">
 				<span>${projectBoardDto.project_board_like}</span>

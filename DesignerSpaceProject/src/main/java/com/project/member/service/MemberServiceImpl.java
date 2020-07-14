@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.project.member.dao.MemberDao;
+import com.project.member.model.MemberBoardDto;
 import com.project.member.model.MemberDto;
 import com.project.util.ProfileUtils;
 
@@ -94,14 +95,6 @@ public class MemberServiceImpl implements MemberService{
 
 	
 
-	@Override
-	public List<MemberDto> getMemberList() {
-		// TODO Auto-generated method stub
-		System.out.println("회원목록 service 접속");
-		List<MemberDto> getMemberList = memberDao.getMemberList();
-		
-		return getMemberList;
-	}
 
 	@Override
 	public MemberDto memberInfo(int member_no) {
@@ -188,10 +181,35 @@ public class MemberServiceImpl implements MemberService{
 			
 			memberDao.memberUpdate(memberDto);
 			
-	
-		
-	
-	
+	}
 
+	@Override
+	public int memberSelectTotalCount(String searchOption, String keyword) {
+		// TODO Auto-generated method stub
+		return memberDao.memberSelectTotalCount(searchOption
+			, keyword);
+	}
+
+	@Override
+	public int memberSelectCurPage(String searchOption, String keyword, int no) {
+		// TODO Auto-generated method stub
+		return memberDao.memberSelectCurPage(searchOption, keyword, no);
+	}
+
+	@Override
+	public List<MemberBoardDto> memberSelectList(String searchOption, String keyword, int start, int end) {
+		// TODO Auto-generated method stub
+		
+		List<MemberBoardDto> memberList = 
+				memberDao.memberSelectList(searchOption, keyword
+					, start, end);
+		
+		return memberList;
+	}
+
+	@Override
+	public void memberRemove(int member_no) {
+		// TODO Auto-generated method stub
+		memberDao.memberRemove(member_no);
 	}
 }

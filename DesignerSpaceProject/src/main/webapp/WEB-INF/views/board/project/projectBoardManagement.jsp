@@ -12,24 +12,73 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 	
 	<style type="text/css">
-		tr{
-			border: 1px solid black;
+		#projectListTable tr{
+			text-align: center;
+			border: 3px solid beige;
 		}
-		#topMenu{
-			display: inline-flex;
+		#projectListTable th{
+			background-color: #7D7471;
+			color: #fff;
+			font-size: 20px;
+			font-weight: bold;
+			height: 50px;
+			vertical-align: middle;
 		}
-		#topMenu > h1{
+		#projectListTable td{			
+			height: 50px;
+			vertical-align: middle;
+		}
+		#manageMentHeader{
 			font-size: 80px;
 			font-weight: bold;
 			color: #60524E;
 		}
-		#topMenu input{
+		#projectListTable td a{			
+			text-decoration: none;
+			color: black;
+		}
+		#projectListTable td a:hover{			
+			text-decoration: underline;
+		}
+		#topMenu{
+			display: table;
+		}
+		#topMenu select{
+			width: 130px;
+		 	height: 50px;
+		 	vertical-align: middle;
+		 	font-size: 17px;
+		 	margin: auto;
+		 	text-align-last: center; 
+		}
+		#searchBtn{
+		 	width: 50px;
+		 	height: 50px;
+		 	background-color: #60524E;
+		 	border-style: none;
+		 	border-radius: 5px;
+		 	vertical-align: middle;
+		}
+		#searchInput{
 			width: 420px;
 			height: 50px;
+			vertical-align: middle;
 			box-sizing: border-box;
 		}
+		#deleteBtn{
+			color: red;
+			font-weight: bold;
+			margin-left: 540px;
+			vertical-align: bottom;			
+		}
 		#innerPage{
-			margin-top: 30px;
+			margin-top: 10px;
+		}
+		#projectListTable{
+			width: 1350px;
+		}
+		#pagingArea{
+			margin-top: 50px;
 		}
 	</style>
 	
@@ -60,7 +109,11 @@
 		});	
 		
 		function projectDeleteFnc() {			
+			var deleteFormObj = document.getElementById('deleteForm');			
+			
 			if(confirm('정말로 삭제하시겠습니까?')){
+				
+				deleteFormObj.submit();
 		 		return true;
 		 	}else{
 		 		return false;
@@ -77,48 +130,108 @@
 	<div id="wrap">
 		<div id="innerWrap">
 <!-- 			페이지정보, 검색, 파일삭제Btn -->
-			<form action="./ManagementDeleteCtr.do" method="get">
-			<div id="topMenu">
-				<h1>작품관리</h1>
-			
-				<input type="text">
-				<button id="searchBtn"><img src="<%=request.getContextPath()%>/resources/img/iconSearch.png"></button>
-				
-				<input type="submit" value="작품삭제" onclick="projectDeleteFnc();">				
-			</div>
-			<div id="innerPage">			
-<!-- 			프로젝트 관리 테이블 ( 작품 게시물 정보 ) -->
-			<table>
-				<tr>
-					<th><input id="allCheck" type="checkbox"></th>
-					<th>번호</th>
-					<th>제목</th>
-					<th>작성자</th>
-					<th>댓글수</th>
-					<th>조회수</th>
-					<th>좋아요</th>
-					<th>작성일</th>					
-				</tr>
-				<c:forEach var="projectList" items="${projectBoardList}">
-					<tr>
-						<td><input name='projectCheck' type="checkbox" class='checkbox' value="${projectList.project_board_no}"></td>
-						<td>${projectList.project_board_no}</td>
-						<td>${projectList.project_board_title}</td>
-						<td>${projectList.member_nick}</td>
-						<td>${projectList.project_comment_cnt}</td>
-						<td>${projectList.project_board_views}</td>
-						<td>${projectList.project_board_like}</td>
-						<td><fmt:formatDate value="${projectList.project_board_cre_date}" 
-							pattern="yyyy.MM.dd"/><br>
-							<fmt:formatDate value="${projectList.project_board_cre_date}" 
-							pattern="hh:mm"/></td>
-					</tr>
-				</c:forEach>				
-			</table>
-			
-<!-- 			페이징 -->
-			</div>
+			<form action="./management.do" method="get">
+				<div id="topMenu">
+					<span id="manageMentHeader">작품관리</span>
+								
+					<select name="searchOption">
+						<c:choose>
+							<c:when test="${listOptionMap.searchOption eq 'project_board_title'}">
+								<option value="project_board_title" selected="selected">제목</option>
+								<option value="all">제목+내용</option>
+								<option value="project_board_contents">내용</option>
+								<option value="member_nick">작성자</option>
+							</c:when>
+							<c:when test="${listOptionMap.searchOption eq 'all'}">
+								<option value="project_board_title">제목</option>
+								<option value="all" selected="selected">제목+내용</option>
+								<option value="project_board_contents">내용</option>
+								<option value="member_nick">작성자</option>
+							</c:when>
+							<c:when test="${listOptionMap.searchOption eq 'project_board_contents'}">
+								<option value="project_board_title">제목</option>
+								<option value="all">제목+내용</option>
+								<option value="project_board_contents" selected="selected">내용</option>
+								<option value="member_nick">작성자</option>
+							</c:when>
+							<c:when test="${listOptionMap.searchOption eq 'member_nick'}">
+								<option value="project_board_title">제목</option>
+								<option value="all">제목+내용</option>
+								<option value="project_board_contents">내용</option>
+								<option value="member_nick" selected="selected">작성자</option>
+							</c:when>
+						</c:choose>						
+					</select>					
+					<input id="searchInput" name="keyword" type="text">
+					<button id="searchBtn" type="submit"><img src="<%=request.getContextPath()%>/resources/img/iconSearch.png"></button>
+					
+					<a type="submit" id="deleteBtn" onclick="projectDeleteFnc();">작품삭제</a>							
+				</div>
 			</form>
+			
+			<div id="innerPage">			
+	<!-- 			프로젝트 관리 테이블 ( 작품 게시물 정보 ) -->
+				<form action="./ManagementDeleteCtr.do" id="deleteForm" method="get">
+					<table id="projectListTable">
+						<tr>
+							<th><input id="allCheck" type="checkbox"></th>
+							<th>번호</th>
+							<th>제목</th>
+							<th>작성자</th>
+							<th>카테고리</th>
+							<th>댓글수</th>
+							<th>조회수</th>
+							<th>좋아요</th>
+							<th>작성일</th>					
+						</tr>
+						<c:if test="${empty projectBoardList}">
+							<tr style="text-align: center;">
+								<td colspan="9">게시물이 존재하지 않습니다.</td>								
+							</tr>
+						</c:if>
+						<c:forEach var="projectList" items="${projectBoardList}">
+							<tr>
+								<td><input name='projectCheck' type="checkbox" class='checkbox' value="${projectList.project_board_no}"></td>
+								<td>${projectList.project_board_no}</td>
+								<td><a href="./detail.do?project_board_no=${projectList.project_board_no}">${projectList.project_board_title}</a></td>
+								<td>${projectList.member_nick}</td>
+								<td>
+									<c:choose>
+										<c:when test="${projectList.project_board_category eq 'p'}">
+											사진																						
+										</c:when>
+										<c:when test="${projectList.project_board_category eq 'i'}">
+											일러스트
+										</c:when>
+									</c:choose>
+								</td>
+								<td>${projectList.project_comment_cnt}</td>
+								<td>${projectList.project_board_views}</td>
+								<td>${projectList.project_board_like}</td>
+								<td><fmt:formatDate value="${projectList.project_board_cre_date}" 
+									pattern="yyyy.MM.dd"/><br>
+									<fmt:formatDate value="${projectList.project_board_cre_date}" 
+									pattern="hh:mm"/></td>
+							</tr>
+						</c:forEach>				
+					</table>
+				</form>										
+			</div> 
+<!-- 			innerPage End ( 테이블 ) -->
+<!-- 		===================================== 페이징 -->
+			<div id="pagingArea">
+				<jsp:include page="/WEB-INF/views/common/paging.jsp">
+					<jsp:param value="${pagingMap}" name="projectBoardPaging"/>
+				</jsp:include>
+			</div>
+	
+			<form action="./management.do" id='pagingForm' method="get">
+				<input type="hidden" id='curPage' name='curPage' 
+					value="${pagingMap.paging.curPage}">
+				<input type="hidden" id='searchOption' name="searchOption" value="${listOptionMap.searchOption}">
+				<input type="hidden" id='keyword' name="keyword" value="${listOptionMap.keyword}">
+			</form>
+			
 		</div>
 	</div>
 	

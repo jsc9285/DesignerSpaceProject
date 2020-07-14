@@ -1,6 +1,8 @@
 package com.project.member.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.project.util.Paging;
+import com.project.member.model.MemberBoardDto;
 import com.project.member.model.MemberDto;
 import com.project.member.service.MemberService;
 
@@ -48,13 +52,18 @@ public class memberController {
 		
 		MemberDto memberDto = memberService.memberExist(member_email, member_pwd);
 		System.out.println("dddddddddddddddddddd"+memberDto);
-		session.setAttribute("memberDto",memberDto);
 		
-		if(memberDto.getMember_grade()==0) {
-			return "redirect:/main/member.do";	
-		}else {
-			return "redirect:/main/admin.do";	
+		if (memberDto == null) {
+			return "login/alert/missLogin";
+		}else{
+			session.setAttribute("memberDto",memberDto);
+			if(memberDto.getMember_grade()==0) {
+				return "redirect:/main/member.do";	
+			}else {
+				return "redirect:/main/admin.do";	
+			}
 		}
+		
 		//return /login/loginDone
 		
 	}
@@ -194,7 +203,10 @@ public class memberController {
 			return "/member/alert/updateSuccess";
 		}
 		//----------------------------------------------------------------------
-		@RequestMapping(value = "/myBoard.do", method = RequestMethod.GET)
+		
+		
+		
+		@RequestMapping(value = "/member/myBoard.do", method = RequestMethod.GET)
 		public String myBoard(MemberDto memberDto, HttpSession session, Model model){
 			
 			log.info("내글목록보기"+memberDto);
@@ -205,7 +217,7 @@ public class memberController {
 			return "/member/myBoard";
 		}
 		
-		@RequestMapping(value = "/myReport.do", method = RequestMethod.GET)
+		@RequestMapping(value = "/member/myReport.do", method = RequestMethod.GET)
 		public String myNotify(MemberDto memberDto, HttpSession session, Model model){
 			
 			log.info("내 신고글 보기"+memberDto);
@@ -216,7 +228,7 @@ public class memberController {
 			return "/member/myReport";
 		}
 		
-		@RequestMapping(value = "/myQna.do", method = RequestMethod.GET)
+		@RequestMapping(value = "/member/myQna.do", method = RequestMethod.GET)
 		public String myQna(MemberDto memberDto, HttpSession session, Model model){
 			
 			log.info("내 QNA 보기"+memberDto);
@@ -224,26 +236,118 @@ public class memberController {
 			return "/member/myQna";
 		}
 		
-		@RequestMapping(value = "/admin/listAdmin.do", method = RequestMethod.GET)
-		public String memberList(HttpSession session, Model model){
+		@RequestMapping(value = "/admin/listAdmin.do", method = {RequestMethod.GET, RequestMethod.POST})
+		public String memberList(HttpSession session, @RequestParam(defaultValue = "1") 
+			int curPage
+			, @RequestParam(defaultValue = "0") int no
+			, @RequestParam(defaultValue = "all") String searchOption
+			, @RequestParam(defaultValue = "") String keyword
+			, Model model){
 			
 			log.info("관리자용 회원관리");
 			
-			List<MemberDto> memberList = memberService.getMemberList();
+//			List<MemberBoardDto> memberList = memberService.getMemberList();
+//			
+//			model.addAttribute("memberList", memberList);
 			
+			log.info("관리자용 회원관리! " + "curPage" + curPage+"\\\\"
+					+ searchOption + " : " + keyword);
+			
+			
+				
+			// 화면의 form의 이름을 마바티스에 편하게 맞추기 위한 로직
+//			if("name".equals(searchOption)) {
+//				searchOption = "member_name";
+//			}
+			
+			// 페이징을 위한 전체 회원목록 갯수
+			int totalCount = 
+				memberService.memberSelectTotalCount(
+						searchOption, keyword
+			);
+			
+			// 이전 페이지로 회원의 번호가 명확하게 나온 경우
+			// 자신의 curPage 찾는 로직 
+			if(no != 0) {
+				curPage 
+					= memberService.memberSelectCurPage(
+							searchOption, keyword, no);
+			}
+			
+//						
+//						System.out.println("????????: " + curPage);
+			
+			Paging memberPaging = new Paging(totalCount, curPage);
+			int start = memberPaging.getPageBegin();
+			int end = memberPaging.getPageEnd();
+			
+			List<MemberBoardDto> memberList = 
+				memberService.memberSelectList(searchOption, keyword
+					, start, end);
+
+			// 화면의 form의 이름을 맞추기 위한 작업
+//			if("mname".equals(searchOption)) {
+//				searchOption = "member_name";
+//			}
+			
+			// 검색
+			HashMap<String, Object> searchMap 
+				= new HashMap<String, Object>();
+			searchMap.put("searchOption", searchOption);
+			searchMap.put("keyword", keyword);
+			
+			// 페이징
+			Map<String, Object> pagingMap = new HashMap<>();
+			pagingMap.put("totalCount", totalCount);
+			pagingMap.put("paging", memberPaging);
+			
+
 			model.addAttribute("memberList", memberList);
-			
+			model.addAttribute("pagingMap", pagingMap);
+			model.addAttribute("searchMap", searchMap);
+					
+	
+	
+	
 			return "/member/memberListAdmin";
 		}
 		
 		
 		
-		@RequestMapping(value = "/listOneAdmin.do", method = RequestMethod.GET)
-		public String memberOne(MemberDto memberDto, HttpSession session, Model model){
+		@RequestMapping(value = "/admin/listOneAdmin.do", method = RequestMethod.GET)
+		public String memberOne(int member_no, HttpSession session, Model model){
 			
-			log.info("관리자용 회원정보보기"+memberDto);
+			log.info("관리자용 회원정보보기"+member_no);
 			
-			return "/member/memberOneAdmin";
+			MemberDto memberDto = memberService.memberModDetail(member_no);
+			
+			model.addAttribute("memberDto", memberDto);
+			
+			return "/member/memberInfoAdmin";
+		}
+		
+		@RequestMapping(value = "/member/remove.do", method = RequestMethod.GET)
+		public String removeOne(int[] member_chk, 
+				@RequestParam(defaultValue = "0") int member_no, HttpSession session){
+			
+			log.info("내글목록보기"+member_no);
+			
+			if(member_no==0) {
+				
+				System.out.println(member_chk.length);
+				
+				for (int i = 0; i < member_chk.length; i++) {
+					memberService.memberRemove(member_chk[i]);
+				}
+				
+			}else {
+				memberService.memberRemove(member_no);
+			}
+			
+			
+			
+			
+			return "redirect:../admin/listAdmin.do";
 		}
 		
 }

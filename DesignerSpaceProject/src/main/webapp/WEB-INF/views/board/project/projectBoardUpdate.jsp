@@ -96,9 +96,9 @@
 			str += "<input type='file' value='파일선택' accept='image/*' onchange='setThumbnailFnc(event, this);'>";
 			str += "<button name='delete' onclick='fileDelFnc($(this));'>파일삭제</button>";
 			str += "<input type='hidden' name='chkListFlag' value='new'>";
+			str += "<input type='hidden' name='chkListFile' value=''>";
 			str += "</a>";
 			
-
 			if($("button[name='delete']").length < 5){
 				$('#projectPicArea').append(str);
 			}
@@ -109,9 +109,31 @@
  		}
  		
  		function fileDelFnc(obj) {
-			obj.parent().remove();			
+			var str = "<input type='hidden' name='chkListFlag' value='delete'>";
+			var parentObj = obj.parent();
+			var storedObj = obj.next().next();
+						
+			// 삭제눌렀을 때 상황별(새로추가한거는 그냥 지움 / 기존파일은 플래그 남김)
+			typeCheckObj = obj.next();
+			if(typeCheckObj.val() == "old" || typeCheckObj.val() == "update"){
+				obj.parent().children().remove();
+				parentObj.append(str);
+				parentObj.append(storedObj);
+			}else{
+				obj.parent().remove();			
+			}						
 			
 			createFlag = false;
+		}
+ 		
+ 		function fileUpdateFnc(obj) {
+			obj.setAttribute('type', 'file');
+			obj.setAttribute('value', '파일선택');
+			obj.setAttribute('accept', 'image/*');
+			obj.setAttribute('onchange', 'setThumbnailFnc(event, this);');
+			
+			checkListFlagObj = obj.nextSibling.nextSibling.nextSibling.nextSibling;
+			checkListFlagObj.value = "update";	
 		}
  		
  		function fileNamingFnc() {
@@ -129,13 +151,61 @@
 		      
 		      reader.onload = function(event) { 
 		         imgObj.setAttribute("src", event.target.result);
-		         imgObj.setAttribute("style", 'background-image: url(' + event.target.result +')');        
+		         imgObj.setAttribute("style", 'background-image: url(' + event.target.result +');');        
 		         
 		    	 createFlag = false;
 		      }; 
 		      
 		      reader.readAsDataURL(event.target.files[0]); 
  		}
+ 		
+ 		function validateFnc() {
+ 			var fileObj = document.getElementsByClassName('exProjectPic');
+ 			var titleObj = document.getElementById('project_board_title');
+ 			var contentObj = document.getElementById('project_board_contents');
+ 			var categoryObj = document.getElementsByName('project_board_category');
+ 			var categoryChk = "F";
+ 			// 유효성 검사 
+ 			// 1. 파일이 없을 경우 2. 제목을 입력하지 않은 경우 3. 내용이 없는 경우 4. 카테고리를 선택하지 않은 경우
+ 			if(!fileObj.length){
+ 				
+ 				alert("하나 이상의 파일을 추가해주세요!");
+ 			return false;
+ 			}
+ 			
+ 			for(var i = 0; i < fileObj.length; i++) {				
+				if(fileObj[i].getAttribute('style') == ""){
+					
+	 				alert("하나 이상의 파일을 추가해주세요!");
+					return false;
+				}
+			}
+ 			
+			if(titleObj.value == ""){
+				
+				alert("제목을 입력해주세요!");
+			return false;
+ 			}
+			
+			if(contentObj.value == ""){
+				
+				alert("내용을 작성해주세요!");
+			return false;
+ 			}
+			
+			for (var i = 0; i < categoryObj.length; i++) {
+				if(categoryObj[i].checked){
+					categoryChk = "T";
+				}
+			}
+			if(categoryChk == "F"){
+				
+				alert("카테고리를 선택해주세요!");
+			return false;
+ 			}
+			
+			return true;
+		}
 	</script>
 	
 </head>
@@ -148,15 +218,15 @@
 		<div id="innerWrap">
 			<div id="innerPage">
 				<form action="./updateCtr.do" method="post"
-					enctype="multipart/form-data">
+					enctype="multipart/form-data" onsubmit="return validateFnc();">
 					<div id="projectPicArea">
 					<c:forEach var="projectBoardFileDto" items="${projectBoardFileList}">
 						<a>
 							<div class='exProjectPic' style="background-image: url(<c:url value='/projectImg/${projectBoardFileDto.FILE_TABLE_STORED_FILE_NAME}'/>)"></div>
-							<input type='file' value='파일선택' accept='image/*' onchange='setThumbnailFnc(event, this);'>
+							<input type="button" value="파일수정" onclick="fileUpdateFnc(this);">
 							<button name='delete' onclick='fileDelFnc($(this));'>파일삭제</button>
 							<input type="hidden" name="chkListFlag" value="old">
-							<input type="hidden" name="chkListFile" value="${projectBoardFileDto.FILE_TABLE_STORED_FILE_NAME}">
+							<input type='hidden' name='chkListFile' value='${projectBoardFileDto.FILE_TABLE_STORED_FILE_NAME}'>
 						</a>
 					</c:forEach>
 										    									
@@ -168,9 +238,9 @@
 						<input type="hidden" name="project_board_no" value="${projectBoardDto.project_board_no}">
 						<input type="hidden" name="project_board_mno" value="${memberDto.member_no}">
 						<h1>제목</h1>
-						<textarea name="project_board_title" style="height: 120px;">${projectBoardDto.project_board_title}</textarea>
+						<textarea id="project_board_title" name="project_board_title" style="height: 120px;">${projectBoardDto.project_board_title}</textarea>
 						<h1>설명</h1>
-						<textarea name="project_board_contents" style="height: 360px;">${projectBoardDto.project_board_contents}</textarea>
+						<textarea id="project_board_contents" name="project_board_contents" style="height: 360px;">${projectBoardDto.project_board_contents}</textarea>
 						
 						<div>
 							<c:choose>

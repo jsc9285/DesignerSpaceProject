@@ -73,7 +73,7 @@
 				
 				<div class="h_myPage_areaLine"></div>
 				
-				<a onclick="if(confirm('정말로 로그아웃하시겠습니까?')){location.href='<%=request.getContextPath()%>/logout.do';}else{return false;}"><img id="h_myPage_logout" class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/logoutIcon.png"></a>
+				<a onclick="if(confirm('정말로 로그아웃하시겠습니까?')){location.href='<%=request.getContextPath()%>/member/logout.do';}else{return false;}"><img id="h_myPage_logout" class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/logoutIcon.png"></a>
 			</div>
 		</div>
 	</c:when>
@@ -99,7 +99,7 @@
 		         	<li class="h_menu_line"></li>
 		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/freeBoard/free.do'>자유게시판</a></li>
 		         	<li class="h_menu_line"></li>
-		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/listAdmin.do'>회원관리</a></li>
+		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/admin/listAdmin.do'>회원관리</a></li>
 		         	<li class="h_menu_line"></li>
 		         	<li><a class="h_menuLink" href='<%=request.getContextPath()%>/qnaBoard/list.do'>QnA</a></li>
 		         	<li class="h_menu_line"></li>
@@ -107,7 +107,7 @@
 		         </ul>
 		      </nav>
 		      
-		      <a onclick="if(confirm('정말로 로그아웃하시겠습니까?')){location.href='<%=request.getContextPath()%>/logout.do';}else{return false;}">
+		      <a onclick="if(confirm('정말로 로그아웃하시겠습니까?')){location.href='<%=request.getContextPath()%>/member/logout.do';}else{return false;}">
 		      	<img id="h_profile" src="<%=request.getContextPath()%>/resources/img/logoutIcon.png">
 		      </a>
 		      
