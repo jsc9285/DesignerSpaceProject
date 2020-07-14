@@ -65,31 +65,156 @@
 
 	function pageMoveListFnc() {
 		
-		var noObj = $('#QNA_BOARD_NO');
+		var noObj = $('#qna_board_no');
 		var keywordObj = $('#keyword');
 		var searchOptionObj = $('#searchOption');
 		
 		var url = '';
 		
 		url += './list.do?';
-		url += 'QNA_BOARD_NO=' + noObj.val();
+		url += 'qna_board_no=' + noObj.val();
 		url += '&keyword=' + keywordObj.val();
 		url += '&searchOption=' + searchOptionObj.val();
 		
 		location.href = url;
 	}
 	
-	function pageMoveDeleteFnc(QNA_BOARD_NO) {
+	function pageMoveDeleteFnc(qna_board_no) {
 		var reQuestion = confirm('게시물을 삭제하시겠습니까?');
 		
 		if (reQuestion) {
-			var url = "./deleteCtr.do?QNA_BOARD_NO=" + QNA_BOARD_NO;
+			var url = "./deleteCtr.do?qna_board_no=" + qna_board_no;
 			location.href = url;
 		}else {
 			alert("다시 되돌아갑니다");
 		}
 		
 	}
+	
+	function commentAddFnc() {
+		
+		var noObj = $('#qna_board_no');
+		var mnoObj = $('#qna_comment_mno');
+		var qbnoObj = $('#qna_comment_qbno');
+		var keywordObj = $('#keyword');
+		var searchOptionObj = $('#searchOption');
+		var commentsObj = $('#comment_text');
+		
+		var url = '';
+		
+		url += './commentAddCtr.do?';
+		url += 'qna_board_no=' + noObj.val();
+		url += '&qna_comment_qbno=' + qbnoObj.val();
+		url += '&keyword=' + keywordObj.val();
+		url += '&searchOption=' + searchOptionObj.val();
+		url += '&qna_comment_mno=' + mnoObj.val();
+		url += '&qna_comment_comments=' + commentsObj.val();
+		
+		location.href = url;
+	}
+	
+	function commentsDeleteFnc(obj, event) {
+		var reQuestion = confirm('댓글을 삭제하시겠습니까?');
+		
+		if (reQuestion) {
+
+			var aTagObj = $(obj);
+      
+     		event.preventDefault();
+
+			var mnoObj = $('#qna_comment_mno');
+			var qbnoObj = $('#qna_comment_qbno');
+			var keywordObj = $('#keyword');
+			var searchOptionObj = $('#searchOption');
+			var commentsObj = '';
+			var qcnoObj = '';
+
+			qcnoObj = aTagObj.parent().parent().children('div').eq(1).children('input').eq(1);
+			
+		    commentsObj = aTagObj.parent().parent().children('div').eq(1).children('input').eq(0);
+			
+			
+			var url = '';
+			
+			url += './commentDeleteCtr.do?';
+		    url += 'qna_board_no=' + qbnoObj.val();
+		    url += '&keyword=' + keywordObj.val();
+		    url += '&searchOption=' + searchOptionObj.val();
+		    url += '&qna_comment_mno=' + mnoObj.val();
+		    url += '&qna_comment_no=' + qcnoObj.val();
+		    url += '&qna_comment_comments=' + commentsObj.val();
+		      
+		    location.href = url;
+ 
+		}
+		
+	}
+	
+	function commentUpdateOneFnc(no) {
+      	var locationObjId = '#comment_span' + no;
+      	var locationObj = '';
+
+      	locationObj = $(locationObjId);
+      	var $commentsObj = $('<input type="text" value="' + locationObj.html() + '" name="qna_comment_comments" id="qna_comment_comments">');
+      	
+      	locationObj.after($commentsObj);
+      	locationObj.remove();
+      
+      	var updaObj = '';
+      
+      	updaObj = $('#updateBtn');
+      	
+//       	updaObj.val('수정완료');
+      	
+//       	var buttonObj = '';
+      	
+//       	buttonObj = aTagObj.parent().children('div').eq(0)
+      	var confirmBtn = $('<input type="button" value="수정 완료" onclick="commentsUpdateFnc(this,event);">');
+		
+		updaObj.before(confirmBtn);
+      
+		
+//       	buttonObj.parent().append(confirmBtn);
+      	
+      	updaObj.remove();
+   }
+	
+	function commentsUpdateFnc(obj, event) {
+		
+      	var aTagObj = $(obj);
+      
+      	event.preventDefault();
+      
+      	var mnoObj = $('#qna_comment_mno');
+		var qbnoObj = $('#qna_comment_qbno');
+		var keywordObj = $('#keyword');
+		var searchOptionObj = $('#searchOption');
+		var commentsObj = '';
+		var qcnoObj = '';
+      
+		qcnoObj = aTagObj.parent().parent().children('div').eq(1).children('input').eq(2);
+		
+		alert(qcnoObj.val());
+		
+	    commentsObj = aTagObj.parent().parent().children('div').eq(1).children('input').eq(0);
+      
+	    alert(commentsObj.val());
+	    
+      	var url = '';
+      
+      	url += './commentUpdateCtr.do?';
+      	url += 'qna_board_no=' + qbnoObj.val();
+      	url += '&keyword=' + keywordObj.val();
+      	url += '&searchOption=' + searchOptionObj.val();
+      	url += '&qna_comment_mno=' + mnoObj.val();
+      	url += '&qna_comment_no=' + qcnoObj.val();
+      	url += '&qna_comment_comments=' + commentsObj.val();
+      
+      	location.href = url;
+	}
+
+	   
+
 
 </script>
 
@@ -111,7 +236,7 @@
 					<br>
 					<div style="margin-left: 200px;">
 						<span style="width: 200px;">작성자</span>
-						<span style="margin-left: 100px;">${qnaBoardDto.MEMBER_NICK}</span>
+						<span style="margin-left: 100px;">${qnaBoardDto.member_nick}</span>
 					</div>
 					<br>
 					<hr style="text-align: center; width: 80%;">
@@ -119,7 +244,7 @@
 					<br>
 					<div style="margin-left: 200px;">
 						<span style="width: 200px;">제목</span>
-						<span style="margin-left: 117px;">${qnaBoardDto.QNA_BOARD_TITLE}</span>
+						<span style="margin-left: 117px;">${qnaBoardDto.qna_board_title}</span>
 					</div>
 					<br>
 					<hr style="text-align: center; width: 80%;">
@@ -127,7 +252,7 @@
 					<br>
 					<div style="margin-left: 200px; height: 400px;">
 						<span style="width: 200px;">질문내용</span>
-						<span style="margin-left: 86px;">${qnaBoardDto.QNA_BOARD_CONTENTS}</span>
+						<span style="margin-left: 86px;">${qnaBoardDto.qna_board_contents}</span>
 					</div>
 					<br>
 					<hr style="text-align: center; width: 80%;">
@@ -136,7 +261,7 @@
 					<div style="margin-left: 200px; float: left;">
 						<span style="width: 200px;">작성일</span>
 						<span style="margin-left: 100px;">
-							<fmt:formatDate value="${qnaBoardDto.QNA_BOARD_CRE_DATE}" 
+							<fmt:formatDate value="${qnaBoardDto.qna_board_cre_date}" 
 								pattern="yyyy.MM.dd hh:mm"/>
 						</span>
 					</div>
@@ -144,11 +269,11 @@
 						<span style="width: 200px;">답변일</span>
 						<span style="margin-left: 100px;">
 							<c:choose>
-								<c:when test="${empty qnaBoardDto.QNA_BOARD_ANSWER_DATE}">
+								<c:when test="${empty qnaBoardDto.qna_board_answer_date}">
 									-
 								</c:when>
 								<c:otherwise>
-									<fmt:formatDate value="${qnaBoardDto.QNA_BOARD_ANSWER_DATE}" 
+									<fmt:formatDate value="${qnaBoardDto.qna_board_answer_date}" 
 										pattern="yyyy.MM.dd hh:mm"/>
 								</c:otherwise>
 							</c:choose>
@@ -157,55 +282,122 @@
 					</div>
 					<div style="margin-left: 200px; float: left;">
 						<span style="width: 200px;">처리상태</span>
-						<span style="margin-left: 86px;">${qnaBoardDto.QNA_BOARD_ANSWER_STATUS}</span>
+						<c:if test="${qnaBoardDto.qna_board_answer_status eq '접수중'}">
+							<span style="margin-left: 86px; color: #E14E4E;">
+								${qnaBoardDto.qna_board_answer_status}
+							</span>
+						</c:if>
+						<c:if test="${qnaBoardDto.qna_board_answer_status eq '답변중'}">
+							<span style="margin-left: 86px; color: #2E89D4;">
+								${qnaBoardDto.qna_board_answer_status}
+							</span>
+						</c:if>
+						<c:if test="${qnaBoardDto.qna_board_answer_status eq '기한만료'}">
+							<span style="margin-left: 86px; color: #E8CA35;">
+								${qnaBoardDto.qna_board_answer_status}
+							</span>
+						</c:if>
+						<c:if test="${qnaBoardDto.qna_board_answer_status eq '답변완료'}">
+							<span style="margin-left: 86px; color: #BBBBBB;">
+								${qnaBoardDto.qna_board_answer_status}
+							</span>
+						</c:if>
+						
 					</div>
 					<div style="margin-left: 200px;">
-						<input type="hidden" id='QNA_BOARD_NO' 
-							name="QNA_BOARD_NO" value="${qnaBoardDto.QNA_BOARD_NO}">
-						<input type="hidden" id='MEMBER_NICK' 
-							name="MEMBER_NICK" value="${qnaBoardDto.MEMBER_NICK}">
+						<input type="hidden" id='qna_board_no' 
+							name="qna_board_no" value="${qnaBoardDto.qna_board_no}">
+						<input type="hidden" id='member_nick' 
+							name="member_nick" value="${qnaBoardDto.member_nick}">
 						<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
 						<input type="hidden" id='keyword' name="keyword" value="${keyword}">
+<%-- 						<input type="hidden" id="mno" name="mno" value="${qnaBoardDto.QNA_BOARD_MNO}"> --%>
+<%-- 						<input type="hidden" id="no" name="no" value="${qnaBoardDto.QNA_BOARD_NO}"> --%>
+<%-- 						<input type="hidden" id="qbno" name="qbno" value="${qnaBoardDto.QNA_BOARD_NO}"> --%>
 					</div>
 				</div>
 			</div>
 			
-			<div style="text-align: center; margin-top: -20px;">
-				<input type="submit" value="수정" id='updateButton'>
-				<input type="button" value="삭제" id='deleteButton'
-					 onclick="pageMoveDeleteFnc(${qnaBoardDto.QNA_BOARD_NO});">
-				<input type="button" value="목록" id='listButton' onclick="pageMoveListFnc();">
-			</div>
+			<c:choose>
+				<c:when test="${memberDto.member_nick eq qnaBoardDto.member_nick}">
+					
+					<div style="text-align: center; margin-top: -50px;">
+						<input type="button" value="답변완료" disabled="disabled" style="width: 150px; height: 150px;
+							border-radius: 50%; background-color: #D4D4D4; color: white;">
+					</div>
+				
+					<div style="text-align: center; margin-top: 50px;">
+						<input type="submit" value="수정" id='updateButton'>
+						<input type="button" value="삭제" id='deleteButton'
+							 onclick="pageMoveDeleteFnc(${qnaBoardDto.qna_board_no});">
+						<input type="button" value="목록" id='listButton' onclick="pageMoveListFnc();">
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div style="text-align: center; margin-top: 50px;">
+						<input type="button" value="목록" id='listButton' onclick="pageMoveListFnc();">
+					</div>
+				</c:otherwise>
+			</c:choose>
+			
+			
 		</form>
+		
+		
 	</div>
 	
-<!-- 	<div id='innerPage'> -->
-<!-- 		<div style="text-align: center;"> -->
-<!-- 			<img alt="" src="" style="width: 75px; height: 75px; border: 1px solid black;"> -->
-<!-- 			<input type="text" value="" style="width: 800px; height: 100px;"> -->
-<!-- 			<input type="button" value="등록" style="width: 100px; height: 100px;"> -->
-<!-- 		</div> -->
-		
-<%-- 		<c:choose> --%>
-<%-- 			<c:when test="${empty qnaBoardList}"> --%>
-<!-- 				등록된 댓글이 없습니다 -->
-<%-- 			</c:when> --%>
-			
-<%-- 			<c:otherwise> --%>
-<%-- 				<c:forEach> --%>
-<!-- 					<div> -->
+	<div id='wrap'>
+		<div id='innerWrap'>
+			<div id='innerPage'>
+				<div style="text-align: center; margin-bottom: 80px;">
+					<img alt="프로필 이미지" src="<c:url value='/profileImg/${memberDto.profile_table_stored_name}'/>"
+						style="border-radius: 50%; width: 75px; height: 75px;">
+					<input type="text" value="" 
+						id='comment_text' style="width: 800px; height: 100px;">
+					<input type="button" value="등록" onclick="commentAddFnc();" 
+						style="width: 100px; height: 100px;">
+					<input type="hidden" id='qna_comment_mno'
+						name="qna_comment_mno" value="${memberDto.member_no}">
+					<input type="hidden" id='qna_comment_qbno' 
+						name="qna_comment_qbno" value="${qnaBoardDto.qna_board_no}">
+				</div>
 				
-<!-- 						<div> -->
-							
-<!-- 						</div>	 -->
-				
-<!-- 					</div> -->
-<%-- 				</c:forEach> --%>
-<%-- 			</c:otherwise> --%>
-<%-- 		</c:choose> --%>
-		
-		
-<!-- 	</div> -->
+				<c:choose>
+					<c:when test="${empty qnaBoardCommentList}">
+						댓글이 없습니다
+					</c:when>
+					<c:otherwise>
+						<c:forEach var="qnaBoardComment" items="${qnaBoardCommentList}">
+							<div style="margin-left: 154px; width: 950px; height: 116px;">
+								<img alt="프로필 이미지" src="<c:url value='/profileImg
+									/${memberDto.profile_table_stored_name}'/>"
+									style="border-radius: 50%; width: 75px; height: 75px; float: left;">
+								<div>
+									<span style="font-size: 25px;">
+										${qnaBoardComment.member_nick}
+									</span>
+									<fmt:formatDate value="${qnaBoardComment.qna_comment_cre_date}" 
+											pattern="yyyy.MM.dd hh:mm"/>
+									<input type="button" value="수정" id="updateBtn" style="width: 60px; height: 20px;"
+										onclick="commentUpdateOneFnc(${qnaBoardComment.qna_comment_no})">
+									<input type="button" value="삭제" id="deleteBtn" style="width: 60px; height: 20px;" 
+										onclick="commentsDeleteFnc(this, event);">
+								</div>
+								<div style="margin-top: 10px;">
+									<span id="comment_span${qnaBoardComment.qna_comment_no}"
+										>${qnaBoardComment.qna_comment_comments}</span>
+									<input type="hidden" value="${qnaBoardComment.qna_comment_comments}" 
+										name="qna_comment_comments" id="qna_comment_comments">
+									<input type="hidden" id='qna_comment_no'
+										name="qna_comment_no" value="${qnaBoardComment.qna_comment_no}">
+								</div>
+							</div>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
+			</div>
+		</div>
+	</div>
 	
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 

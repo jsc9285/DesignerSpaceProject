@@ -124,7 +124,7 @@
 		var url = '';
 		
 		url += './listDetail.do?';
-		url += 'QNA_BOARD_NO=' + qnaBoardNoObj.html();
+		url += 'qna_board_no=' + qnaBoardNoObj.html();
 		url += '&keyword=' + keywordObj.val();
 		url += '&searchOption=' + searchOptionObj.val();
 				
@@ -211,48 +211,48 @@
 					<c:otherwise>
 						<c:forEach var="QnaBoardDto" items="${qnaBoardList}">
 							<tr>
-								<td class="cell2">${QnaBoardDto.QNA_BOARD_NO}</td>
+								<td class="cell2">${QnaBoardDto.qna_board_no}</td>
 								<td class="cell2">
 									<a href='#' onclick="listDetailPageFnc(this, event);">
-										${QnaBoardDto.QNA_BOARD_TITLE}
+										${QnaBoardDto.qna_board_title}
 									</a>
 								</td>
 								<td class="cell2">
-									${QnaBoardDto.MEMBER_NICK}
+									${QnaBoardDto.member_nick}
 								</td>
 								<td class="cell2">
-									<fmt:formatDate value="${QnaBoardDto.QNA_BOARD_CRE_DATE}" 
-										pattern="yyyy.MM.dd hh:mm"/>
+									<fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
+										pattern="yyyy.MM.dd hh24:mm"/>
 								</td>
 								<td class="cell2">
 									<c:choose>
-										<c:when test="${empty QnaBoardDto.QNA_BOARD_ANSWER_DATE}">
+										<c:when test="${empty QnaBoardDto.qna_board_answer_date}">
 											-
 										</c:when>
 										<c:otherwise>
-											<fmt:formatDate value="${QnaBoardDto.QNA_BOARD_ANSWER_DATE}" 
-												pattern="yyyy.MM.dd hh:mm"/>
+											<fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
+												pattern="yyyy.MM.dd hh24:mm"/>
 										</c:otherwise>
 									</c:choose>
 								</td>
-								<c:if test="${QnaBoardDto.QNA_BOARD_ANSWER_STATUS eq '접수중'}">
+								<c:if test="${QnaBoardDto.qna_board_answer_status eq '접수중'}">
 									<td class="cell2" style="color: #E14E4E;">
-										${QnaBoardDto.QNA_BOARD_ANSWER_STATUS}
+										${QnaBoardDto.qna_board_answer_status}
 									</td>
 								</c:if>
-								<c:if test="${QnaBoardDto.QNA_BOARD_ANSWER_STATUS eq '답변중'}">
+								<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변중'}">
 									<td class="cell2" style="color: #2E89D4;">
-										${QnaBoardDto.QNA_BOARD_ANSWER_STATUS}
+										${QnaBoardDto.qna_board_answer_status}
 									</td>
 								</c:if>
-								<c:if test="${QnaBoardDto.QNA_BOARD_ANSWER_STATUS eq '기한만료'}">
+								<c:if test="${QnaBoardDto.qna_board_answer_status eq '기한만료'}">
 									<td class="cell2" style="color: #E8CA35;">
-										${QnaBoardDto.QNA_BOARD_ANSWER_STATUS}
+										${QnaBoardDto.qna_board_answer_status}
 									</td>
 								</c:if>
-								<c:if test="${QnaBoardDto.QNA_BOARD_ANSWER_STATUS eq '답변완료'}">
+								<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변완료'}">
 									<td class="cell2" style="color: #BBBBBB;">
-										${QnaBoardDto.QNA_BOARD_ANSWER_STATUS}
+										${QnaBoardDto.qna_board_answer_status}
 									</td>
 								</c:if>
 							</tr>
@@ -271,7 +271,7 @@
 	<form action="./list.do" id='pagingForm' method="get">
 		<input type="hidden" id='curPage' name='curPage' 
 			value="${pagingMap.paging.curPage}">
-		<input type="hidden" id='QNA_BOARD_NO' name="QNA_BOARD_NO" value="${QnaBoardDto.QNA_BOARD_NO}">
+		<input type="hidden" id='QNA_BOARD_NO' name="QNA_BOARD_NO" value="${QnaBoardDto.qna_board_no}">
 		<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
 		<input type="hidden" id='keyword' name="keyword" value="${keyword}">
 	</form>

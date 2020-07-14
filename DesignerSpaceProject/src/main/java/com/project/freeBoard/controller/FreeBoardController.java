@@ -32,17 +32,11 @@ public class FreeBoardController {
 			,@RequestParam(defaultValue = "0") int no
 			, @RequestParam(defaultValue = "all") String searchOption
 			, @RequestParam(defaultValue = "") String keyword
+			, @RequestParam(defaultValue = "free_board_no") String lineTitle
 			,@RequestParam(defaultValue = "0") int mno
 			,Model model) {
 		log.info("Welcome free!");
 		
-		if("title".equals(searchOption)) {
-			searchOption = "free_board_title";
-		}
-		
-		if("writer".equals(searchOption)) {
-			searchOption = "member_nick";
-		}
 		
 		int totalCount = 
 				freeBoardService.freeBoardSelectTotalCount(
@@ -52,7 +46,7 @@ public class FreeBoardController {
 		if(no != 0) {
 			curPage 
 				= freeBoardService.freeBoardSelectCurPage(
-						searchOption, keyword, no);
+						searchOption, keyword, no, lineTitle);
 		}
 		
 		Paging freeBoardPaging = new Paging(totalCount, curPage);
@@ -61,17 +55,8 @@ public class FreeBoardController {
 
 		List<FreeBoardDto> freeBoardList = 
 				freeBoardService.freeBoardSelectList(searchOption, keyword
-				, start, end);
+				, start, end, lineTitle);
 		
-		
-		
-		if("free_board_title".equals(searchOption)) {
-			searchOption = "title";
-		}
-		
-		if("member_nick".equals(searchOption)) {
-			searchOption = "writer";
-		}
 		
 		HashMap<String, Object> searchMap 
 			= new HashMap<String, Object>();
@@ -84,6 +69,7 @@ public class FreeBoardController {
 		pagingMap.put("totalCount", totalCount);
 		pagingMap.put("paging", freeBoardPaging);
 		
+		model.addAttribute("lineTitle", lineTitle);
 		model.addAttribute("freeBoardList", freeBoardList);
 		model.addAttribute("pagingMap", pagingMap);
 		model.addAttribute("searchMap", searchMap);
@@ -95,14 +81,16 @@ public class FreeBoardController {
 	@RequestMapping(value = "/freeBoard/freeBoardListOne.do"
 		, method = {RequestMethod.GET,RequestMethod.POST})
 	public String freeBoardList(@RequestParam(defaultValue="0")int no
-			,String searchOption
-			,String keyword
+			,@RequestParam(defaultValue = "all")String searchOption
+			,@RequestParam(defaultValue = "")String keyword
 			,@RequestParam(defaultValue="1") int curPage
+			,int rnum
 			,Model model
+			,@RequestParam(defaultValue = "free_board_no") String lineTitle
 			,@RequestParam(defaultValue="0") int mno
 			) {
 		log.info("call freeBoardListOne! - " + no + "\n" + searchOption
-				+ "\n" + keyword + "\n" + mno);
+				+ "\n" + keyword + "\n" + mno + "rnum : " + rnum + "lineTitle : " + lineTitle);
 		
 		
 		Map<String, Object> map = freeBoardService.freeBoardSelectOne(no);
@@ -110,12 +98,17 @@ public class FreeBoardController {
 		FreeBoardDto freeBoardDto = (FreeBoardDto)map.get("freeBoardDto");
 		
 		//////
+
+		int totalMoveCount = freeBoardService.selectTotalMoveCount(searchOption, keyword
+				,lineTitle);
+		
+		//////
 		int totalCount = 
 				freeBoardService.freeBoardCommentSelectTotalCount(no);
 		
 		CommentPaging freeBoardCommentPaging = new CommentPaging(totalCount, curPage);
 		int end = freeBoardCommentPaging.getPageEnd();
-
+		
 		List<FreeBoardDto> freeBoardCommentList = 
 				freeBoardService.freeBoardCommentSelectList(no, end);
 		
@@ -127,6 +120,11 @@ public class FreeBoardController {
 
 		String freeBoardLikeList = freeBoardService.freeBoardLikeSelectList(no, mno);
 		
+		model.addAttribute("no", no);
+		model.addAttribute("mno", mno);
+		model.addAttribute("totalMoveCount", totalMoveCount);
+		model.addAttribute("lineTitle", lineTitle);
+		model.addAttribute("rnum", rnum);
 		model.addAttribute("commentCount", commentCount);
 		model.addAttribute("freeBoardLikeList", freeBoardLikeList);
 		model.addAttribute("freeBoardDto", freeBoardDto);
@@ -204,6 +202,7 @@ public class FreeBoardController {
 	
 	@RequestMapping(value="/freeBoard/commentAdd.do", method = RequestMethod.GET)
 	public String commentAdd(int mno, int no,String searchOption
+			,int rnum
 			,String keyword
 			,String comments) {
 		log.info("댓글 추가"+mno + ": 회원번호 " + no + "게시물 번호"+ searchOption + keyword);
@@ -215,18 +214,22 @@ public class FreeBoardController {
 			,int mno		,String writer
 			,String title	,String contents
 			,String searchOption	,String keyword
-			,Model model) {
-		log.info(no +"게시물번호" + writer + "회원번호");
+			,Model model, int rnum) {
+		log.info("수정 알넘 : "+ rnum);
 		String memInfo = freeBoardService.freeBoardAddOne(mno);
 		
+		Map<String, Object> map = new HashMap<>();
+		map.put("mno", mno);
+		map.put("no", no);
+		map.put("searchOption", searchOption);
+		map.put("keyword", keyword);
+		map.put("writer", writer);
+		map.put("title", title);
+		map.put("contents", contents);
+		map.put("rnum", rnum);
+		
 		model.addAttribute("memInfo", memInfo);	
-		model.addAttribute("mno", mno);
-		model.addAttribute("no", no);
-		model.addAttribute("searchOption", searchOption);
-		model.addAttribute("keyword", keyword);
-		model.addAttribute("writer", writer);
-		model.addAttribute("title", title);
-		model.addAttribute("contents", contents);
+		model.addAttribute("map", map);	
 		return "/board/free/freeBoardUpdateForm";
 	}
 	
@@ -235,7 +238,8 @@ public class FreeBoardController {
 			,String title
 			,String contents
 			,String searchOption
-			,String keyword) {
+			,String keyword
+			,int rnum) {
 		log.info("게시물 수정 "+no +"게시물번호" + title + contents);
 		freeBoardService.freeBoardUpdate(no, title, contents);
 		return "forward:/freeBoard/freeBoardListOne.do";
@@ -256,11 +260,50 @@ public class FreeBoardController {
 			,String title
 			,String searchOption
 			,String keyword
+			,int rnum
 			,String comments
 			,int fcno) {
 		log.info("댓글 수정 "+fcno +"댓글 내용" + comments);
 		freeBoardService.freeBoardCommentUpdate(fcno, comments);
 		return "forward:/freeBoard/freeBoardListOne.do";
 	}
-
+	
+	
+	@RequestMapping(value="/freeBoard/prePage.do", method = RequestMethod.GET)
+	public String freeBoardPrePage(int mno, int rnum, int no, String searchOption
+			,String keyword,@RequestParam(defaultValue = "free_board_no") String lineTitle,Model model) {
+		log.info(mno + ": 회원번호 " +no+ " : 게시물 번호 " + rnum + " : 알넘" +searchOption + keyword);
+		FreeBoardDto freeBoardDto = freeBoardService.selectPrePage(searchOption, keyword
+				,lineTitle, rnum);
+		
+		System.out.println(freeBoardDto.getFreeBoardRownum());
+		System.out.println(freeBoardDto.getMemberNo());
+		System.out.println(freeBoardDto.getFreeBoardNo());
+		model.addAttribute("rnum", freeBoardDto.getFreeBoardRownum());
+		model.addAttribute("mno", freeBoardDto.getMemberNo());
+		model.addAttribute("no", freeBoardDto.getFreeBoardNo());
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("lineTitle", lineTitle);
+		return "redirect:/freeBoard/freeBoardListOne.do";
+	}
+	
+	@RequestMapping(value="/freeBoard/nextPage.do", method = RequestMethod.GET)
+	public String freeBoardNextPage(int mno, int rnum, int no, String searchOption
+			,String keyword,@RequestParam(defaultValue = "free_board_no") String lineTitle,Model model ) {
+		log.info(mno + ": 회원번호 " +no+ " : 게시물 번호 " + rnum + " : 알넘" +searchOption + keyword);
+		FreeBoardDto freeBoardDto = freeBoardService.selectNextPage(searchOption, keyword
+				,lineTitle, rnum);
+		
+		System.out.println(freeBoardDto.getFreeBoardRownum());
+		System.out.println(freeBoardDto.getMemberNo());
+		System.out.println(freeBoardDto.getFreeBoardNo());
+		model.addAttribute("rnum", freeBoardDto.getFreeBoardRownum());
+		model.addAttribute("mno", freeBoardDto.getMemberNo());
+		model.addAttribute("no", freeBoardDto.getFreeBoardNo());
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("lineTitle", lineTitle);
+		return "redirect:/freeBoard/freeBoardListOne.do";
+	}
 }
