@@ -42,6 +42,7 @@
 			background-color: #60524E;
 			font-size: 13px;
 			color: #fff;
+			cursor: pointer;
 		}
 		#topCategory button:hover{
 			background-color: #4AD674;
@@ -137,7 +138,41 @@
 			}, function() {
 				$(this).children().removeClass('hoverTitle');
 			});
-		});
+		});	
+		
+		function sortOptionChangeFnc(e) {
+			var sortOption = document.getElementById('sortOption');
+			
+			if(e.value == "project_board_no"){
+				sortOption.value = e.value;
+			}else if(e.value == "project_board_like"){
+				sortOption.value = e.value;
+			}else if(e.value == "project_board_views"){
+				sortOption.value = e.value;
+			}
+			
+			var curPage = document.getElementById('curPage');
+			curPage.value = 1;
+			
+			var pagingForm = document.getElementById('pagingForm'); 
+			pagingForm.submit();						
+		}
+		
+		function categoryOptionChangeFnc(obj) {
+			var categoryOption = document.getElementById('categoryOption');
+			var searchOption = document.getElementById('searchOption');
+			var keyword = document.getElementById('keyword');
+			
+			categoryOption.value = obj.value;
+			searchOption.value = "member_nick";
+			keyword.value = "";
+			
+			var curPage = document.getElementById('curPage');
+			curPage.value = 1;
+			
+			var pagingForm = document.getElementById('pagingForm'); 
+			pagingForm.submit();					
+		}
 	</script>
 </head>
 
@@ -146,29 +181,55 @@
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>	
 	
 	<div id="wrap">
-		<div id="innerWrap">		
+		<div id="innerWrap">	
+			
 <!-- 			검색, 카테고리 선택, 정렬방법 -->
 			<div id="topMenu">
-				<select>
-					<option>작성자</option>
-					<option>제목</option>
-				</select>
-				<input type="text">
-				<button id="searchBtn"><img src="<%=request.getContextPath()%>/resources/img/iconSearch.png"></button>
+				<form action="./list.do" method="get">
+					<select name="searchOption">
+						<c:choose>
+							<c:when test="${listOptionMap.searchOption eq 'member_nick'}">
+								<option value="member_nick" selected="selected">작성자</option>
+								<option value="project_board_title">제목</option>
+							</c:when>
+							<c:when test="${listOptionMap.searchOption eq 'project_board_title'}">
+								<option value="member_nick">작성자</option>
+								<option value="project_board_title" selected="selected">제목</option>
+							</c:when>
+						</c:choose>						
+					</select>
+					<input type="text" name="keyword" value="${listOptionMap.keyword}">
+					<button id="searchBtn" type="submit"><img src="<%=request.getContextPath()%>/resources/img/iconSearch.png"></button>
+				</form>
 				
 				<div id="topCategory">
-					<button>전체</button>
-					<button>그림</button>
-					<button>사진</button>
+					<button onclick="categoryOptionChangeFnc(this);" value="all">전체</button>
+					<button onclick="categoryOptionChangeFnc(this);" value="pic">그림</button>
+					<button onclick="categoryOptionChangeFnc(this);" value="ill">사진</button>
 					<button style="cursor:pointer; margin-left: 50px; position: absolute; background-color: red;" onclick="location.href='./add.do'">테스트용 글작성</button>
 				</div>
 				
-				<select>
-					<option>최신순</option>
-					<option>좋아요</option>
-					<option>조회수</option>
+				<select onchange="sortOptionChangeFnc(this);">
+					<c:choose>
+						<c:when test="${listOptionMap.sortOption eq 'project_board_like'}">
+							<option value="project_board_no">최신순</option>
+							<option value="project_board_like" selected="selected">좋아요</option>
+							<option value="project_board_views">조회수</option>
+						</c:when>
+						<c:when test="${listOptionMap.sortOption eq 'project_board_views'}">
+							<option value="project_board_no">최신순</option>
+							<option value="project_board_like">좋아요</option>
+							<option value="project_board_views" selected="selected">조회수</option>
+						</c:when>
+						<c:otherwise>
+							<option value="project_board_no" selected="selected">최신순</option>
+							<option value="project_board_like">좋아요</option>
+							<option value="project_board_views">조회수</option>
+						</c:otherwise>					
+					</c:choose>					
 				</select>
 			</div>
+			
 <!-- 			프로젝트 조회 -->		
 			<div id="projectView">
 				<c:forEach var="projectBoardDto" items="${projectBoardList}">
@@ -203,8 +264,24 @@
 
 <!-- 			프로젝트 페이징 -->
 			<div id="paging">
-			
+				<jsp:include page="/WEB-INF/views/common/projectBoardPaging.jsp">
+					<jsp:param value="${projectBoardPaging}" name="projectBoardPaging"/>
+				</jsp:include>				
+				
+				<form action="./list.do" id='pagingForm' method="get">
+					<input type="hidden" id='curPage' name='curPage' 
+						value="${projectBoardPaging.curPage}">
+					<input type="hidden" id='categoryOption' name="categoryOption" 
+						value="${listOptionMap.categoryOption}">
+					<input type="hidden" id='sortOption' name='sortOption'
+						value="${listOptionMap.sortOption}">										
+					<input type="hidden" id='searchOption' name="searchOption" 
+						value="${listOptionMap.searchOption}">
+					<input type="hidden" id='keyword' name='keyword'
+						value="${listOptionMap.keyword}">										
+				</form>
 			</div>
+			
 		</div>
 	</div>
 	

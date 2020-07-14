@@ -1,5 +1,6 @@
 package com.project.projectBoard.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.project.projectBoard.model.ProjectBoardDto;
 import com.project.projectBoard.model.ProjectBoardFileDto;
+import com.project.projectBoard.model.ProjectCommentDto;
 
 
 @Repository
@@ -20,9 +22,16 @@ public class ProjectBoardDaoImpl implements ProjectBoardDao{
 	String namespace = "com.project.projectBoard.";
 
 	@Override
-	public List<ProjectBoardDto> projectBoardSelectList() {
+	public List<ProjectBoardDto> projectBoardSelectList(String searchOption, String keyword, String sortOption, String categoryOption, int end) {
 		
-		List<ProjectBoardDto> projectBoardList = sqlSession.selectList(namespace + "projectBoardSelectList"); 
+		Map<String, Object> listOptionMap = new HashMap<>();
+		listOptionMap.put("searchOption", searchOption);
+		listOptionMap.put("keyword", keyword);
+		listOptionMap.put("sortOption", sortOption);
+		listOptionMap.put("categoryOption", categoryOption);
+		listOptionMap.put("end", end);
+		
+		List<ProjectBoardDto> projectBoardList = sqlSession.selectList(namespace + "projectBoardSelectList", listOptionMap); 
 		
 		return projectBoardList;
 	}
@@ -85,6 +94,52 @@ public class ProjectBoardDaoImpl implements ProjectBoardDao{
 	public int projectBoardDeleteOne(int no) {
 		
 		int checkDelete = sqlSession.delete(namespace + "projectBoardDeleteOne", no);
+		
+		return checkDelete;
+	}
+
+	@Override
+	public int projectBoardTotalCount(String searchOption, String keyword, String categoryOption) {
+		
+		Map<String, Object> listOptionMap = new HashMap<>();
+		listOptionMap.put("searchOption", searchOption);
+		listOptionMap.put("keyword", keyword);
+		listOptionMap.put("categoryOption", categoryOption);
+		
+		int totalCnt = sqlSession.selectOne(namespace + "projectBoardTotalCount", listOptionMap);
+		
+		return totalCnt;
+	}
+
+	@Override
+	public List<ProjectCommentDto> projectCommentSelectList(int no) {
+		
+		List<ProjectCommentDto> projectCommentDto 
+			= sqlSession.selectList(namespace + "projectCommentSelectList", no);
+		
+		return projectCommentDto;
+	}
+
+	@Override
+	public int projectCommentInsertOne(ProjectCommentDto projectCommentDto) {
+		
+		int checkInsert = sqlSession.insert(namespace + "projectCommentInsertOne", projectCommentDto);
+		
+		return checkInsert;
+	}
+
+	@Override
+	public int projectCommentUpdateOne(ProjectCommentDto projectCommentDto) {
+		
+		int checkUpdate = sqlSession.update(namespace + "projectCommentUpdateOne", projectCommentDto);
+		
+		return checkUpdate;
+	}
+
+	@Override
+	public int projectCommentDeleteOne(int no) {
+		
+		int checkDelete = sqlSession.delete(namespace + "projectCommentDeleteOne", no);
 		
 		return checkDelete;
 	}

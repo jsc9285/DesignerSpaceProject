@@ -24,6 +24,10 @@ public class MemberDto {
 
 	private String profile_table_original_name;
 	private String profile_table_stored_name;
+	
+	private String boardCnt;
+	private String viewCnt;
+	private String likeCnt;
 
 	public MemberDto() {
 		super();
@@ -33,7 +37,7 @@ public class MemberDto {
 			String member_phone, int member_check_question, String member_check_answer, String member_comments,
 			Date member_cre_date, Date member_mod_date, String member_sign_check, int member_grade,
 			String member_del_flag, int profile_table_no, int profile_table_mno, String profile_table_original_name,
-			String profile_table_stored_name) {
+			String profile_table_stored_name, String boardCnt, String viewCnt, String likeCnt) {
 		super();
 		this.member_no = member_no;
 		this.member_name = member_name;
@@ -53,6 +57,9 @@ public class MemberDto {
 		this.profile_table_mno = profile_table_mno;
 		this.profile_table_original_name = profile_table_original_name;
 		this.profile_table_stored_name = profile_table_stored_name;
+		this.boardCnt = boardCnt;
+		this.viewCnt = viewCnt;
+		this.likeCnt = likeCnt;
 	}
 
 	public int getMember_no() {
@@ -199,6 +206,30 @@ public class MemberDto {
 		this.profile_table_stored_name = profile_table_stored_name;
 	}
 
+	public String getBoardCnt() {
+		return boardCnt;
+	}
+
+	public void setBoardCnt(String boardCnt) {
+		this.boardCnt = boardCnt;
+	}
+
+	public String getViewCnt() {
+		return viewCnt;
+	}
+
+	public void setViewCnt(String viewCnt) {
+		this.viewCnt = viewCnt;
+	}
+
+	public String getLikeCnt() {
+		return likeCnt;
+	}
+
+	public void setLikeCnt(String likeCnt) {
+		this.likeCnt = likeCnt;
+	}
+
 	@Override
 	public String toString() {
 		return "MemberDto [member_no=" + member_no + ", member_name=" + member_name + ", member_nick=" + member_nick
@@ -208,7 +239,9 @@ public class MemberDto {
 				+ member_mod_date + ", member_sign_check=" + member_sign_check + ", member_grade=" + member_grade
 				+ ", member_del_flag=" + member_del_flag + ", profile_table_no=" + profile_table_no
 				+ ", profile_table_mno=" + profile_table_mno + ", profile_table_original_name="
-				+ profile_table_original_name + ", profile_table_stored_name=" + profile_table_stored_name + "]";
+				+ profile_table_original_name + ", profile_table_stored_name=" + profile_table_stored_name
+				+ ", boardCnt=" + boardCnt + ", viewCnt=" + viewCnt + ", likeCnt=" + likeCnt + "]";
 	}
 
+	
 }

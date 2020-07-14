@@ -3,6 +3,24 @@
 
 <mapper namespace="com.project.projectBoard">
 	
+	<sql id="categoryOption">
+		<choose>
+        	<!-- 전체 카테고리 조회일 경우  -->
+        	<when test="categoryOption == 'all'">
+        		and (project_board_category = 'p' 
+				or project_board_category = 'i') 
+        	</when>
+        	
+        	<!-- 전체 카테고리 조회가 아닐 경우 -->
+        	<when test="categoryOption == 'pic'">
+        		and project_board_category = 'p'  
+        	</when>
+        	<when test="categoryOption == 'ill'">
+        		and project_board_category = 'i'  
+        	</when>
+        </choose>
+	</sql>
+	
 	<resultMap type="com.project.projectBoard.model.ProjectBoardDto"
 		 id="projectBoardResultMap">
 		<result column="project_board_no" property="project_board_no"/>
@@ -41,32 +59,58 @@
 			javaType="java.util.Date"/>	
 	</resultMap>		
 	
-	<select id="projectBoardSelectList" 
+	<resultMap type="com.project.projectBoard.model.ProjectCommentDto"
+		 id="projectCommentResultMap">
+		<result column="PROJECT_COMMENT_NO" property="PROJECT_COMMENT_NO"/>
+		<result column="PROJECT_COMMENT_MNO" property="PROJECT_COMMENT_MNO"/>
+		<result column="PROJECT_COMMENT_PBNO" property="PROJECT_COMMENT_PBNO"/>
+		<result column="PROJECT_COMMENT_COMMENTS" property="PROJECT_COMMENT_COMMENTS"/>
+		<result column="PROJECT_COMMENT_CRE_DATE" property="PROJECT_COMMENT_CRE_DATE"
+			javaType="java.util.Date"/>
+		<result column="PROJECT_COMMENT_MOD_DATE" property="PROJECT_COMMENT_MOD_DATE"
+			javaType="java.util.Date"/>	
+		<result column="member_nick" property="member_nick"/>
+		<result column="profile_table_stored_name" property="profile_table_stored_name"/>
+	</resultMap>
+	
+	<select id="projectBoardSelectList" parameterType="map"
 		resultMap="projectBoardResultMap">
 		select (select count(project_comment_no) from project_comment where project_comment.project_comment_pbno = project_board_no) project_comment_cnt, project_board_no, project_board_title, project_board_views, project_board_category, project_board_cre_date, project_board_like, file_table_stored_file_name, member_nick, profile_table_stored_name
 		from member m left join profile_table pt
 		on m.member_no = pt.profile_table_mno
-		join (select FB.rnum, fb.project_board_no, fb.project_board_title, fb.project_board_views, fb.project_board_category, fb.project_board_cre_date, fb.project_board_like, fb.file_table_stored_file_name, fb.project_board_mno
-		      from (select rownum rnum, f.project_board_no, f.project_board_title, f.project_board_views, f.project_board_category, f.project_board_cre_date, f.project_board_like, f.file_table_stored_file_name,f.project_board_mno
-		            from (select pb.project_board_mno ,pb.project_board_no, pb.project_board_title, pb.project_board_views, pb.project_board_category, pb.project_board_cre_date, pb.project_board_like, ft.file_table_stored_file_name
+		join (select FB.rnum, fb.cnt, fb.project_board_no, fb.project_board_title, fb.project_board_views, fb.project_board_category, fb.project_board_cre_date, fb.project_board_like, fb.file_table_stored_file_name, fb.project_board_mno
+		      from (select rownum rnum, f.cnt, f.project_board_no, f.project_board_title, f.project_board_views, f.project_board_category, f.project_board_cre_date, f.project_board_like, f.file_table_stored_file_name,f.project_board_mno
+		            from (select pb.cnt, pb.project_board_mno ,pb.project_board_no, pb.project_board_title, pb.project_board_views, pb.project_board_category, pb.project_board_cre_date, pb.project_board_like, ft.file_table_stored_file_name
 		                  ,DENSE_RANK() OVER (PARTITION BY pb.project_board_no
 		                  ORDER BY ft.file_table_no) r
-		                  from (select p.project_board_mno , p.project_board_no, p.project_board_title, p.project_board_views, p.project_board_category, p.project_board_cre_date, count(project_like_no) project_board_like
+		                  from (select (select count(project_board_no) from project_board) cnt, p.project_board_mno , p.project_board_no, p.project_board_title, p.project_board_views, p.project_board_category, p.project_board_cre_date, count(project_like_no) project_board_like
 		                        from project_board p left join project_like pl
 		                        on p.project_board_no = pl.project_like_pbno
 		                        and p.project_board_mno = pl.project_like_mno
-		                        group by p.project_board_mno , p.project_board_no, p.project_board_title, p.project_board_views, p.project_board_category, p.project_board_cre_date) pb, file_table ft
-		                  where pb.project_board_no = ft.file_table_pbno) f 
-		                  where f.r = 1            
-		                   ) FB) PBM
+		                        group by p.project_board_mno , p.project_board_no, p.project_board_title, p.project_board_views, p.project_board_category, p.project_board_cre_date order by ${sortOption} desc) pb, file_table ft
+		                  where pb.project_board_no = ft.file_table_pbno order by ${sortOption} desc) f
+		                  where f.r = 1  
+		                  <include refid="categoryOption"></include>		                           
+		                   ) FB 
+		                   ) PBM
 		on m.member_no = PBM.project_board_mno
-		<!-- 		where pbm.rnum between 1 and 25 -->		
-		order by project_board_no
+		<![CDATA[WHERE RNUM <= #{end}]]>
+		and (${searchOption} like '%' || #{keyword} || '%')		
+		order by ${sortOption} desc
+	</select>
+	
+	<select id="projectBoardTotalCount" parameterType="map" 
+		resultType="int">
+		SELECT count(*)
+		from project_board pb left join member m
+		on pb.project_board_mno = m.member_no
+		where (${searchOption} like '%' || #{keyword} || '%')
+		<include refid="categoryOption"></include>
 	</select>
 	
 	<select id="projectBoardSelectOne" parameterType="int"
 		resultMap="projectBoardResultMap">
-		select (select count(project_comment_no) from project_comment where project_comment_pbno = #{no}) project_comment_cnt, member_nick, profile_table_stored_name, project_board_title, project_board_contents, project_board_category, project_board_like, project_board_views, project_board_cre_date
+		select project_board_mno, (select count(project_comment_no) from project_comment where project_comment_pbno = #{no}) project_comment_cnt, member_nick, profile_table_stored_name, project_board_title, project_board_contents, project_board_category, project_board_like, project_board_views, project_board_cre_date
 		from project_board pb, member m, profile_table pt,
 		     (select count(project_like_no) project_board_like, pb.project_board_no
 		     from project_board pb left join project_like pl
@@ -77,6 +121,16 @@
 		where pb.project_board_mno = m.member_no
 		and m.member_no = pt.profile_table_mno(+)
 		and L.project_board_no = pb.project_board_no
+	</select>
+	
+	<select id="projectCommentSelectList" parameterType="int"
+		resultMap="projectCommentResultMap">
+		select project_comment_no, project_comment_mno, project_comment_comments, PROJECT_COMMENT_CRE_DATE, PROJECT_COMMENT_MOD_DATE, member_nick, profile_table_stored_name
+		from member m, profile_table pt, project_comment pc
+		where m.member_no = pt.profile_table_mno(+)
+		and m.member_no = pc.project_comment_mno
+		and project_comment_pbno = #{no}
+		order by project_comment_cre_date desc
 	</select>
 	
 	<select id="projectBoardFileSelectList" parameterType="int"
@@ -131,6 +185,24 @@
 	<delete id="projectBoardDeleteOne" parameterType="int">
 		delete from project_board
 		where project_board_no = #{no}
+	</delete>
+	
+	<insert id="projectCommentInsertOne" parameterType="com.project.projectBoard.model.ProjectCommentDto">
+		insert into project_comment
+		value(project_comment_no, project_comment_mno, project_comment_pbno, project_comment_comments, project_comment_cre_date)
+		values(project_comment_pcno_SEQ.nextval, #{PROJECT_COMMENT_MNO}, #{PROJECT_COMMENT_PBNO}, #{PROJECT_COMMENT_COMMENTS}, SYSDATE)
+	</insert>
+	
+	<update id="projectCommentUpdateOne" parameterType="com.project.projectBoard.model.ProjectCommentDto">
+		update project_comment
+		set project_comment_comments = #{PROJECT_COMMENT_COMMENTS}
+		, project_comment_mod_date = SYSDATE
+		where project_comment_no = #{PROJECT_COMMENT_NO}
+	</update>
+	
+	<delete id="projectCommentDeleteOne" parameterType="int">
+		delete from project_comment
+		where project_comment_no = #{no}
 	</delete>
 	
 </mapper>

@@ -76,7 +76,7 @@
 					<br>
 					<div style="margin-left: 200px;">
 						<span style="width: 200px;">작성자</span>
-						<span style="margin-left: 100px;">${qnaBoardDto.MEMBER_NICK}</span>
+						<span style="margin-left: 100px;">${qnaBoardDto.member_nick}</span>
 					</div>
 					<br>
 					<hr>
@@ -84,8 +84,8 @@
 					<br>
 					<div style="margin-left: 200px;">
 						<span style="width: 200px;">제목</span>
-						<input type="text" value="${qnaBoardDto.QNA_BOARD_TITLE}"
-							 id='titleSpace' name="QNA_BOARD_TITLE">
+						<input type="text" value="${qnaBoardDto.qna_board_title}"
+							 id='titleSpace' name="qna_board_title">
 					</div>
 					<br>
 					<hr style="text-align: center; width: 80%;">
@@ -94,7 +94,7 @@
 					<div style="margin-left: 200px; height: 400px;">
 						<span style="width: 200px; margin-top: 0px;">질문내용</span>
 						<textarea id='textSpace' cols="84" rows="17"
-							 name="QNA_BOARD_CONTENTS">${qnaBoardDto.QNA_BOARD_CONTENTS}</textarea>
+							 name="qna_board_contents">${qnaBoardDto.qna_board_contents}</textarea>
 					</div>
 					<br>
 					<hr>
@@ -105,7 +105,7 @@
 							height: 50px; background-color: #60524E; color: white;">
 						<input type="button" value="취소" style="text-align: center; width: 150px; 
 							height: 50px; background-color: #60524E; color: white;" onclick="pageMoveListFnc();">
-						<input type="hidden" name="QNA_BOARD_NO" value="${qnaBoardDto.QNA_BOARD_NO}">
+						<input type="hidden" name="qna_board_no" value="${qnaBoardDto.qna_board_no}">
 					</div>
 				</form>	
 			</div>
