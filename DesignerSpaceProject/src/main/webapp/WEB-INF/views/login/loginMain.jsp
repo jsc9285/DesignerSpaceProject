@@ -82,7 +82,6 @@
 		var email = document.getElementById("email_input");
 		var pwd = document.getElementById("email_pwd");
 		
-		alert(email.value);
 		
 		if (email.value=="") {
 			email.focus();
@@ -118,7 +117,7 @@
 					<form action="./member/loginCtr.do" method="post">
 						<c:choose>
 							<c:when test="${empty member_email}">
-								<input id="email_input" type="email" name='member_email' placeholder="이메일 입력" >
+								<input id="email_input" type="text" name='member_email' placeholder="이메일 입력" >
 							</c:when>
 							<c:otherwise>
 								<input id="email_input" type="password" name='member_email' placeholder="이메일 입력" value="${member_email}">
