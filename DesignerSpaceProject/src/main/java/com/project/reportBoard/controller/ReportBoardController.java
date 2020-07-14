@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.project.qnaBoard.model.QnaBoardDto;
+import com.project.projectBoard.model.ProjectBoardDto;
+import com.project.projectBoard.service.ProjectBoardService;
 import com.project.reportBoard.model.ReportBoardDto;
 import com.project.reportBoard.service.ReportBoardService;
 
@@ -26,6 +27,8 @@ public class ReportBoardController {
 	@Autowired
 	private ReportBoardService reportBoardService;
 	
+	@Autowired
+	private ProjectBoardService projectBoardService;
 	
 	@RequestMapping(value = "reportBoard/list.do", method = RequestMethod.GET)
 	public String reportBoardList(@RequestParam(defaultValue = "1") int curPage
@@ -102,6 +105,7 @@ public class ReportBoardController {
 			 , @RequestParam(defaultValue = "0") int report_board_no
 			 , @RequestParam(defaultValue = "titleAndContent") String searchOption
 			 , @RequestParam(defaultValue = "") String keyword
+			 , ProjectBoardDto projectBoardDto
 			 , Model model) {
 		
 		log.info("Welcome reportBoardListDetail! " + curPage + " : ????"
@@ -110,30 +114,23 @@ public class ReportBoardController {
 		ReportBoardDto reportBoardDto = reportBoardService.reportBoardSelectDetail(report_board_no);
 		
 		model.addAttribute("reportBoardDto", reportBoardDto);
-		
-//		int totalCount = 
-//				reportBoardService.qnaBoardCommentSelectTotalCount(report_board_no);
-		
-//		CommentPaging reportCommentPaging = new CommentPaging(totalCount, curPage);
-//		int end = reportCommentPaging.getPageEnd();
-				
-//		List<ReportBoardDto> reportBoardCommentList = 
-//				reportBoardService.qnaBoardCommentSelectList(report_board_no, end);
-		
-//		model.addAttribute("qnaBoardCommentList", qnaBoardCommentList);
-//		model.addAttribute("freeBoardCommentPaging", qnaCommentPaging);
-		
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);
+		model.addAttribute("projectBoardDto", projectBoardDto);
 		
 		return "board/report/reportBoardDetail";
 	}
 	
 	// 신고게시판 추가 화면
 	@RequestMapping(value = "reportBoard/add.do", method = RequestMethod.GET) 
-	public String ReportBoardAdd(Model model) {
+	public String ReportBoardAdd(int project_board_no, Model model) {
 		
-		log.info("Welcome ReportBoardAdd!");
+		log.info("Welcome ReportBoardAdd!" + project_board_no);
+		
+		ProjectBoardDto projectBoardDto = projectBoardService.projectBoardSelectOne(project_board_no);
+		
+		model.addAttribute("projectBoardDto", projectBoardDto);
+		model.addAttribute("project_board_no", project_board_no);
 		
 		return "board/report/reportBoardAdd";
 	}
@@ -143,10 +140,21 @@ public class ReportBoardController {
 	public String ReportBoardAddCtr(ReportBoardDto reportBoardDto, Model model) {
 		
 		log.info("Welcome ReportBoardAdd_ctr!");
-		
+		System.out.println(reportBoardDto);
+		System.out.println(reportBoardDto);
+		System.out.println(reportBoardDto);
+		System.out.println(reportBoardDto);
+		System.out.println(reportBoardDto);
+		System.out.println(reportBoardDto);
+		System.out.println(reportBoardDto);
+		System.out.println(reportBoardDto);
 		reportBoardService.reportBoardInsertOne(reportBoardDto);
 		
-		return "redirect:./list.do";
+//		ProjectBoardDto projectBoardDto = projectBoardService.projectBoardSelectOne(project_board_no);
+//		
+//		model.addAttribute("projectBoardDto", projectBoardDto);
+		
+		return "redirect:../projectBoard/detail.do";
 	}
 	
 }

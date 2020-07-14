@@ -53,9 +53,9 @@
 </script>
 <nav id='navList'>
 	<ul>
-		<li>	
+		<li>
 		<c:choose>
-			<c:when test="${projectBoardPaging.curPage < projectBoardPaging.totPage }">
+			<c:when test="${projectBoardPaging.curPage < projectBoardPaging.totPage}">
 				<a href="#"
 					onclick="goPageFnc(${projectBoardPaging.curPage + 1});">
 					<span>더보기</span>

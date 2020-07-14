@@ -36,17 +36,17 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 	}
 
 	@Override
-	public int freeBoardSelectCurPage(String searchOption, String keyword, int no) {
+	public int freeBoardSelectCurPage(String searchOption, String keyword, int no, String lineTitle) {
 		// TODO Auto-generated method stub
-		return freeBoardDao.freeBoardSelectCurPage(searchOption, keyword, no);
+		return freeBoardDao.freeBoardSelectCurPage(searchOption, keyword, no, lineTitle);
 	}
 
 	@Override
-	public List<FreeBoardDto> freeBoardSelectList(String searchOption, String keyword, int start, int end) {
+	public List<FreeBoardDto> freeBoardSelectList(String searchOption, String keyword, int start, int end, String lineTitle) {
 		// TODO Auto-generated method stub
 		List<FreeBoardDto> freeboardList = 
 				freeBoardDao.freeBoardSelectList(searchOption, keyword
-					, start, end);
+					, start, end, lineTitle);
 		
 		return freeboardList;
 	}
@@ -183,6 +183,24 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 	public int freeBoardCommentTotalCount(int no) {
 		// TODO Auto-generated method stub
 		return freeBoardDao.freeBoardCommentTotalCount(no);
+	}
+
+	@Override
+	public int selectTotalMoveCount(String searchOption, String keyword, String lineTitle) {
+		// TODO Auto-generated method stub
+		return freeBoardDao.selectTotalMoveCount(searchOption, keyword, lineTitle);
+	}
+
+	@Override
+	public FreeBoardDto selectPrePage(String searchOption, String keyword, String lineTitle, int rnum) {
+		// TODO Auto-generated method stub
+		return freeBoardDao.selectPrePage(searchOption,keyword,lineTitle,rnum);
+	}
+
+	@Override
+	public FreeBoardDto selectNextPage(String searchOption, String keyword, String lineTitle, int rnum) {
+		// TODO Auto-generated method stub
+		return freeBoardDao.selectNextPage(searchOption, keyword, lineTitle, rnum);
 	}
 
 	

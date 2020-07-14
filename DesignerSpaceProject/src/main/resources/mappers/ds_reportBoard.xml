@@ -110,9 +110,10 @@
 	
 	<insert id="reportBoardInsertOne" parameterType="com.project.reportBoard.model.ReportBoardDto">
 		INSERT INTO REPORT_BOARD
-		VALUE(REPORT_BOARD_NO,REPORT_BOARD_MNO,REPORT_BOARD_TITLE,REPORT_BOARD_CONTENTS,REPORT_BOARD_CRE_DATE)
+		VALUE(REPORT_BOARD_NO, REPORT_BOARD_MNO, REPORT_BOARD_TITLE, REPORT_BOARD_REASON,
+			  REPORT_BOARD_CONTENTS, REPORT_BOARD_CRE_DATE, REPORT_BOARD_NAME)
 		VALUES(REPORT_BOARD_RBNO_SEQ.NEXTVAL, #{report_board_mno}, #{report_board_title},
-				 #{report_board_contents}, SYSDATE)
+				#{report_board_reason}, #{report_board_contents}, SYSDATE, #{report_board_name})
 	</insert>
 	
 	<select id="reportBoardSelectTotalCount" resultType="int" 
