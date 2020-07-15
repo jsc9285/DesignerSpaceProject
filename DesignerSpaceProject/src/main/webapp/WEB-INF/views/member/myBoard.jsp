@@ -227,6 +227,13 @@
 
 	function sortOptionChangeFnc(e) {
 		var sortOption = document.getElementById('sortOption');
+		var searchOption = document.getElementById('searchOption');
+		var searchOptionObj = document.getElementById('searchOptionObj');
+		var keyword = document.getElementById('keyword');
+		var keywordObj = document.getElementById('keywordObj');
+		
+		searchOption.value = searchOptionObj.value;
+		keyword.value = keywordObj.value;
 
 		if (e.value == "project_board_no") {
 			sortOption.value = e.value;
@@ -246,11 +253,13 @@
 	function categoryOptionChangeFnc(obj) {
 		var categoryOption = document.getElementById('categoryOption');
 		var searchOption = document.getElementById('searchOption');
+		var searchOptionObj = document.getElementById('searchOptionObj');
 		var keyword = document.getElementById('keyword');
+		var keywordObj = document.getElementById('keywordObj');
 
 		categoryOption.value = obj.value;
-		searchOption.value = "member_nick";
-		keyword.value = "";
+		searchOption.value = searchOptionObj.value;
+		keyword.value = keywordObj.value;
 
 		var curPage = document.getElementById('curPage');
 		curPage.value = 1;
@@ -284,7 +293,7 @@
 			</div>
 			<c:choose>
 				<c:when test="${memberDto.member_no eq  mno}">
-					<div id="createBox" onclick="location.href='./add.do'">
+					<div id="createBox" onclick="location.href='../projectBoard/add.do?chkPage=1'">
 						<a>작품제작</a>
 					</div>	
 				</c:when>
@@ -293,8 +302,9 @@
 			<div id="myProjectArea">
 				<!-- 			검색, 카테고리 선택, 정렬방법 -->
 				<div id="topMenu">
-					<form action="./MyPage.do" method="get" style="display: table;">
-						<select name="searchOption">
+					<form action="./myBoard.do" method="get" style="display: table;">
+					<input type="hidden" name="mno" value="${memberDto.member_no}">
+						<select id="searchOptionObj" name="searchOption">
 							<c:choose>
 								<c:when
 									test="${listOptionMap.searchOption eq 'project_board_title'}">
@@ -314,7 +324,7 @@
 									<option value="project_board_contents" selected="selected">내용</option>
 								</c:when>
 							</c:choose>
-						</select> <input type="text" name="keyword"
+						</select> <input type="text" id="keywordObj" name="keyword"
 							value="${listOptionMap.keyword}">
 						<button id="searchBtn" type="submit">
 							<img
@@ -356,7 +366,7 @@
 					<c:forEach var="projectBoardDto" items="${projectBoardList}">
 						<div class="projectList">
 							<div class="thumbnailPic"
-								onclick="location.href='../projectBoard/detail.do?project_board_no=${projectBoardDto.project_board_no}'"
+								onclick="location.href='../projectBoard/detail.do?project_board_no=${projectBoardDto.project_board_no}&chkPage=1'"
 								style="background-image: url(<c:url value='/projectImg/${projectBoardDto.FILE_TABLE_STORED_FILE_NAME}'/>);">
 								<c:choose>
 									<c:when test="${projectBoardDto.project_board_category eq 'p'}">
@@ -396,17 +406,18 @@
 					<jsp:param value="${projectBoardPaging}" name="projectBoardPaging" />
 				</jsp:include>
 
-				<form action="./MyPage.do" id='pagingForm' method="get">
+				<form action="./myBoard.do" id='pagingForm' method="get">
 					<input type="hidden" id='curPage' name='curPage'
-						value="${projectBoardPaging.curPage}"> <input
-						type="hidden" id='categoryOption' name="categoryOption"
-						value="${listOptionMap.categoryOption}"> <input
-						type="hidden" id='sortOption' name='sortOption'
-						value="${listOptionMap.sortOption}"> <input type="hidden"
-						id='searchOption' name="searchOption"
-						value="${listOptionMap.searchOption}"> <input
-						type="hidden" id='keyword' name='keyword'
+						value="${projectBoardPaging.curPage}"> 
+					<input type="hidden" id='categoryOption' name="categoryOption"
+						value="${listOptionMap.categoryOption}"> 
+					<input type="hidden" id='sortOption' name='sortOption'
+						value="${listOptionMap.sortOption}"> 
+					<input type="hidden" id='searchOption' name="searchOption"
+						value="${listOptionMap.searchOption}"> 
+					<input type="hidden" id='keyword' name='keyword'
 						value="${listOptionMap.keyword}">
+					<input type="hidden" name="mno" value="${memberDto.member_no}">
 				</form>
 			</div>
 		</div>

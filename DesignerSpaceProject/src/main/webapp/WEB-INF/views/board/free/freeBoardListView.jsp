@@ -12,13 +12,15 @@
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 <style type="text/css">
+	#innerPage{
+		margin-top: 100px;
+	}
 	#boardTitle{
 		font-size: 70px;
 		font-weight: bold;
 		float: left;
 		color: #7D7471;
 	}
-
 	#searchOption{
 		margin-top: 40px;
 		margin-left: 20px;
@@ -29,23 +31,21 @@
 		font-size: 17px;
 		float: left;
 	}
-	
 	#keyword{
 		margin-top: 40px;
 		width: 420px;
 		height: 45px;
 		float: left;
 	}
-	
 	#searchButton{
 		margin-top: 40px;
 		width: 50px;
 		height: 50px;
 		float: left;
 	}
-	
 	#writeButton{
 		float: right;
+		margin-right: 180px;
 		text-align: center;
 		color: white;
 		width: 150px;
@@ -55,8 +55,7 @@
 		background-color: #7D7471;
 		border: 0;
 		outline: 0;
-	}
-	
+	}	
 	#writeButton:hover{
 		float: right;
 		text-align: center;
@@ -68,8 +67,7 @@
 		background-color: #7D7500;
 		border: 0;
 		outline: 0;
-	}
-	
+	}	
 	#selectProcessStatus{
 		margin-top: 40px;
 		margin-left: 20px;
@@ -80,75 +78,45 @@
 		text-align-last: center;
 		font-size: 17px;
 		float: right;
+	}	
+	#projectListTable{
+			width: 1350px;
 	}
-	
-	#columnTitle{
-		clear: both;
-		margin-top: 100px;
-		width: 100%;
+	#projectListTable tr{
+		text-align: center;
+		border: 3px solid beige;
 	}
-	
+	#projectListTable th{
+		background-color: #7D7471;
+		color: #fff;
+		font-size: 20px;
+		font-weight: bold;
+		height: 50px;
+		vertical-align: middle;
+	}
+	#projectListTable td{			
+		height: 50px;
+		vertical-align: middle;
+	}
 	#lineTitle{
 		border-bottom: 1px solid black;
 		height: 77px;
-	}
-	
-	.cell{
-		border-bottom: 1px solid black;
-		border-top: 1px solid black;
-		border-color: #D8D8D8;
-		background-color: #7D7471;
-		vertical-align: middle;
-		font-size: 30px;
-		color: white;
-	}
-	
-	.cell:hover{
-		border-bottom: 1px solid black;
-		border-top: 1px solid black;
-		border-color: #D8D8D8;
-		background-color: #7D7500;
-		vertical-align: middle;
-		font-size: 30px;
-		color: white;
-	}
-	
-	.cell2{
-		border-bottom: 1px solid black;
-		border-top: 1px solid black;
-		border-color: #D8D8D8;
-		vertical-align: middle;
-		font-size: 30px;
-		font-weight: bold;
-		text-align: center;
-	}
-	
+	}		
 	#admin{
-		border-bottom: 1px solid black;
-		border-top: 1px solid black;
-		border-color: #D8D8D8;
-		vertical-align: middle;
-		font-size: 30px;
 		font-weight: bold;
-		text-align: center;
 		color: red;
 	}
-	
 	a > #admin { 
-	text-decoration:none;
-	color: red;
-	}
-	
+		text-decoration:none;
+		color: red;
+	}	
 	a{
-	text-decoration:none;
-	color: black;
-	} 
-	
+		text-decoration:none;
+		color: black;
+	} 	
 	.freeBoardTitle:hover{
 		color: yellow;
 	}
-	
-	
 </style>
 
 <script type="text/javascript" 
@@ -292,11 +260,11 @@ function freeBoardListOnePageFnc(obj, event){
 				<input type="text" id='keyword' 
 					name="keyword" value="${searchMap.keyword}"
 					placeholder="제목 or 작성자 검색">
-				<input type="submit" value="검색" id='searchButton'>
-				
+				<input type="submit" value="검색" id='searchButton'>		
 			</form>	
 			
-			<table id='columnTitle'>
+			<div id="innerPage">
+			<table id="projectListTable">
 				<tr id='lineTitle'>
 					<th class="cell" onclick="sortFnc(this);" id="free_board_no">글번호</th>
 					<th class="cell" onclick="sortFnc(this);" id="free_board_title">제목</th>
@@ -346,8 +314,10 @@ function freeBoardListOnePageFnc(obj, event){
 						<td><input type="hidden" id="rnum" name="rnum" value="${freeBoardDto.freeBoardRownum}"></td>
 						<td><input type="hidden" id="sortTitle" name="sortTitle" value="${lineTitle}"></td>
 						<td class="cell2">
-							<fmt:formatDate value="${freeBoardDto.freeBoardCreDate}" 
-								pattern="yyyy.MM.dd  HH:mm"/>
+							<h6><fmt:formatDate value="${freeBoardDto.freeBoardCreDate}" 
+								pattern="yyyy.MM.dd"/></h6>
+							<h6><fmt:formatDate value="${freeBoardDto.freeBoardCreDate}" 
+								pattern="HH:mm"/></h6>
 						</td>
 						<c:choose>
 						<c:when test="${memberDto.member_grade eq '1'}">
@@ -366,6 +336,7 @@ function freeBoardListOnePageFnc(obj, event){
 			</c:choose>
 			
 			</table>
+			</div>
 			
 			<jsp:include page="/WEB-INF/views/common/paging.jsp">
 				<jsp:param value="${pagingMap}" name="pagingMap"/>

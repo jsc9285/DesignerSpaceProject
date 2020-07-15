@@ -218,4 +218,10 @@ public class ProjectBoardDaoImpl implements ProjectBoardDao{
 		return sqlSession.selectOne(namespace + "projectLikeFlag", map);
 	}
 
+	@Override
+	public Map<String, Object> selectInfoList() {
+
+		return sqlSession.selectOne(namespace + "selectInfoList");
+	}
+
 }
