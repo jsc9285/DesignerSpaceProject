@@ -251,7 +251,7 @@
 								<td class="cell2">${reportBoardDto.report_board_no}</td>
 								<td class="cell2">
 									<a href='#' onclick="listDetailPageFnc(this, event);">
-										${reportBoardDto.report_board_title}
+										${reportBoardDto.report_board_reason}
 									</a>
 								</td>
 								<td class="cell2">

@@ -12,14 +12,15 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 
 	<style type="text/css">
-
+	#innerPage{
+		margin-top: 100px;
+	}
 	#boardTitle{
 		font-size: 80px;
 		font-weight: bold;
 		float: left;
 		color: #7D7471;
 	}
-
 	#searchOption{
 		margin-top: 40px;
 		margin-left: 20px;
@@ -29,27 +30,19 @@
 		text-align-last: center;
 		font-size: 17px;
 		float: left;
-	}
-	
+	}	
 	#keyword{
 		margin-top: 40px;
 		width: 420px;
 		height: 45px;
 		float: left;
-	}
-	
+	}	
 	#searchButton{
 		margin-top: 40px;
 		width: 50px;
 		height: 50px;
 		float: left;
 	}
-	#delDiv{
-		float: right; 
-		margin-top: 65px;
-		margin-bottom: 10px;
-	}
-	
 	#writeButton{
 		float: right;
 		text-align: center;
@@ -59,8 +52,7 @@
 		margin-top: 40px;
 		font-size: 20px;
 		background-color: #7D7471;
-	}
-	
+	}	
 	#selectProcessStatus{
 		margin-top: 40px;
 		margin-left: 20px;
@@ -71,51 +63,47 @@
 		text-align-last: center;
 		font-size: 17px;
 		float: right;
+	}	
+	#projectListTable{
+		width: 1350px;
 	}
-	
-	#columnTitle{
-		clear: both;
-		margin-top: 100px;
-		width: 100%;
-	}
-	
-	#lineTitle{
-		border-bottom: 1px solid black;
-		height: 77px;
-	}
-	
-	.cell{
-		border-bottom: 1px solid black;
-		border-top: 1px solid black;
-		border-color: #D8D8D8;
+	#projectListTable tr{
+       text-align: center;
+       border: 1px solid #D8D8D8;
+    }
+	#projectListTable th{
 		background-color: #7D7471;
-		vertical-align: middle;
-		font-size: 30px;
-		color: white;
-		text-align: center;
-	}
-	
-	.cell2{
-		border-bottom: 1px solid black;
-		border-top: 1px solid black;
-		border-color: #D8D8D8;
-		vertical-align: middle;
-		font-size: 30px;
+		color: #fff;
+		font-size: 20px;
 		font-weight: bold;
-		text-align: center;
-		background-color: #FFFFFF;
+		height: 50px;
+		vertical-align: middle;
 	}
-	
-
+	#projectListTable td{			
+		height: 50px;
+		vertical-align: middle;
+	}
+	#deleteBtn{
+		color: red;
+		font-weight: bold;
+		position: absolute;
+		right: 180px;
+		top: 70px;	
+	}
+	.cell2 a{
+		text-decoration: none;
+		color: #000;
+	}
+	.cell2 a:hover{
+		text-decoration: underline;
+	}
 	</style>
 
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 	
 	
-	<script type="text/javascript">
-	
-		
+	<script type="text/javascript">	
 	    $(document).ready(function() {
 	        //체크박스 전체선택
 	        $('#allCheck').click(function() {
@@ -138,7 +126,11 @@
 	        });
 	     });   
      
-	
+		function removeMemberFnc() {
+			removeFormObj = document.getElementById('removeForm');
+			
+			removeFormObj.submit();
+		}
 	
 	</script>
 
@@ -153,7 +145,7 @@
 	
 	<div id="wrap">
 		<div id="innerWrap" style="overflow: hidden;">
-			<div style="float: left; width: 1000px;">
+			<div style="position: relative;">
 				<div id='boardTitle'>회원목록</div>
 				<form id='searchingForm' action="./listAdmin.do" method="post">
 						<select id='searchOption' name='searchOption'>
@@ -185,77 +177,73 @@
 						<input type="submit" id='searchButton' value="검색">
 				</form>	
 				
+				<a id="deleteBtn" onclick="removeMemberFnc();">회원삭제</a>
+				
 			</div>
 			
-			<form action="../member/remove.do" method="get">
-			
-			<div id="delDiv">
-				<button style="width: 100px; height: 40px; background-color: #FF0000;
-					color: #FFFFFF; border: 0px; font-size: 15px;">
-					회원삭제
-				</button>
+			<form action="../member/remove.do" id="removeForm" method="get">
+			<div id="innerPage">
+				<table id='projectListTable'>
+					<tr id='lineTitle' style="border: 1px solid #7D7471;">
+						<th class="cell"><input type="checkbox" id="allCheck"></th>
+						<th class="cell">회원번호</th>
+						<th class="cell">닉네임</th>
+						<th class="cell">이메일</th>
+						<th class="cell">작품수</th>
+						<th class="cell">좋아요</th>	
+						<th class="cell">가입일자</th>	
+							
+				<c:choose>
+					<c:when test="${empty memberList}">
+						<tr>
+							<td class="cell2" colspan="7" style="text-align: center;">
+								일치하는 회원이 없습니다
+							</td>
+						</tr>
+					</c:when>
+					<c:otherwise>
+						<c:forEach var="memberBoardDto" items="${memberList}">
+							<tr>
+								<td class="cell2">
+									<input type="checkbox" name='member_chk' class="checkbox" value="${memberBoardDto.member_no}">
+								</td>
+								<td class="cell2">
+									${memberBoardDto.member_no}
+								</td>
+								<td class="cell2">
+									<a href="./listOneAdmin.do?member_no=${memberBoardDto.member_no}">${memberBoardDto.member_nick}</a></td>
+								<td class="cell2">${memberBoardDto.member_email}</td>
+								<c:choose>
+									<c:when test="${empty memberBoardDto.board_cnt}">
+										<td id="board_cnt" class="cell2">0</td>
+									</c:when>
+									<c:otherwise>
+										<td id="board_cnt" class="cell2">${memberBoardDto.board_cnt}</td>
+									</c:otherwise>
+								</c:choose>
+								<c:choose>
+									<c:when test="${empty memberBoardDto.like_cnt}">
+										<td id="like_cnt" class="cell2">0</td>
+									</c:when>
+									<c:otherwise>
+										<td id="like_cnt" class="cell2">${memberBoardDto.like_cnt}</td>
+									</c:otherwise>
+								</c:choose>
+								
+								<td class="cell2">
+									<h5><fmt:formatDate value="${memberBoardDto.member_cre_date}" 
+										pattern="yyyy.MM.dd"/></h5>
+									<h5><fmt:formatDate value="${memberBoardDto.member_cre_date}" 
+										pattern="hh:mm"/></h5>
+								</td>
+							</tr>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
+				</table>
 			</div>
-			
-			
-			<table id='columnTitle'>
-				<tr id='lineTitle'>
-					<td class="cell"><input type="checkbox" id="allCheck"></td>
-					<td class="cell">회원번호</td>
-					<td class="cell">닉네임</td>
-					<td class="cell">이메일</td>
-					<td class="cell">작품수</td>
-					<td class="cell">좋아요</td>	
-					<td class="cell">가입일자</td>	
-						
-	<c:choose>
-		<c:when test="${empty memberList}">
-			<tr>
-				<td class="cell2" colspan="7" style="text-align: center;">
-					일치하는 회원이 없습니다
-				</td>
-			</tr>
-		</c:when>
-		<c:otherwise>
-			<c:forEach var="memberBoardDto" items="${memberList}">
-				<tr>
-					<td class="cell2">
-						<input type="checkbox" name='member_chk' class="checkbox" value="${memberBoardDto.member_no}">
-					</td>
-					<td class="cell2">
-						${memberBoardDto.member_no}
-					</td>
-					<td class="cell2">
-						<a href="./listOneAdmin.do?member_no=${memberBoardDto.member_no}">${memberBoardDto.member_nick}</a></td>
-					<td class="cell2">${memberBoardDto.member_email}</td>
-					<c:choose>
-						<c:when test="${empty memberBoardDto.board_cnt}">
-							<td id="board_cnt" class="cell2">0</td>
-						</c:when>
-						<c:otherwise>
-							<td id="board_cnt" class="cell2">${memberBoardDto.board_cnt}</td>
-						</c:otherwise>
-					</c:choose>
-					<c:choose>
-						<c:when test="${empty memberBoardDto.like_cnt}">
-							<td id="like_cnt" class="cell2">0</td>
-						</c:when>
-						<c:otherwise>
-							<td id="like_cnt" class="cell2">${memberBoardDto.like_cnt}</td>
-						</c:otherwise>
-					</c:choose>
-					
-					<td class="cell2">
-						<h5><fmt:formatDate value="${memberBoardDto.member_cre_date}" 
-							pattern="yyyy.MM.dd"/></h5>
-						<h5><fmt:formatDate value="${memberBoardDto.member_cre_date}" 
-							pattern="hh:mm"/></h5>
-					</td>
-				</tr>
-			</c:forEach>
-		</c:otherwise>
-	</c:choose>
-			</table>
 			</form>
+
 			<jsp:include page="/WEB-INF/views/common/paging.jsp">
 				<jsp:param value="${pagingMap}" name="pagingMap"/>
 			</jsp:include>

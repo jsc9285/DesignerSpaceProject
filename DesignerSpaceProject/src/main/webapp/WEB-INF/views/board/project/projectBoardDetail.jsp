@@ -86,6 +86,8 @@
 		}
 		#projectInfoArea h1{
 			font-size: 35px;
+			margin-top: 40px;
+			margin-bottom: 20px;
 		}
 		#likeBtn{		
 			width: 150px;
@@ -287,16 +289,19 @@
 	<form action="./like.do#projectInfoArea" id="like" method="get">
 		<input type="hidden" name="project_board_no" value="${projectBoardDto.project_board_no}">
 		<input type="hidden" name="mno" value="${memberDto.member_no}">
+		<input type="hidden" name="chkPage" value="${chkPage}">
 	</form>
 	
 	<form action="./likeUpdate.do#projectInfoArea" id="likeUpdate" method="get">
 		<input type="hidden" name="project_board_no" value="${projectBoardDto.project_board_no}">
 		<input type="hidden" name="mno" value="${memberDto.member_no}">
+		<input type="hidden" name="chkPage" value="${chkPage}">
 	</form>
 	
 	<form action="./likeDelete.do#projectInfoArea" id="likeDelete" method="get">
 		<input type="hidden" name="project_board_no" value="${projectBoardDto.project_board_no}">
 		<input type="hidden" name="mno" value="${memberDto.member_no}">
+		<input type="hidden" name="chkPage" value="${chkPage}">
 	</form>
 	
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>	
@@ -317,7 +322,7 @@
 					<c:when test="${memberDto.member_grade eq 0}">
 						<c:choose>
 							<c:when test="${memberDto.member_no eq projectBoardDto.project_board_mno}">
-								<input type="button" onclick="location.href='./update.do?project_board_no=${projectBoardDto.project_board_no}'" value="수정">			
+								<input type="button" onclick="location.href='./update.do?project_board_no=${projectBoardDto.project_board_no}&chkPage=${chkPage}'" value="수정">			
 								<input type="button" onclick="projectDeleteFnc();" value="삭제">					
 							</c:when>
 							<c:when test="${memberDto.member_no ne projectBoardDto.project_board_mno}">
@@ -329,7 +334,17 @@
 						<input type="button" onclick="projectDeleteFnc();" value="삭제">
 					</c:when>
 				</c:choose>			
-				<input type="button" onclick="location.href='./list.do'" value="목록">			
+				<c:choose>
+					<c:when test="${chkPage eq 0}">
+						<input type="button" onclick="location.href='./list.do'" value="목록">					
+					</c:when>
+					<c:when test="${chkPage eq 1}">
+						<input type="button" onclick="location.href='../member/myBoard.do?mno=${projectBoardDto.project_board_mno}'" value="목록">
+					</c:when>
+					<c:when test="${chkPage eq 2}">
+						<input type="button" onclick="location.href='./management.do'" value="목록">
+					</c:when>
+				</c:choose>
 			</div>
 			<div id="projectInfoArea">
 				<c:choose>
@@ -354,13 +369,13 @@
 				<img src="<%=request.getContextPath()%>/resources/img/iconChat_grey.png">
 				<span>${projectBoardDto.project_comment_cnt}</span>
 							
-				<h6>작성일 <fmt:formatDate value="${projectBoardDto.project_board_cre_date}" pattern="yyyy년 MM월 dd일"/></h6>
+				<h6 style="margin: 40px 0px;">작성일 <fmt:formatDate value="${projectBoardDto.project_board_cre_date}" pattern="yyyy년 MM월 dd일"/></h6>
 				
 				<div class="profileImg" 
 					style="background-image: url(<c:url value='/profileImg/${projectBoardDto.PROFILE_TABLE_STORED_NAME}'/>);"></div>
 				<div style="height: 150px; text-align: left;">
 					<h1><a class="memberInfoLink" href="../member/myBoard.do?mno=${projectBoardDto.project_board_mno}">${projectBoardDto.member_nick}</a></h1>
-					<span>${projectBoardDto.project_board_contents}</span>
+					<span style="margin-left: 20px;">${projectBoardDto.project_board_contents}</span>
 				</div>								
 			</div>
 			<div id="commentArea">

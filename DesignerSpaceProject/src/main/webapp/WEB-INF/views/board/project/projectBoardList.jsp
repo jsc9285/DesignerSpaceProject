@@ -211,9 +211,8 @@
 				
 				<div id="topCategory">
 					<button onclick="categoryOptionChangeFnc(this);" value="all">전체</button>
-					<button onclick="categoryOptionChangeFnc(this);" value="pic">그림</button>
-					<button onclick="categoryOptionChangeFnc(this);" value="ill">사진</button>
-					<button style="cursor:pointer; margin-left: 50px; position: absolute; background-color: red;" onclick="location.href='./add.do'">테스트용 글작성</button>
+					<button onclick="categoryOptionChangeFnc(this);" value="pic">사진</button>
+					<button onclick="categoryOptionChangeFnc(this);" value="ill">일러스트</button>
 				</div>
 				
 				<select onchange="sortOptionChangeFnc(this);">
@@ -244,7 +243,7 @@
 				</c:if>
 				<c:forEach var="projectBoardDto" items="${projectBoardList}">
 					<div class="projectList">
-						<div class="thumbnailPic" onclick="location.href='./projectView.do?project_board_no=${projectBoardDto.project_board_no}'"
+						<div class="thumbnailPic" onclick="location.href='./projectView.do?project_board_no=${projectBoardDto.project_board_no}&chkPage=0'"
 							 style="background-image: url(<c:url value='/projectImg/${projectBoardDto.FILE_TABLE_STORED_FILE_NAME}'/>);">
 							<c:choose>
 								<c:when test="${projectBoardDto.project_board_category eq 'p'}">

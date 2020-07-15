@@ -12,10 +12,13 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 	
 	<style type="text/css">
-		#projectListTable tr{
-			text-align: center;
-			border: 3px solid beige;
+		#projectListTable{
+			width: 1350px;
 		}
+		#projectListTable tr{
+	       text-align: center;
+	       border: 1px solid #D8D8D8;
+	    }
 		#projectListTable th{
 			background-color: #7D7471;
 			color: #fff;
@@ -73,9 +76,6 @@
 		}
 		#innerPage{
 			margin-top: 10px;
-		}
-		#projectListTable{
-			width: 1350px;
 		}
 		#pagingArea{
 			margin-top: 50px;
@@ -180,7 +180,7 @@
 	<!-- 			프로젝트 관리 테이블 ( 작품 게시물 정보 ) -->
 				<form action="./ManagementDeleteCtr.do" id="deleteForm" method="get">
 					<table id="projectListTable">
-						<tr>
+						<tr style="border: 1px solid #7D7471;">
 							<th><input id="allCheck" type="checkbox"></th>
 							<th>번호</th>
 							<th>제목</th>
@@ -200,8 +200,8 @@
 							<tr>
 								<td><input name='projectCheck' type="checkbox" class='checkbox' value="${projectList.project_board_no}"></td>
 								<td>${projectList.project_board_no}</td>
-								<td><a href="../member/myBoard.do?project_board_no=${projectList.project_board_no}">${projectList.project_board_title}</a></td>
-								<td><a id="memberInfoLink" href="./MyPage.do?mno=${projectList.project_board_mno}">${projectList.member_nick}</a></td>
+								<td><a href="./detail.do?project_board_no=${projectList.project_board_no}&chkPage=2">${projectList.project_board_title}</a></td>
+								<td><a id="memberInfoLink" href="../member/myBoard.do?mno=${projectList.project_board_mno}">${projectList.member_nick}</a></td>
 								<td>
 									<c:choose>
 										<c:when test="${projectList.project_board_category eq 'p'}">

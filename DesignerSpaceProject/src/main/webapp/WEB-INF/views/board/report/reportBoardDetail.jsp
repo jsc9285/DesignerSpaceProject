@@ -101,7 +101,7 @@
 		<form action='./listDetail.do' method='get'>
 			<div id="innerWrap">
 				<div id='boardTitle'>
-					QnA
+					신고글
 				</div>
 				
 				<div id="innerPage" style="height: 809px; margin-top: 40px;">

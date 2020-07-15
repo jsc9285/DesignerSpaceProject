@@ -17,6 +17,8 @@
 
 #navList > ul > li {
 	float: left;
+	width: 50px;
+	height: 50px;
 }
 
 #navList > ul > li > a {
