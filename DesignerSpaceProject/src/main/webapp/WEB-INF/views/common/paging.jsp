@@ -8,7 +8,7 @@
  	list-style-type: none; 
     padding: 0;
     overflow: hidden;
-    background-color: #333333; 
+    background-color: #FFFFFF; 
     display: table; /* table을 주면  요소의 내용에 맞게 자동으로 크기 */ 
     margin-left: auto;
     margin-right: auto;
@@ -21,23 +21,29 @@
 
 #navList > ul > li > a {
     display: block;
-    color: white;  
+    color: black;  
     text-align: center;
     padding: 16px;
     text-decoration: none;
+    border: 1px solid grey;
+    font-weight: bold;
 } 
 
 #navList > ul > li > a:hover { 
-     color: #FFD9EC; 
-     background-color: #5D5D5D; 
+     color: #FFFFFF; 
+     background-color: #60524E; 
      font-weight: bold; 
  }  
  
 .active {
-	color: #FFD9EC;
-	background-color: #5D5D5D;
+	color: white;
+	background-color: #60524E;
 	font-weight: bold;  
 }
+.move:hover{
+	color: white;
+}
+
 </style>
 
 <!-- <script type="text/javascript"  -->
@@ -66,14 +72,14 @@
 	}
 </script>
 	
-	<nav id="navList">
+	<nav id="navList" style="margin-top: 30px;">
 		<ul>
 			<c:choose>
 				<c:when test="${pagingMap.paging.blockEnd ne 0}">
 					<li>
-						<a href="#" 
+						<a class="move" href="#" 
 							onclick="goPageFnc(${pagingMap.paging.prevPage});">
-							<span>≪</span>
+							<span class="move">◀</span>
 						</a>
 					</li>	
 				</c:when>
@@ -97,9 +103,9 @@
 			<c:choose>
 				<c:when test="${pagingMap.paging.blockEnd ne 0}">
 					<li>
-						<a href="#"
+						<a class="move" href="#"
 							onclick="goPageFnc(${pagingMap.paging.nextPage});">
-							<span>≫</span>
+							<span class="move">▶</span>
 						</a>
 					</li>	
 				</c:when>

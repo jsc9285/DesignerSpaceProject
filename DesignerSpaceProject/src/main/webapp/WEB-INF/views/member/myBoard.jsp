@@ -271,7 +271,7 @@
 
 			<div id="myInfoArea">
 				<div class="profilePic"
-					style="background-image: url(<c:url value='/profileImg/${memberDto.profile_table_stored_name}'/>);"></div>
+					style="background-image: url(<c:url value='/profileImg/${myMemberDto.profile_table_stored_name}'/>);"></div>
 				<span style="font-size: 22px; font-weight: bold; margin-top: 30px;">${myMemberDto.member_nick}</span>
 				<span
 					style="font-size: 18px; color: #A3A3A3; font-weight: bold; margin-top: 20px;">${myMemberDto.member_email}</span>
@@ -282,9 +282,13 @@
 						pattern="yyyy년 MM월 dd일" />
 				</span>
 			</div>
-			<div id="createBox" onclick="location.href='./add.do'">
-				<a>작품제작</a>
-			</div>
+			<c:choose>
+				<c:when test="${memberDto.member_no eq  mno}">
+					<div id="createBox" onclick="location.href='./add.do'">
+						<a>작품제작</a>
+					</div>	
+				</c:when>
+			</c:choose>			
 
 			<div id="myProjectArea">
 				<!-- 			검색, 카테고리 선택, 정렬방법 -->
@@ -352,7 +356,7 @@
 					<c:forEach var="projectBoardDto" items="${projectBoardList}">
 						<div class="projectList">
 							<div class="thumbnailPic"
-								onclick="location.href='./detail.do?project_board_no=${projectBoardDto.project_board_no}'"
+								onclick="location.href='../projectBoard/detail.do?project_board_no=${projectBoardDto.project_board_no}'"
 								style="background-image: url(<c:url value='/projectImg/${projectBoardDto.FILE_TABLE_STORED_FILE_NAME}'/>);">
 								<c:choose>
 									<c:when test="${projectBoardDto.project_board_category eq 'p'}">

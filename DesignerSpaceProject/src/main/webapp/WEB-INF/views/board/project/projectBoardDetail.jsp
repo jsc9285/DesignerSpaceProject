@@ -172,6 +172,13 @@
 			width: 855px; 
 			height: 80px;
 		}		
+		.memberInfoLink{
+			text-decoration: none;
+			color: #000;
+		}
+		.memberInfoLink:hover{
+			text-decoration: underline;
+		}
 	</style>
 	
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
@@ -299,7 +306,7 @@
 			<div id="projectInfo">
 				<div class="profileImg" style="background-image: url(<c:url value='/profileImg/${projectBoardDto.PROFILE_TABLE_STORED_NAME}'/>);"></div>
 				<h1>${projectBoardDto.project_board_title}</h1>
-				<span>${projectBoardDto.member_nick}</span>
+				<span><a class="memberInfoLink" href="../member/myBoard.do?mno=${projectBoardDto.project_board_mno}">${projectBoardDto.member_nick}</a></span>
 			</div>
 			<div id="projectArea">
 				<c:forEach var="projectBoardFileDto" items="${projectBoardFileList}">
@@ -352,7 +359,7 @@
 				<div class="profileImg" 
 					style="background-image: url(<c:url value='/profileImg/${projectBoardDto.PROFILE_TABLE_STORED_NAME}'/>);"></div>
 				<div style="height: 150px; text-align: left;">
-					<h1>${projectBoardDto.member_nick}</h1>
+					<h1><a class="memberInfoLink" href="../member/myBoard.do?mno=${projectBoardDto.project_board_mno}">${projectBoardDto.member_nick}</a></h1>
 					<span>${projectBoardDto.project_board_contents}</span>
 				</div>								
 			</div>
