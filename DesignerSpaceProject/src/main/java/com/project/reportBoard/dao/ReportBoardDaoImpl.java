@@ -36,13 +36,14 @@ public class ReportBoardDaoImpl implements ReportBoardDao{
 	}
 
 	@Override
-	public int reportBoardSelectTotalCount(String searchOption, String keyword) {
+	public int reportBoardSelectTotalCount(String searchOption, String keyword, String sortOption) {
 		// TODO Auto-generated method stub
 		
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
 		
 		paramMap.put("searchOption", searchOption);
 		paramMap.put("keyword", keyword);
+		paramMap.put("sortOption", sortOption);
 		
 		return sqlSession.selectOne(namespace + "reportBoardSelectTotalCount", paramMap);
 	}
@@ -71,6 +72,20 @@ public class ReportBoardDaoImpl implements ReportBoardDao{
 		// TODO Auto-generated method stub
 		
 		sqlSession.insert(namespace + "reportBoardInsertOne", reportBoardDto);
+	}
+
+	@Override
+	public void processingComplete(ReportBoardDto reportBoardDto) {
+		// TODO Auto-generated method stub
+		
+		sqlSession.update(namespace + "processingComplete", reportBoardDto);
+	}
+
+	@Override
+	public int selectProjectBoardNumber(String title) {
+		// TODO Auto-generated method stub
+		
+		return sqlSession.selectOne(namespace + "selectProjectBoardNumber", title);
 	}
 
 }

@@ -66,13 +66,14 @@ public class QnaBoardDaoImpl implements QnaBoardDao{
 	}
 
 	@Override
-	public int qnaBoardSelectTotalCount(String searchOption, String keyword) {
+	public int qnaBoardSelectTotalCount(String searchOption, String keyword, String sortOption) {
 		// TODO Auto-generated method stub
 		
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
 		
 		paramMap.put("searchOption", searchOption);
 		paramMap.put("keyword", keyword);
+		paramMap.put("sortOption", sortOption);
 		
 		return sqlSession.selectOne(namespace + "qnaBoardSelectTotalCount", paramMap);
 	}
@@ -159,6 +160,13 @@ public class QnaBoardDaoImpl implements QnaBoardDao{
 		
 		sqlSession.update(namespace + "changeUpdateStatus", qna_comment_qbno);
 		
+	}
+
+	@Override
+	public void answerCompleteChange(int qna_board_no) {
+		// TODO Auto-generated method stub
+		
+		sqlSession.update(namespace + "answerCompleteChange", qna_board_no);
 	}
 
 

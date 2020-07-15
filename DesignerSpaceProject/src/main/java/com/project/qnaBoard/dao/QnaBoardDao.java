@@ -17,7 +17,7 @@ public interface QnaBoardDao {
 	
 	public int qnaBoardDeleteOne(int qna_board_no);
 	
-	public int qnaBoardSelectTotalCount(String searchOption, String keyword);
+	public int qnaBoardSelectTotalCount(String searchOption, String keyword, String sortOption);
 	
 	public int qnaSelectCurPage(String searchOption, String keyword, int qna_board_no);
 	
@@ -36,4 +36,6 @@ public interface QnaBoardDao {
 	public int qnaCommentDelete(int qna_board_no);
 	
 	public void changeUpdateStatus(int qna_comment_qbno);
+	
+	public void answerCompleteChange(int qna_board_no);
 }

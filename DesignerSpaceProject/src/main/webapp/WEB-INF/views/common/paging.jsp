@@ -73,7 +73,6 @@
 			.setAttribute('class', 'active');
 	}
 </script>
-	
 	<nav id="navList" style="margin-top: 30px;">
 		<ul>
 			<c:choose>

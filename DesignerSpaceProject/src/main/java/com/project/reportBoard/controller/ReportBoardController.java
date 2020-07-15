@@ -53,7 +53,7 @@ public class ReportBoardController {
 		}
 		
 		int totalCount = 
-				reportBoardService.reportBoardSelectTotalCount(searchOption, keyword);
+				reportBoardService.reportBoardSelectTotalCount(searchOption, keyword, sortOption);
 		
 		if(report_board_no != 0) {
 			curPage 
@@ -110,11 +110,17 @@ public class ReportBoardController {
 		log.info("Welcome reportBoardListDetail! " + curPage + " : ????"
 				+ searchOption + " : " + keyword);
 		
+		
 		ReportBoardDto reportBoardDto = reportBoardService.reportBoardSelectDetail(report_board_no);
+		String title = reportBoardDto.getReport_board_title();
+		
+		int project_board_no = reportBoardService.selectProjectBoardNumber(title);
+		
 		
 		model.addAttribute("reportBoardDto", reportBoardDto);
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);
+		model.addAttribute("project_board_no", project_board_no);
 		
 		return "board/report/reportBoardDetail";
 	}
@@ -138,21 +144,24 @@ public class ReportBoardController {
 	public String ReportBoardAddCtr(ReportBoardDto reportBoardDto, Model model) {
 		
 		log.info("Welcome ReportBoardAdd_ctr!");
-		System.out.println(reportBoardDto);
-		System.out.println(reportBoardDto);
-		System.out.println(reportBoardDto);
-		System.out.println(reportBoardDto);
-		System.out.println(reportBoardDto);
-		System.out.println(reportBoardDto);
-		System.out.println(reportBoardDto);
-		System.out.println(reportBoardDto);
-		reportBoardService.reportBoardInsertOne(reportBoardDto);
 		
-//		ProjectBoardDto projectBoardDto = projectBoardService.projectBoardSelectOne(project_board_no);
-//		
-//		model.addAttribute("projectBoardDto", projectBoardDto);
+		reportBoardService.reportBoardInsertOne(reportBoardDto);
 		
 		return "redirect:../reportBoard/listDetail.do?report_board_no=" + reportBoardDto.getReport_board_no();
 	}
 	
+	@RequestMapping(value = "reportBoard/processingCompleteCtr.do", method = RequestMethod.GET)
+	public String processingCompleteCtr(ReportBoardDto reportBoardDto, String searchOption,
+			String keyword, Model model) {
+		
+		log.info("call processingComplete_ctr! " + reportBoardDto);
+		
+		reportBoardService.processingComplete(reportBoardDto);
+		
+		return "forward:/reportBoard/list.do";
+	}
+	
+	
+	
 }
+

@@ -149,6 +149,22 @@
 		var pagingForm = document.getElementById('pagingForm'); 
 		pagingForm.submit();						
 	}
+	
+	function processingCompleteFnc() {
+		
+// 		var noObj = $('#report_board_no');
+		var keywordObj = $('#keyword');
+		var searchOptionObj = $('#searchOption');
+		
+		var url = '';
+		
+		url += './processingCompleteCtr.do?';
+// 		url += 'report_board_no=' + noObj.val();
+		url += 'keyword=' + keywordObj.val();
+		url += '&searchOption=' + searchOptionObj.val();
+
+		location.href = url;
+	}
 </script>
 
 </head>
@@ -224,6 +240,12 @@
 						</c:when>
 					</c:choose>
 				</select>
+				
+				<div>
+					<input type="button" value="처리완료" style="float: right; 
+						width: 138px; height: 50px; margin-top: 40px;" onclick="processingCompleteFnc();">
+				</div>
+				
 			</form>
 			
 			<table id='columnTitle'>
@@ -232,7 +254,7 @@
 					<th class="cell">제목</th>
 					<th class="cell">작성자</th>
 					<th class="cell">작성일</th>
-					<th class="cell">답변일</th>
+					<th class="cell">처리일</th>
 					<th class="cell">처리상태</th>
 				</tr>
 				
@@ -259,12 +281,20 @@
 								</td>
 								<td class="cell2">
 									<fmt:formatDate value="${reportBoardDto.report_board_cre_date}" 
-										pattern="yyyy.MM.dd hh:mm"/>
+										pattern="yyyy.MM.dd HH:mm"/>
 								</td>
 								<td class="cell2">
-									<fmt:formatDate value="${reportBoardDto.report_board_answer_date}" 
-										pattern="yyyy.MM.dd hh:mm"/>
+									<c:choose>
+										<c:when test="${empty reportBoardDto.report_board_answer_date}">
+											-
+										</c:when>
+										<c:otherwise>
+											<fmt:formatDate value="${reportBoardDto.report_board_answer_date}" 
+												pattern="yyyy.MM.dd HH:mm"/>
+										</c:otherwise>
+									</c:choose>
 								</td>
+								
 								<c:if test="${reportBoardDto.report_board_answer_status eq '접수중'}">
 									<td class="cell2" style="color: #E14E4E;">
 										${reportBoardDto.report_board_answer_status}
@@ -297,9 +327,9 @@
 		<input type="hidden" id='curPage' name='curPage' 
 			value="${pagingMap.paging.curPage}">
 		<input type="hidden" id='qna_board_no' name="qna_board_no" value="${reportBoardDto.report_board_no}">
-		<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
+		<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
 		<input type="hidden" id='keyword' name="keyword" value="${keyword}">
-		<input type="hidden" id='sortOption' name='sortOption' value="${sortOption}">	
+		<input type="hidden" id='sortOption' name='sortOption' value="${searchMap.sortOption}">	
 	</form>
 	
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>

@@ -26,10 +26,10 @@ public class ReportBoardServiceImpl implements ReportBoardService{
 	}
 
 	@Override
-	public int reportBoardSelectTotalCount(String searchOption, String keyword) {
+	public int reportBoardSelectTotalCount(String searchOption, String keyword, String sortOption) {
 		// TODO Auto-generated method stub
 		
-		return reportBoardDao.reportBoardSelectTotalCount(searchOption, keyword);
+		return reportBoardDao.reportBoardSelectTotalCount(searchOption, keyword, sortOption);
 	}
 
 	@Override
@@ -54,6 +54,21 @@ public class ReportBoardServiceImpl implements ReportBoardService{
 		
 		reportBoardDao.reportBoardInsertOne(reportBoardDto);
 		
+	}
+
+	@Override
+	public void processingComplete(ReportBoardDto reportBoardDto) {
+		// TODO Auto-generated method stub
+		
+		reportBoardDao.processingComplete(reportBoardDto);
+		
+	}
+
+	@Override
+	public int selectProjectBoardNumber(String title) {
+		// TODO Auto-generated method stub
+		
+		return reportBoardDao.selectProjectBoardNumber(title);
 	}
 
 }

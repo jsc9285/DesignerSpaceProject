@@ -144,9 +144,10 @@
 			
 			url += './commentDeleteCtr.do?';
 		    url += 'qna_board_no=' + qbnoObj.val();
+// 		    url += '&qna_comment_qbno=' + qbnoObj.val();S
 		    url += '&keyword=' + keywordObj.val();
 		    url += '&searchOption=' + searchOptionObj.val();
-		    url += '&sortOptionObj=' + sortOptionObj.val();
+		    url += '&sortOption=' + sortOptionObj.val();
 		    url += '&qna_comment_mno=' + mnoObj.val();
 		    url += '&qna_comment_no=' + qcnoObj.val();
 		    url += '&qna_comment_comments=' + commentsObj.val();
@@ -216,15 +217,19 @@
 	}
 
 	function answerCompleteFnc() {
+
+		var noObj = $('#qna_board_no');
+		var keywordObj = $('#keyword');
+		var searchOptionObj = $('#searchOption');
 		
 		var url = '';
 		
-		url += './list.do?';
-		url += '';
-		url += '';
-		url += '';
-		url += '';
-		
+		url += './answerCompleteCtr.do?';
+		url += 'qna_board_no=' + noObj.val();
+		url += '&keyword=' + keywordObj.val();
+		url += '&searchOption=' + searchOptionObj.val();
+
+		location.href = url;
 	}   
 
 
@@ -323,20 +328,27 @@
 							name="member_nick" value="${qnaBoardDto.member_nick}">
 						<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
 						<input type="hidden" id='keyword' name="keyword" value="${keyword}">
-<%-- 						<input type="hidden" id="mno" name="mno" value="${qnaBoardDto.QNA_BOARD_MNO}"> --%>
-<%-- 						<input type="hidden" id="no" name="no" value="${qnaBoardDto.QNA_BOARD_NO}"> --%>
-<%-- 						<input type="hidden" id="qbno" name="qbno" value="${qnaBoardDto.QNA_BOARD_NO}"> --%>
 					</div>
 				</div>
 			</div>
 			
 			<c:choose>
-				<c:when test="${memberDto.member_nick eq qnaBoardDto.member_nick || memberDto.member_grade eq '1'}">
+				<c:when test="${memberDto.member_nick eq qnaBoardDto.member_nick}">
 					
-					<div style="text-align: center; margin-top: -50px;">
-						<input type="button" value="답변완료" disabled="disabled" style="width: 150px; height: 150px;
-							border-radius: 50%; background-color: #D4D4D4; color: white;" onclick="answerCompleteFnc();">
-					</div>
+					<c:if test="${qnaBoardDto.qna_board_answer_status eq '답변중'}">
+						<div style="text-align: center; margin-top: -50px;">
+							<input type="button" value="답변완료" style="width: 150px; height: 150px;
+								border-radius: 50%; background-color: #4AD674; color: white;" onclick="answerCompleteFnc();">
+						</div>
+					</c:if>
+					
+					<c:if test="${qnaBoardDto.qna_board_answer_status eq '접수중'}">
+						<div style="text-align: center; margin-top: -50px;">
+							<input type="button" value="답변완료" disabled="disabled" style="width: 150px; height: 150px;
+								border-radius: 50%; background-color: #D4D4D4; color: white;" onclick="answerCompleteFnc();">
+						</div>
+					</c:if>
+					
 					
 					<div style="text-align: center; margin-top: 50px;">
 						<input type="submit" value="수정" id='updateButton'>
@@ -360,7 +372,7 @@
 				<div style="text-align: center; margin-bottom: 50px;">
 					
 					<c:if test="${qnaBoardDto.qna_board_mno eq memberDto.member_no 
-										|| memberDto.member_grade eq '1'}">
+										|| memberDto.member_grade == 1}">
 						<img alt="프로필 이미지" src="<c:url value='/profileImg/${memberDto.profile_table_stored_name}'/>"
 							style="border-radius: 50%; width: 75px; height: 75px; vertical-align: middle;">
 						<input type="text" value="" 
@@ -389,14 +401,14 @@
 										${qnaBoardComment.member_nick}
 									</span>
 									<fmt:formatDate value="${qnaBoardComment.qna_comment_cre_date}" 
-											pattern="yyyy.MM.dd hh:mm"/>
+											pattern="yyyy.MM.dd HH:mm"/>
 									<c:if test="${qnaBoardComment.qna_comment_mno eq memberDto.member_no}">
 										<input type="button" value="수정" id="updateBtn"
 											style="width: 60px; height: 20px;"
 											onclick="commentUpdateOneFnc(${qnaBoardComment.qna_comment_no})">
 									</c:if>
 									<c:if test="${qnaBoardComment.qna_comment_mno eq memberDto.member_no 
-										|| memberDto.member_grade eq '1'}">
+										|| memberDto.member_grade == 1}">
 										<input type="button" value="삭제" id="deleteBtn" 
 											style="width: 60px; height: 20px;" 
 											onclick="commentsDeleteFnc(this, event);">
@@ -426,7 +438,8 @@
 								value="${freeBoardCommentPaging.curPage}">
 							<input type="hidden" id='qna_board_no' name="qna_board_no" 
 								value="${qnaBoardDto.qna_board_no}">
-							<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
+							<input type="hidden" id='searchOption' name="searchOption" 
+								value="${searchMap.searchOption}">
 							<input type="hidden" id='keyword' name="keyword" value="${keyword}">
 							<input type="hidden" id="comments" name="comments">
 						</form>
