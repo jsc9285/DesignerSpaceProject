@@ -15,11 +15,12 @@ public class QnaBoardServiceImpl implements QnaBoardService{
 	public QnaBoardDao qnaBoardDao;
 
 	@Override
-	public List<QnaBoardDto> qnaBoardSelectList(String searchOption, String keyword, int start, int end) {
+	public List<QnaBoardDto> qnaBoardSelectList(String searchOption, String keyword,
+			String sortOption, int start, int end) {
 		// TODO Auto-generated method stub
 		
 		List<QnaBoardDto> qnaBoardList = 
-				qnaBoardDao.qnaBoardSelectList(searchOption, keyword, start, end);
+				qnaBoardDao.qnaBoardSelectList(searchOption, keyword, sortOption, start, end);
 		
 		return qnaBoardList;
 	}
@@ -111,6 +112,13 @@ public class QnaBoardServiceImpl implements QnaBoardService{
 		// TODO Auto-generated method stub
 		
 		qnaBoardDao.qnaCommentUpdateOne(qna_comment_no, qna_comment_comments);
+	}
+
+	@Override
+	public int qnaCommentDelete(int qna_board_no) {
+		// TODO Auto-generated method stub
+		
+		return qnaBoardDao.qnaCommentDelete(qna_board_no);
 	}
 
 	

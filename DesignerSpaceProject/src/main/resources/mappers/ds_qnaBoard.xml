@@ -3,7 +3,6 @@
 
 <mapper namespace="com.project.qnaBoard">
 
-
 	<sql id="search">
 		<choose>
         	<when test="searchOption == 'titleAndContent'">
@@ -14,6 +13,26 @@
         	<otherwise>
         		WHERE (${searchOption} LIKE '%' || #{keyword} || '%')
         	</otherwise>
+        </choose>
+	</sql>
+	
+	<sql id="sort">
+		<choose>
+        	<when test="sortOption == 'qna_board_whole'">
+        		AND (QNA_BOARD_ANSWER_STATUS LIKE '%')
+        	</when>
+        	<when test="sortOption == 'qna_board_accept'">
+        		AND (QNA_BOARD_ANSWER_STATUS LIKE '%' || '접수중' || '%')
+        	</when>
+        	<when test="sortOption == 'qna_board_answer'">
+        		AND (QNA_BOARD_ANSWER_STATUS LIKE '%' || '답변중' || '%')
+        	</when>
+        	<when test="sortOption == 'qna_board_time_limit'">
+        		AND (QNA_BOARD_ANSWER_STATUS LIKE '%' || '기한만료' || '%')
+        	</when>
+        	<when test="sortOption == 'qna_board_answer_complete'">
+        		AND (QNA_BOARD_ANSWER_STATUS LIKE '%' || '답변완료' || '%')
+        	</when>
         </choose>
 	</sql>
 
@@ -79,6 +98,7 @@
           		  ORDER BY QB.QNA_BOARD_NO DESC) QNA 
      		 )QNAM     
 		WHERE QNAM.RNUM BETWEEN #{start} AND #{end}
+		<include refid="sort"></include>
 	</select>
 	
 	<select id="qnaBoardSelectDetail" parameterType="int"
@@ -94,7 +114,6 @@
 		INSERT INTO QNA_BOARD
 		VALUE(QNA_BOARD_NO,QNA_BOARD_MNO,QNA_BOARD_TITLE,QNA_BOARD_CONTENTS,QNA_BOARD_CRE_DATE)
 		VALUES(QNA_BOARD_QBNO_SEQ.NEXTVAL, #{qna_board_mno}, #{qna_board_title}, #{qna_board_contents}, SYSDATE)
-		
 	</insert>
 	
 	<update id="qnaBoardUpdateOne" parameterType="com.project.qnaBoard.model.QnaBoardDto">
@@ -105,7 +124,7 @@
 		WHERE QNA_BOARD_NO = #{qna_board_no}
 	</update>
 	
-	<delete id="qnaBoardDeleteOne" parameterType="java.lang.Integer">
+	<delete id="qnaBoardDeleteOne" parameterType="java.lang.Integer" >
 		DELETE FROM QNA_BOARD
 		WHERE QNA_BOARD_NO = #{qna_board_no}
 	</delete>
@@ -147,8 +166,8 @@
                          , PT.PROFILE_TABLE_MNO, PT.PROFILE_TABLE_NO
           		  FROM QNA_BOARD QB, QNA_COMMENT QC, MEMBER M, PROFILE_TABLE PT
           		  WHERE QB.QNA_BOARD_NO = QC.QNA_COMMENT_QBNO
-                  AND QC.QNA_COMMENT_MNO = M.MEMBER_NO
-                  AND M.MEMBER_NO = PT.PROFILE_TABLE_MNO
+                  AND QC.QNA_COMMENT_MNO = M.MEMBER_NO(+)
+                  AND M.MEMBER_NO = PT.PROFILE_TABLE_MNO(+)
                   AND QB.QNA_BOARD_NO = #{qna_board_no}
           		  ORDER BY QC.QNA_COMMENT_NO DESC) QNA 
      		 )QNAM     
@@ -189,4 +208,9 @@
     		QNA_COMMENT_MOD_DATE = SYSDATE
 		WHERE QNA_COMMENT_NO = #{qna_comment_no}
 	</update>
+	
+	<delete id="qnaCommentDelete" parameterType="int">
+		DELETE FROM QNA_COMMENT
+		WHERE QNA_COMMENT_QBNO = #{qna_board_no}
+	</delete>
 </mapper>

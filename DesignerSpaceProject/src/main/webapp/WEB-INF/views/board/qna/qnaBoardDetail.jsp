@@ -98,6 +98,7 @@
 		var qbnoObj = $('#qna_comment_qbno');
 		var keywordObj = $('#keyword');
 		var searchOptionObj = $('#searchOption');
+		var sortOptionObj = $('#sortOption');
 		var commentsObj = $('#comment_text');
 		
 		var url = '';
@@ -107,6 +108,7 @@
 		url += '&qna_comment_qbno=' + qbnoObj.val();
 		url += '&keyword=' + keywordObj.val();
 		url += '&searchOption=' + searchOptionObj.val();
+		url += '&sortOptionObj=' + sortOptionObj.val();
 		url += '&qna_comment_mno=' + mnoObj.val();
 		url += '&qna_comment_comments=' + commentsObj.val();
 		
@@ -126,13 +128,17 @@
 			var qbnoObj = $('#qna_comment_qbno');
 			var keywordObj = $('#keyword');
 			var searchOptionObj = $('#searchOption');
+			var sortOptionObj = $('#sortOption');
 			var commentsObj = '';
 			var qcnoObj = '';
 
 			qcnoObj = aTagObj.parent().parent().children('div').eq(1).children('input').eq(1);
 			
+			alert(qcnoObj.val());
+			
 		    commentsObj = aTagObj.parent().parent().children('div').eq(1).children('input').eq(0);
 			
+		    alert(commentsObj.val());
 			
 			var url = '';
 			
@@ -140,6 +146,7 @@
 		    url += 'qna_board_no=' + qbnoObj.val();
 		    url += '&keyword=' + keywordObj.val();
 		    url += '&searchOption=' + searchOptionObj.val();
+		    url += '&sortOptionObj=' + sortOptionObj.val();
 		    url += '&qna_comment_mno=' + mnoObj.val();
 		    url += '&qna_comment_no=' + qcnoObj.val();
 		    url += '&qna_comment_comments=' + commentsObj.val();
@@ -164,19 +171,12 @@
       
       	updaObj = $('#updateBtn');
       	
-//       	updaObj.val('수정완료');
-      	
-//       	var buttonObj = '';
-      	
-//       	buttonObj = aTagObj.parent().children('div').eq(0)
       	var confirmBtn = $('<input type="button" value="수정 완료" onclick="commentsUpdateFnc(this,event);">');
 		
 		updaObj.before(confirmBtn);
-      
 		
-//       	buttonObj.parent().append(confirmBtn);
-      	
-      	updaObj.remove();
+		updaObj.remove();
+      
    }
 	
 	function commentsUpdateFnc(obj, event) {
@@ -189,6 +189,7 @@
 		var qbnoObj = $('#qna_comment_qbno');
 		var keywordObj = $('#keyword');
 		var searchOptionObj = $('#searchOption');
+		var sortOptionObj = $('#sortOption');
 		var commentsObj = '';
 		var qcnoObj = '';
       
@@ -206,6 +207,7 @@
       	url += 'qna_board_no=' + qbnoObj.val();
       	url += '&keyword=' + keywordObj.val();
       	url += '&searchOption=' + searchOptionObj.val();
+      	url += '&sortOptionObj=' + sortOptionObj.val();
       	url += '&qna_comment_mno=' + mnoObj.val();
       	url += '&qna_comment_no=' + qcnoObj.val();
       	url += '&qna_comment_comments=' + commentsObj.val();
@@ -319,13 +321,13 @@
 			</div>
 			
 			<c:choose>
-				<c:when test="${memberDto.member_nick eq qnaBoardDto.member_nick}">
+				<c:when test="${memberDto.member_nick eq qnaBoardDto.member_nick || memberDto.member_grade eq '1'}">
 					
 					<div style="text-align: center; margin-top: -50px;">
 						<input type="button" value="답변완료" disabled="disabled" style="width: 150px; height: 150px;
 							border-radius: 50%; background-color: #D4D4D4; color: white;">
 					</div>
-				
+					
 					<div style="text-align: center; margin-top: 50px;">
 						<input type="submit" value="수정" id='updateButton'>
 						<input type="button" value="삭제" id='deleteButton'
@@ -339,23 +341,23 @@
 					</div>
 				</c:otherwise>
 			</c:choose>
-			
-			
 		</form>
-		
-		
 	</div>
 	
 	<div id='wrap'>
 		<div id='innerWrap'>
 			<div id='innerPage'>
-				<div style="text-align: center; margin-bottom: 80px;">
-					<img alt="프로필 이미지" src="<c:url value='/profileImg/${memberDto.profile_table_stored_name}'/>"
-						style="border-radius: 50%; width: 75px; height: 75px;">
-					<input type="text" value="" 
-						id='comment_text' style="width: 800px; height: 100px;">
-					<input type="button" value="등록" onclick="commentAddFnc();" 
-						style="width: 100px; height: 100px;">
+				<div style="text-align: center; margin-bottom: 50px;">
+					
+					<c:if test="${qnaBoardDto.qna_board_mno eq memberDto.member_no 
+										|| memberDto.member_grade eq '1'}">
+						<img alt="프로필 이미지" src="<c:url value='/profileImg/${memberDto.profile_table_stored_name}'/>"
+							style="border-radius: 50%; width: 75px; height: 75px; vertical-align: middle;">
+						<input type="text" value="" 
+							id='comment_text' style="width: 800px; height: 100px;">
+						<input type="button" value="등록" onclick="commentAddFnc();" 
+							style="width: 100px; height: 100px;">
+					</c:if>
 					<input type="hidden" id='qna_comment_mno'
 						name="qna_comment_mno" value="${memberDto.member_no}">
 					<input type="hidden" id='qna_comment_qbno' 
@@ -368,7 +370,7 @@
 					</c:when>
 					<c:otherwise>
 						<c:forEach var="qnaBoardComment" items="${qnaBoardCommentList}">
-							<div style="margin-left: 154px; width: 950px; height: 116px;">
+							<div style="margin-left: 154px; width: 950px; height: 116px; clear: both;">
 								<img alt="프로필 이미지" src="<c:url value='/profileImg
 									/${memberDto.profile_table_stored_name}'/>"
 									style="border-radius: 50%; width: 75px; height: 75px; float: left;">
@@ -378,10 +380,18 @@
 									</span>
 									<fmt:formatDate value="${qnaBoardComment.qna_comment_cre_date}" 
 											pattern="yyyy.MM.dd hh:mm"/>
-									<input type="button" value="수정" id="updateBtn" style="width: 60px; height: 20px;"
-										onclick="commentUpdateOneFnc(${qnaBoardComment.qna_comment_no})">
-									<input type="button" value="삭제" id="deleteBtn" style="width: 60px; height: 20px;" 
-										onclick="commentsDeleteFnc(this, event);">
+									<c:if test="${qnaBoardComment.qna_comment_mno eq memberDto.member_no}">
+										<input type="button" value="수정" id="updateBtn"
+											style="width: 60px; height: 20px;"
+											onclick="commentUpdateOneFnc(${qnaBoardComment.qna_comment_no})">
+									</c:if>
+									<c:if test="${qnaBoardComment.qna_comment_mno eq memberDto.member_no 
+										|| memberDto.member_grade eq '1'}">
+										<input type="button" value="삭제" id="deleteBtn" 
+											style="width: 60px; height: 20px;" 
+											onclick="commentsDeleteFnc(this, event);">
+									</c:if>
+									
 								</div>
 								<div style="margin-top: 10px;">
 									<span id="comment_span${qnaBoardComment.qna_comment_no}"
@@ -390,11 +400,30 @@
 										name="qna_comment_comments" id="qna_comment_comments">
 									<input type="hidden" id='qna_comment_no'
 										name="qna_comment_no" value="${qnaBoardComment.qna_comment_no}">
+<!-- 									<input type="hidden" id='qna_comment_qno' -->
+<%-- 										name="qna_comment_no" value="${qnaBoardDto.qna_comment_no}"> --%>
 								</div>
+								
 							</div>
 						</c:forEach>
+						
+						<jsp:include page="/WEB-INF/views/common/commentpaging.jsp">
+							<jsp:param value="${freeBoardCommentPaging}" name="freeBoardCommentPaging"/>
+						</jsp:include>
+						
+						<form action="./listDetail.do#navList" id='pagingForm' method="get">
+							<input type="hidden" id='curPage' name='curPage' 
+								value="${freeBoardCommentPaging.curPage}">
+							<input type="hidden" id='qna_board_no' name="qna_board_no" 
+								value="${qnaBoardDto.qna_board_no}">
+							<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
+							<input type="hidden" id='keyword' name="keyword" value="${keyword}">
+							<input type="hidden" id="comments" name="comments">
+						</form>
+						
 					</c:otherwise>
 				</c:choose>
+				
 			</div>
 		</div>
 	</div>
