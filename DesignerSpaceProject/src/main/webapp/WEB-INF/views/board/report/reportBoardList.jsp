@@ -168,7 +168,6 @@
 
 		location.href = url;
 	}
-<<<<<<< HEAD
 	
 	$(document).ready(function() {
 		//체크박스 전체선택
@@ -203,8 +202,7 @@
 	 		return false;
 	 	}
 	}
-=======
->>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
+	
 </script>
 
 </head>

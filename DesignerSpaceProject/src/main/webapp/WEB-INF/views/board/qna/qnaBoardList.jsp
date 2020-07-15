@@ -93,7 +93,6 @@
        height: 50px;
        vertical-align: middle;
     }
-<<<<<<< HEAD
     
     #deleteBtn{
 		color: red;
@@ -101,8 +100,6 @@
 		margin-left: 540px;
 		vertical-align: bottom;
 	}
-=======
->>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 	
 </style>
 
@@ -263,19 +260,7 @@
 					</c:choose>
 				</select>
 				
-<<<<<<< HEAD
-=======
-				<input type="text" id='keyword' name="keyword" value="${searchMap.keyword}">
-				<input type="submit" value="검색" id='searchButton'>
-				<c:if test="${memberDto.member_grade == 0}">
-					<input type="button" value="작성" id='writeButton' onclick="writeButtonFnc();">
-				</c:if>
-				<c:if test="${memberDto.member_grade == 1}">
-					<input type="button" value="작성" disabled="disabled" id='writeButton' onclick="writeButtonFnc();">
-				</c:if>
->>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 				
-<<<<<<< HEAD
 				<input type="text" id='keyword' name="keyword" value="${searchMap.keyword}">
 <%-- 				<input type="submit" value="<img src="<%=request.getContextPath()%>/resources/img/iconSearch.png">" --%>
 <!-- 					 id='searchButton'> -->
@@ -290,8 +275,6 @@
 					<input type="button" value="작성" disabled="disabled" id='writeButton' onclick="writeButtonFnc();">
 				</c:if>
 				
-=======
->>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 				<select id='selectProcessStatus' name="sortOption" onchange="sortOptionChangeFnc(this);">
 					<c:choose>
 						<c:when test="${searchMap.sortOption eq 'qna_board_whole'}">
@@ -334,7 +317,6 @@
 			</form>
 			
 			<div id="innerPage">
-<<<<<<< HEAD
 				<c:if test="${memberDto.member_grade == 1}">
 					<form action="./managementDeleteCtr.do" id="deleteForm" method="get">
 						<table id='projectListTable'>
@@ -346,26 +328,7 @@
 								<th class="cell">작성일</th>
 								<th class="cell">답변일</th>
 								<th class="cell">처리상태</th>
-=======
-				<table id='projectListTable'>
-					<tr id='lineTitle' style="border: 1px solid #7D7471;">
-						<th class="cell">글번호</th>
-						<th class="cell">제목</th>
-						<th class="cell">작성자</th>
-						<th class="cell">작성일</th>
-						<th class="cell">답변일</th>
-						<th class="cell">처리상태</th>
-					</tr>
-					
-					<c:choose>
-						<c:when test="${empty qnaBoardList}">
-							<tr>
-								<td colspan="6" style="text-align: center;">
-									등록된 게시글이 없습니다.
-								</td>
->>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 							</tr>
-<<<<<<< HEAD
 							
 							<c:choose>
 								<c:when test="${empty qnaBoardList}">
@@ -506,62 +469,6 @@
 						</c:choose>
 					</table>
 				</c:if>
-=======
-						</c:when>
-						
-						<c:otherwise>
-							<c:forEach var="QnaBoardDto" items="${qnaBoardList}">
-								<tr>
-									<td class="cell2">${QnaBoardDto.qna_board_no}</td>
-									<td class="cell2">
-										<a href='#' onclick="listDetailPageFnc(this, event);">
-											${QnaBoardDto.qna_board_title}
-										</a>
-									</td>
-									<td class="cell2">
-										${QnaBoardDto.member_nick}
-									</td>
-									<td class="cell2">
-										<fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
-											pattern="yyyy.MM.dd hh:mm"/>
-									</td>
-									<td class="cell2">
-										<c:choose>
-											<c:when test="${empty QnaBoardDto.qna_board_answer_date}">
-												-
-											</c:when>
-											<c:otherwise>
-												<fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
-													pattern="yyyy.MM.dd hh:mm"/>
-											</c:otherwise>
-										</c:choose>
-									</td>
-									<c:if test="${QnaBoardDto.qna_board_answer_status eq '접수중'}">
-										<td class="cell2" style="color: #E14E4E;">
-											${QnaBoardDto.qna_board_answer_status}
-										</td>
-									</c:if>
-									<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변중'}">
-										<td class="cell2" style="color: #2E89D4;">
-											${QnaBoardDto.qna_board_answer_status}
-										</td>
-									</c:if>
-									<c:if test="${QnaBoardDto.qna_board_answer_status eq '기한만료'}">
-										<td class="cell2" style="color: #E8CA35;">
-											${QnaBoardDto.qna_board_answer_status}
-										</td>
-									</c:if>
-									<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변완료'}">
-										<td class="cell2" style="color: #BBBBBB;">
-											${QnaBoardDto.qna_board_answer_status}
-										</td>
-									</c:if>
-								</tr>
-							</c:forEach>
-						</c:otherwise>
-					</c:choose>
-				</table>
->>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 			</div>
 			
 		</div>
