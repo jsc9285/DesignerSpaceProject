@@ -35,4 +35,6 @@ public interface ProjectBoardService {
 	public int projectCommentDeleteOne(int no);
 	
 	public MemberDto profileSelectOne(int no);
+	
+	public Map<String, Object> selectInfoList();
 }

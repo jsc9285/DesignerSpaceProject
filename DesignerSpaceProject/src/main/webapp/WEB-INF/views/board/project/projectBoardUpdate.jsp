@@ -219,6 +219,7 @@
 			<div id="innerPage">
 				<form action="./updateCtr.do" method="post"
 					enctype="multipart/form-data" onsubmit="return validateFnc();">
+					<input type="hidden" name="chkPage" value="${chkPage}">
 					<div id="projectPicArea">
 					<c:forEach var="projectBoardFileDto" items="${projectBoardFileList}">
 						<a>
@@ -256,7 +257,7 @@
 						</div>
 						
 						<input type="submit" value="수정완료" onclick="fileNamingFnc();">
-						<input type="button" value="취소" onclick="location.href='./list.do'">
+						<input type="button" value="취소" onclick="location.href='./detail.do?project_board_no=${projectBoardDto.project_board_no}'">
 					</div>
 				</form>
 			</div>
