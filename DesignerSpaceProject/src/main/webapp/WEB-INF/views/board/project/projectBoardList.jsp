@@ -126,6 +126,13 @@
 		.projectList .thumbnailPic .hoverTitle{
 			opacity: 1.0;
 		}
+		.profileNic a{
+			text-decoration: none;
+			color: #000;
+		}
+		.profileNic a:hover{
+			text-decoration: underline;
+		}
 	</style>
 	
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
@@ -253,7 +260,7 @@
 						</div>						
 						<div style="float: left;">
 							<div class="profilePic" style="background-image: url(<c:url value='/profileImg/${projectBoardDto.PROFILE_TABLE_STORED_NAME}'/>);"></div>						
-							<span class="profileNic">${projectBoardDto.member_nick}</span>
+							<span class="profileNic"><a href="../member/myBoard.do?mno=${projectBoardDto.project_board_mno}">${projectBoardDto.member_nick}</a></span>
 						</div>												
 						<div style="float: right; padding-top: 10px;">
 							<img src="<%=request.getContextPath()%>/resources/img/iconLike.png">

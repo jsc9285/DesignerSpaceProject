@@ -19,7 +19,7 @@
 			width: 292px;
 			height: 30px;
 			margin-top : 10px;
-			margin-bottom: 20px;
+			margin-bottom: 30px;
 			border-radius: 5px;
 			border: 1px solid #60524E
 		}
@@ -37,9 +37,7 @@
 		#cancel{
 			width: 300px;
 			height: 35px;
-			color: #FFFFFF;
 			margin-bottom: 10px;
-			background-color: #60524E;
 			font-weight: bold;
 			border: 0px;
 			border-radius: 5px;
