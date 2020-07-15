@@ -103,8 +103,8 @@
 		
 		$('#title').keyup(function(e) {
 			var title = $(this).val();
-			if(title.length > 20){
-				alert('제목은 최대 20자까지입니당');
+			if(title.length > 30){
+				alert('제목은 최대 30자까지입니당');
 				$(this).val(title.substring(0, 20));
 			}
 		})

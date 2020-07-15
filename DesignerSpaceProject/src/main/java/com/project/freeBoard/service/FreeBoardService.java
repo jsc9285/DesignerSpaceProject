@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.project.freeBoard.model.FreeBoardDto;
+import com.project.qnaBoard.model.QnaBoardDto;
 import com.project.reportBoard.model.ReportBoardDto;
 
 public interface FreeBoardService {
@@ -61,6 +62,11 @@ public interface FreeBoardService {
 	public int reportBoardSelectTotalCount(String searchOption, String keyword, String sortOption, int mno);
 
 	public List<ReportBoardDto> reportBoardSelectList(String searchOption, String keyword, String sortOption, int start,
+			int end, int mno);
+
+	public int qnaBoardSelectTotalCount(String searchOption, String keyword, String sortOption, int mno);
+
+	public List<QnaBoardDto> qnaBoardSelectList(String searchOption, String keyword, String sortOption, int start,
 			int end, int mno);
 
 	

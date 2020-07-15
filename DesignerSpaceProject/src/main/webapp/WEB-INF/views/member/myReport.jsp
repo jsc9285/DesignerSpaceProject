@@ -125,13 +125,6 @@ function sortOptionChangeFnc(e) {
 	pagingForm.submit();						
 }
 
-function reportWriteFnc(){
-	
-	var url = '';
-	
-	location.href = url;
-}
-
 </script>
 </head>
 
@@ -237,9 +230,9 @@ function reportWriteFnc(){
 							<tr>
 								<td class="cell2">${reportBoardDto.report_board_no}</td>
 								<td class="cell2">
-<!-- 									<a href='#' onclick="listDetailPageFnc(this, event);"> -->
+									<a href="#">
 										${reportBoardDto.report_board_title}
-<!-- 									</a> -->
+									</a>
 								</td>
 								<td class="cell2">
 									${reportBoardDto.member_nick}
@@ -288,9 +281,9 @@ function reportWriteFnc(){
 					<input type="hidden" id='curPage' name='curPage' 
 						value="${pagingMap.paging.curPage}">
 					<input type="hidden" id='qna_board_no' name="qna_board_no" value="${reportBoardDto.report_board_no}">
-					<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
-					<input type="hidden" id='keyword' name="keyword" value="${keyword}">
-					<input type="hidden" id='sortOption' name='sortOption' value="${sortOption}">	
+					<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
+					<input type="hidden" id='keyword' name="keyword" value="${searchMap.keyword}">
+					<input type="hidden" id='sortOption' name='sortOption' value="${searchMap.sortOption}">	
 				</form>
 			
 		</div>

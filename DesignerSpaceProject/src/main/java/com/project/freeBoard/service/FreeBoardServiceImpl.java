@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.freeBoard.dao.FreeBoardDao;
 import com.project.freeBoard.model.FreeBoardDto;
+import com.project.qnaBoard.model.QnaBoardDto;
 import com.project.reportBoard.model.ReportBoardDto;
 import com.project.util.FileUtils;
 
@@ -218,6 +219,22 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 				freeBoardDao.reportBoardSelectList(searchOption, keyword, sortOption, start, end, mno);
 		
 		return reportBoardList;
+	}
+
+	@Override
+	public int qnaBoardSelectTotalCount(String searchOption, String keyword, String sortOption, int mno) {
+		// TODO Auto-generated method stub
+		return freeBoardDao.qnaBoardSelectTotalCount(searchOption, keyword,sortOption, mno);
+	}
+
+	@Override
+	public List<QnaBoardDto> qnaBoardSelectList(String searchOption, String keyword, String sortOption, int start,
+			int end, int mno) {
+		// TODO Auto-generated method stub
+		List<QnaBoardDto> qnaBoardList = 
+				freeBoardDao.qnaBoardSelectList(searchOption, keyword, sortOption, start, end, mno);
+		
+		return qnaBoardList;
 	}
 
 	

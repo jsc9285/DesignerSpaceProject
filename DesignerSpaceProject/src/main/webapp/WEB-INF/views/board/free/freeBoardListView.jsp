@@ -82,10 +82,13 @@
 	#projectListTable{
 			width: 1350px;
 	}
-	#projectListTable tr{
-		text-align: center;
-		border: 3px solid beige;
-	}
+	 #projectListTable tr{
+       text-align: center;
+       border: 1px solid #D8D8D8;
+    }
+
+
+ 
 	#projectListTable th{
 		background-color: #7D7471;
 		color: #fff;
@@ -97,11 +100,7 @@
 	#projectListTable td{			
 		height: 50px;
 		vertical-align: middle;
-	}
-	#lineTitle{
-		border-bottom: 1px solid black;
-		height: 77px;
-	}		
+	}	
 	#admin{
 		font-weight: bold;
 		color: red;
@@ -206,9 +205,17 @@ function freeBoardListOnePageFnc(obj, event){
 		
 		for (var i = 0; i < $('.freeBoardTitle').length; i++) {
 			var freeBoardTitleStr = $('.freeBoardTitle').eq(i).text();
+<<<<<<< HEAD
+			if(freeBoardTitleStr.length >= 30){
+=======
 			if(freeBoardTitleStr.length >= 10){
+>>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 				
+<<<<<<< HEAD
+				freeBoardTitleStr = freeBoardTitleStr.substring(0,30) + "...";	
+=======
 				freeBoardTitleStr = freeBoardTitleStr.substring(0,10) + "...";	
+>>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 			}
 			$('.freeBoardTitle').eq(i).text(freeBoardTitleStr);
 		}
@@ -228,6 +235,10 @@ function freeBoardListOnePageFnc(obj, event){
 			<div id='boardTitle'>자유게시판</div>
 			<div>
 				<a href="./myList.do">내신고글</a>
+<<<<<<< HEAD
+				<a href="./myQnaList.do">내QNA글</a>
+=======
+>>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 				<form action="./freeBoardAdd.do" method="post">
 					<input type="submit" value="작성" id='writeButton'>
 					<input type="hidden" id="mno" name="mno" value="${memberDto.member_no}">
@@ -238,19 +249,19 @@ function freeBoardListOnePageFnc(obj, event){
 				<select id='searchOption' name='searchOption'>
 				<c:choose>
 					<c:when test="${searchMap.searchOption eq 'all'}">
-						<option value="all" selected="selected">제목+작성자</option>
+						<option value="all" selected="selected">제목+내용</option>
 						<option value="free_board_title">제목</option>
 						<option value="member_nick">작성자</option>
 					</c:when>
 					
 					<c:when test="${searchMap.searchOption eq 'free_board_title'}">
-						<option value="all">제목+작성자</option>
+						<option value="all">제목+내용</option>
 						<option value="free_board_title" selected="selected">제목</option>
 						<option value="member_nick">작성자</option>
 					</c:when>
 		
 					<c:when test="${searchMap.searchOption eq 'member_nick'}">
-						<option value="all">제목+작성자</option>
+						<option value="all">제목+내용</option>
 						<option value="free_board_title">제목</option>
 						<option value="member_nick" selected="selected">작성자</option>
 					</c:when>
@@ -266,7 +277,7 @@ function freeBoardListOnePageFnc(obj, event){
 			
 			<div id="innerPage">
 			<table id="projectListTable">
-				<tr id='lineTitle'>
+				<tr id='lineTitle' style="border: 1px solid #7D7471;" >
 					<th class="cell" onclick="sortFnc(this);" id="free_board_no">글번호</th>
 					<th class="cell" onclick="sortFnc(this);" id="free_board_title">제목</th>
 					<th class="cell" onclick="sortFnc(this);" id="member_nick">작성자</th>
