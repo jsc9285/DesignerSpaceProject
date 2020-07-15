@@ -379,11 +379,13 @@ public class memberController {
 			return "/member/memberInfoAdmin";
 		}
 		
+		//회원탈퇴
 		@RequestMapping(value = "/member/remove.do", method = RequestMethod.GET)
 		public String removeOne(int[] member_chk, 
-				@RequestParam(defaultValue = "0") int member_no, HttpSession session){
+				@RequestParam(defaultValue = "0") int member_no,HttpSession session){
 			
-			log.info("내글목록보기"+member_no);
+			log.info("회원삭제"+member_no);
+			
 			
 			if(member_no==0) {
 				
@@ -398,9 +400,8 @@ public class memberController {
 			}
 			
 			
+			return "/member/alert/deleteSuccess";
 			
-			
-			return "redirect:../admin/listAdmin.do";
 		}
 		
 		

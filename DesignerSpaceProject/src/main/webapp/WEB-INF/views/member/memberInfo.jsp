@@ -12,28 +12,48 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 
 	<style type="text/css">
-		body {
+		#innerPage {
 			font-size: 20px;
 			font-weight: bold;
 			color: #60524E;
 		}
-		input {
+		.input {
 			width: 292px;
 			height: 30px;
 			margin-top : 10px;
-			margin-bottom: 20px;
+			margin-bottom: 30px;
 			border-radius: 5px;
 			border: 1px solid #60524E
 		}
-		button {
-			width: 300px;
-			height: 35px;
+		#button {
+			width: 300px; 
+	 		height: 35px; 
 			color: #FFFFFF;
 			margin-bottom: 10px;
 			background-color: #60524E;
 			font-weight: bold;
+			border: none;
+			border-radius: 5px;
+		}
+		#cancel{
+			width: 300px;
+			height: 35px;
+			color: #000;
+			margin-bottom: 10px;
+			background-color: #fff;
+			font-weight: bold;
 			border: 1px solid #60524E;
 			border-radius: 5px;
+			cursor: pointer;
+			
+		}
+		
+		#button:hover{
+			background-color: #4AD674;
+		}
+		#cancel:hover{
+			color: #fff;
+			background-color: #4AD674;
 		}
 		.input_span{
 			color: #60524E;
@@ -72,6 +92,8 @@
 		function backMoveFnc() {
 			location.href='<%=request.getContextPath()%>/projectBoard/list.do';
 		}
+		
+		
 	</script>
 	
 	
@@ -89,26 +111,22 @@
 				</div> 
 			
 				<div id="join_div">
-					<input type="hidden" value="${memberDto.member_no}" name='member_no'>
-					<br>
-					닉네임
-					<br>
-					<input type="text" value="${memberDto.member_nick}" name='member_nick'>
-					<br>
-					이메일
-					<br>
-					<input type="text" value="${memberDto.member_email}" name='member_email'>
-					<br>
-					성명
-					<br>
-					<input type="text" value="${memberDto.member_name}" name='member_name'>
-					<br>
-					휴대번호
-					<br>
-					<input type="text" value="${memberDto.member_phone}" name='member_phone'>
-					<br>
+					<input type="hidden" class="input" value="${memberDto.member_no}" 
+						name='member_no' readonly="readonly">
+					<span>닉네임</span>
 					
-					프로필 이미지<br>
+					<input type="text" class="input" value="${memberDto.member_nick}" 
+						name='member_nick' readonly="readonly">
+					<span>이메일</span>
+					<input type="text" class="input" value="${memberDto.member_email}" 
+						name='member_email' readonly="readonly">
+					<span>성명</span>
+					<input type="text" class="input" value="${memberDto.member_name}" 
+						name='member_name' readonly="readonly">
+					<span>휴대번호</span>
+					<input type="text" class="input" value="${memberDto.member_phone}" 
+						name='member_phone' readonly="readonly">
+					<span>프로필 이미지</span>
 					<div id="img_div">
 						<c:choose>
 							<c:when test="${empty memberDto.profile_table_stored_name}">
@@ -121,19 +139,15 @@
 						</c:choose>
 					</div>
 					
-					자기소개
-					<br>
+					<span>자기소개</span>
 					<div style="overflow: auto; width: 298px; height: 150px; border: 1px solid black; 
 						background-color: white; margin-top: 10px; margin-bottom: 40px; font-size: 16px;">
 						${memberDto.member_comments}
 					</div>
 					
 					
-					<button onclick="location.href='modInfo.do'">수정</button>
-					<button style="background-color: #FFFFFF;
-					color: #60524E;">탈퇴</button>
-					<button style="background-color: #FFFFFF;
-					color: #60524E;" onclick="backMoveFnc()">뒤로가기</button>
+					<button id="button" onclick="location.href='modInfo.do'">수정</button>
+					<button id="cancel" onclick="backMoveFnc();">뒤로가기</button>
 				</div>	
 				
 			</div>

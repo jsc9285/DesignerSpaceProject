@@ -210,7 +210,7 @@
 	<c:choose>
 		<c:when test="${empty memberList}">
 			<tr>
-				<td class="cell2" colspan="6" style="text-align: center;">
+				<td class="cell2" colspan="7" style="text-align: center;">
 					일치하는 회원이 없습니다
 				</td>
 			</tr>

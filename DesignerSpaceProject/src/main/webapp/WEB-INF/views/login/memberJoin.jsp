@@ -41,9 +41,7 @@
 	#cancel{
 		width: 300px;
 		height: 35px;
-		color: #FFFFFF;
 		margin-bottom: 10px;
-		background-color: #60524E;
 		font-weight: bold;
 		border: none;
 		border-radius: 5px;
@@ -144,7 +142,7 @@
 	}
 	.overlap_div{
 		font-size: 10px;
-		margin-bottom: 20px;
+		margin-bottom: 30px;
 	}
 	
 	input[type=checkbox]{
@@ -518,7 +516,7 @@
 						</c:if>
 					</div>
 					
-					<div class="file_input" style="margin: 20px 0px;">
+					<div class="file_input" style="margin: 20px 0px 30px 0px;">
 					  <input type = "text" readonly="readonly" id="file_route" placeholder="기본프로필.jpg"
 					  	style="border-radius: 5px; height: 29px;">
 						
@@ -542,7 +540,7 @@
 						border-radius: 5px; font-size: 12px;">
 						
 						
-						<h2 class="MAT0">제 1 장 총칙</h2><br>
+						<h2>제 1 장 총칙</h2><br>
 						<h3> 제 1 조 (목적)</h3><br>
 						<ol>
 							<li>1. 본 약관은 기업마당 사이트가 제공하는 모든 서비스(이하 "서비스")의 이용조건 및 절차, 이용자와 기업마당 사이트의 권리, 의무, 책임사항과 기타 필요한 사항을 규정함을 목적으로 합니다.</li>
