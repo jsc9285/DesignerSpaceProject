@@ -18,7 +18,8 @@
 			color: #60524E;
 		}
 		.input {
-			width: 292px;
+			padding : 0px 10px;
+			width: 277px;
 			height: 30px;
 			margin-top : 10px;
 			margin-bottom: 30px;
@@ -54,6 +55,7 @@
 		#cancel:hover{
 			color: #fff;
 			background-color: #4AD674;
+			border: none;
 		}
 		.input_span{
 			color: #60524E;
@@ -100,7 +102,7 @@
 			if(pwdOne.value==pwdTwo.value){
 				location.href='modInfoDetail.do';
 			}else {
-				alert('비밀번호가 틀렸습니다');
+				alert('비밀번호를 다시 입력해주세요');
 				pwdOne.focus();
 			}
 			

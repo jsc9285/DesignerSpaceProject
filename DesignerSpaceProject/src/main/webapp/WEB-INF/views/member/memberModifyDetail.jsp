@@ -20,7 +20,8 @@
 		color: #60524E;
 	}
 	.input {
-		width: 292px;
+		padding : 0px 10px;
+		width: 277px;
 		height: 30px;
 		margin-top : 10px;
 		border-radius: 5px;
@@ -66,6 +67,7 @@
 	#cancel:hover{
 		color: #fff;
 		background-color: #4AD674;
+		border: none;
 	}
 	#exit:hover{
 		color: #fff;
@@ -82,6 +84,7 @@
 		height: 35px;
 		border-radius: 5px;
 		margin-top: 10px;
+		padding: 5px;
 	}
 	#join_div{
 		width : 300px;
@@ -165,11 +168,12 @@
 	}
 	
 	#textarea {
-	width: 292px;
-	resize: none;
-	border-radius: 5px;
-	margin-top: 10px;
-	margin-bottom: 20px;
+		padding: 10px;
+		width: 277px;
+		resize: none;
+		border-radius: 5px;
+		margin-top: 10px;
+		margin-bottom: 40px;
 	}
 
 </style>
@@ -452,7 +456,7 @@ $(function(){
 				
 				<div id="join_div">
 					<form action="modInfoDetailCtr.do" method="post" enctype="multipart/form-data" onsubmit="return modiOrderFnc();">
-						<input type="text" id="member_no" name="member_no" value="${memberDto.member_no}">
+						<input type="hidden" id="member_no" name="member_no" value="${memberDto.member_no}">
 						
 						<span>성명</span> 
 						<input type="text" class="input" name="member_name" style="background-color: #EAEAEA" 
@@ -462,7 +466,7 @@ $(function(){
 						<span>닉네임</span> 
 						<div>
 							<input type="text" class="input" id="member_nick" name="member_nick" maxlength="10"
-								value="${memberDto.member_nick}" style="width: 200px;">
+								value="${memberDto.member_nick}" style="width: 185px;">
 							<input type="button" id="check_nick" class="overlap" value="중복확인">
 						</div>
 						<div id="nick_div" class="overlap_div"></div>
@@ -533,7 +537,8 @@ $(function(){
 						
 						<div class="file_input" style="margin: 20px 0px 30px 0px;">
 						  <input type = "text" readonly="readonly" id="file_route" placeholder="기본프로필 이미지.jpg" 
-						  	value="${memberDto.profile_table_original_name}" style="border-radius: 5px; height: 29px;">
+						  	value="${memberDto.profile_table_original_name}" style="
+						  	width:110px; border-radius: 5px; height: 29px; padding: 0px 5px;">
 							
 							<label>
 								첨부파일
@@ -546,13 +551,13 @@ $(function(){
 						<input type="hidden" id="chang_flag" name="change" value="N">
 						
 						<span>소개</span>
-						<textarea id="textarea" rows="8" cols="38"  name="member_comments" maxlength="100">
-						${memberDto.member_comments}</textarea>
+						<textarea id="textarea" rows="8" cols="38" name="member_comments" 
+						maxlength="100">${memberDto.member_comments}</textarea>
 						
 						<button id="button">확인</button>
 					</form>
-					<button type id="exit" onclick="exitMemberFnc();">탈퇴</button>
-					<button id="cancel">취소</button>
+					<button id="exit" onclick="exitMemberFnc();">탈퇴</button>
+					<button id="cancel" onclick="location.href='info.do;'">취소</button>
 				</div>
 			</div>
 		</div>

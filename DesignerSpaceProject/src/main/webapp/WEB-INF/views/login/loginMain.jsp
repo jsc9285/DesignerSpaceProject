@@ -13,7 +13,8 @@
 	
 	<style type="text/css">
 		.input {
-			width: 292px;
+			padding : 0px 10px;
+			width: 276px;
 			height: 30px;
 			margin-bottom: 10px;
 			border-radius: 5px;

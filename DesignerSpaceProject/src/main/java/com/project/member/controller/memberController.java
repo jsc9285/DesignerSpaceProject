@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.project.freeBoard.service.FreeBoardService;
 import com.project.member.model.MemberBoardDto;
 import com.project.member.model.MemberDto;
 import com.project.member.service.MemberService;
 import com.project.projectBoard.model.ProjectBoardDto;
 import com.project.projectBoard.service.ProjectBoardService;
+import com.project.qnaBoard.model.QnaBoardDto;
+import com.project.reportBoard.model.ReportBoardDto;
 import com.project.util.CommentPaging;
 import com.project.util.Paging;
 
@@ -40,6 +43,9 @@ public class memberController {
 	
 	@Autowired
 	private ProjectBoardService projectBoardService;
+	
+	@Autowired
+	private FreeBoardService freeBoardService;
 	
 	@RequestMapping(value = "/login.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public String mainLogin(@RequestParam(defaultValue = "")String member_email, Model model) {
@@ -271,22 +277,135 @@ public class memberController {
 		   }
 		
 		@RequestMapping(value = "/member/myReport.do", method = RequestMethod.GET)
-		public String myNotify(MemberDto memberDto, HttpSession session, Model model){
+		public String myReportBoardList(@RequestParam(defaultValue = "1") int curPage
+								 , @RequestParam(defaultValue = "0") int report_board_no
+								 , @RequestParam(defaultValue = "titleAndContent") String searchOption
+								 , @RequestParam(defaultValue = "report_board_whole") String sortOption
+								 , @RequestParam(defaultValue = "") String keyword
+								 , int mno
+								 , HttpSession session
+								 , Model model) {
+			log.info("Welcome reportBoardList! " + curPage + " : ????"
+					+ searchOption + " : " + keyword);
 			
-			log.info("내 신고글 보기"+memberDto);
+			if("writer".equals(searchOption)) {
+				searchOption = "member_nick";
+			}
 			
+			if("title".equals(searchOption)) {
+				searchOption = "report_board_title";
+			}
 			
+			if("content".equals(searchOption)) {
+				searchOption = "report_board_contents";
+			}
 			
+			int totalCount = 
+					freeBoardService.reportBoardSelectTotalCount(searchOption, keyword, sortOption, mno);
 			
-			return "/member/myReport";
+			Paging reportBoardPaging = new Paging(totalCount, curPage);
+			int start = reportBoardPaging.getPageBegin();
+			int end = reportBoardPaging.getPageEnd();
+					
+			List<ReportBoardDto> reportBoardList = freeBoardService.reportBoardSelectList(
+					searchOption, keyword, sortOption, start, end, mno);
+			
+//			 화면의 form의 이름을 맞추기 위한 작업
+			if("member_nick".equals(searchOption)) {
+				searchOption = "writer";
+			}
+			
+			if("report_board_title".equals(searchOption)) {
+				searchOption = "title";
+			}
+			
+			if("report_board_contents".equals(searchOption)) {
+				searchOption = "content";
+			}
+			
+			// 검색
+			HashMap<String, Object> searchMap 
+				= new HashMap<String, Object>();
+			searchMap.put("searchOption", searchOption);
+			searchMap.put("keyword", keyword);
+			searchMap.put("sortOption", sortOption);
+			
+			// 페이징
+			Map<String, Object> pagingMap = new HashMap<>();
+			pagingMap.put("totalCount", totalCount);
+			pagingMap.put("paging", reportBoardPaging);
+
+			model.addAttribute("reportBoardList", reportBoardList);
+			model.addAttribute("pagingMap", pagingMap);
+			model.addAttribute("searchMap", searchMap);
+			
+			return "member/myReport";
 		}
 		
+		
 		@RequestMapping(value = "/member/myQna.do", method = RequestMethod.GET)
-		public String myQna(MemberDto memberDto, HttpSession session, Model model){
+		public String myQnaList(@RequestParam(defaultValue = "1") int curPage
+								 , @RequestParam(defaultValue = "0") int qna_board_no
+								 , @RequestParam(defaultValue = "titleAndContent") String searchOption
+								 , @RequestParam(defaultValue = "qna_board_whole") String sortOption
+								 , @RequestParam(defaultValue = "") String keyword
+								 , int mno
+								 , HttpSession session, Model model) {
+			log.info("Welcome qnaBoardList! " + curPage + " : ????"
+					+ searchOption + " : " + keyword);
 			
-			log.info("내 QNA 보기"+memberDto);
+			if("writer".equals(searchOption)) {
+				searchOption = "member_nick";
+			}
 			
-			return "/member/myQna";
+			if("title".equals(searchOption)) {
+				searchOption = "qna_board_title";
+			}
+			
+			if("content".equals(searchOption)) {
+				searchOption = "qna_board_contents";
+			}
+			
+			int totalCount = 
+					freeBoardService.qnaBoardSelectTotalCount(searchOption, keyword, sortOption, mno);
+			
+			Paging qnaBoardPaging = new Paging(totalCount, curPage);
+			int start = qnaBoardPaging.getPageBegin();
+			int end = qnaBoardPaging.getPageEnd();
+			System.out.println("총 카운트 : "+totalCount);		
+			List<QnaBoardDto> qnaBoardList = freeBoardService.qnaBoardSelectList(
+					searchOption, keyword, sortOption, start, end, mno);
+//			 화면의 form의 이름을 맞추기 위한 작업
+
+			if("member_nick".equals(searchOption)) {
+				searchOption = "writer";
+			}
+			
+			if("qna_board_title".equals(searchOption)) {
+				searchOption = "title";
+			}
+			
+			if("qna_board_contents".equals(searchOption)) {
+				searchOption = "content";
+			}
+			
+			// 검색
+			HashMap<String, Object> searchMap 
+				= new HashMap<String, Object>();
+			searchMap.put("searchOption", searchOption);
+			searchMap.put("keyword", keyword);
+			searchMap.put("sortOption", sortOption);
+			
+			// 페이징
+			Map<String, Object> pagingMap = new HashMap<>();
+			pagingMap.put("totalCount", totalCount);
+			pagingMap.put("paging", qnaBoardPaging);
+
+			model.addAttribute("qnaBoardList", qnaBoardList);
+			model.addAttribute("pagingMap", pagingMap);
+			model.addAttribute("searchMap", searchMap);
+			
+			return "member/myQna";
 		}
 		
 		@RequestMapping(value = "/admin/listAdmin.do", method = {RequestMethod.GET, RequestMethod.POST})
@@ -399,7 +518,7 @@ public class memberController {
 				memberService.memberRemove(member_no);
 			}
 			
-			
+			session.invalidate();
 			return "/member/alert/deleteSuccess";
 			
 		}

@@ -16,7 +16,8 @@
 			color: #60524E;
 		}
 		.input {
-			width: 292px;
+			padding : 0px 10px;
+			width: 276px;
 			height: 30px;
 			margin-top : 10px;
 			margin-bottom: 30px;
@@ -39,7 +40,7 @@
 			height: 35px;
 			margin-bottom: 10px;
 			font-weight: bold;
-			border: 0px;
+			border: 1px solid #000;
 			border-radius: 5px;
 			cursor: pointer;
 			background-color: #fff;
@@ -52,6 +53,7 @@
 		#cancel:hover{
 			color: #fff;
 			background-color: #4AD674;
+			border: none;
 		}
 
 		.input_span{

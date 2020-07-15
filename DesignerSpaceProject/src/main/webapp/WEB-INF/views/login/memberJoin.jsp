@@ -22,7 +22,8 @@
 		color: #60524E;
 	}
 	.input {
-		width: 292px;
+		padding : 0px 10px;
+		width: 277px;
 		height: 30px;
 		margin-top : 10px;
 		border-radius: 5px;
@@ -43,7 +44,7 @@
 		height: 35px;
 		margin-bottom: 10px;
 		font-weight: bold;
-		border: none;
+		border: 1px solid #000;
 		border-radius: 5px;
 		cursor: pointer;
 		background-color: #fff;
@@ -56,6 +57,7 @@
 	#cancel:hover{
 		color: #fff;
 		background-color: #4AD674;
+		border : none;
 	}
 	
 	.input_span{
@@ -64,6 +66,7 @@
 		font-weight: bold;
 	}
 	#select{
+		padding : 0px 5px;
 		width: 298px;
 		height: 35px;
 		border-radius: 5px;
@@ -98,7 +101,7 @@
 	}
 	.overlap{
 		width: 83px;
-		height: 35px;
+		height: 33px;
 		border-radius: 5px;
 		border: 1px solid #60524E;
 		cursor: pointer;
@@ -151,7 +154,8 @@
 	}
 	
 	#textarea {
-	width: 292px;
+	padding: 10px;
+	width: 277px;
 	resize: none;
 	border-radius: 5px;
 	margin-top: 10px;
@@ -438,7 +442,6 @@
 			return false
 			
 		}else {
-			alert('가입이완료되었습니다');
 			return true;
 		}
 		
@@ -474,13 +477,13 @@
 					
 					<span>닉네임</span><br>
 					<input type="text" id="member_nick" class="input" name="member_nick" placeholder="닉네임을 입력해주세요"
-						style="width: 200px;" maxlength="10">
+						style="width: 185px;" maxlength="10">
 					<input type="button" id="check_nick" class="overlap" value="중복확인">
 					<div id="nick_div" class="overlap_div"></div>
 					
 					<span>이메일</span><br>
 					<input type="email" id="member_email" class="input" name="member_email" placeholder="이메일을 입력해주세요"
-						style="width: 200px;" maxlength="20">
+						style="width: 185px;" maxlength="20">
 					<input type="button" id="check_email" class="overlap" value="중복확인">
 					<div id="email_div" class="overlap_div"></div>
 					
@@ -518,7 +521,7 @@
 					
 					<div class="file_input" style="margin: 20px 0px 30px 0px;">
 					  <input type = "text" readonly="readonly" id="file_route" placeholder="기본프로필.jpg"
-					  	style="border-radius: 5px; height: 29px;">
+					  	style="width:110px; border-radius: 5px; height: 29px; padding: 0px 5px;">
 						
 						<label>
 							첨부파일
@@ -535,7 +538,7 @@
 						placeholder="자기소개글을 작성해 주세요(100자 이내)" maxlength="100"></textarea>
 					
 					<span>이용약관</span>
-					<div style="overflow: auto; width: 296px; height: 150px; 
+					<div style="overflow: auto;padding: 10px; width: 277px; height: 150px; 
 						margin-top: 10px; border: 1px solid black; background-color: white; 
 						border-radius: 5px; font-size: 12px;">
 						

@@ -130,6 +130,7 @@
 		ON MEMBER_NO = PROJECT_BOARD_MNO
 		WHERE RNUM BETWEEN #{start} AND #{end}
 		ORDER BY RNUM ASC
+		
 	</select>
 	
 	<insert id="profileAdd" parameterType="map">
@@ -194,11 +195,14 @@
 		parameterType="map">
 		SELECT COUNT(*)
 		FROM MEMBER
+		
 		<include refid="search"></include>
+		AND MEMBER_DEL_FLAG = 'N'
+		
 	</select>
 	
 	<select id="memberSelectCurPage" parameterType="map"
-		resultType="int">
+		resultType="int">	
 		SELECT floor((RNUM-1) / 10)+1 no
 		FROM
 			(SELECT RNUM, MEMBER_NO, MEMBER_NICK, MEMBER_EMAIL, BOARD_CNT, 

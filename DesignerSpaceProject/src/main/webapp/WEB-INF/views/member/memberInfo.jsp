@@ -18,7 +18,8 @@
 			color: #60524E;
 		}
 		.input {
-			width: 292px;
+			padding : 0px 10px;
+			width: 276px;
 			height: 30px;
 			margin-top : 10px;
 			margin-bottom: 30px;
@@ -54,6 +55,7 @@
 		#cancel:hover{
 			color: #fff;
 			background-color: #4AD674;
+			border: none;
 		}
 		.input_span{
 			color: #60524E;
@@ -140,8 +142,9 @@
 					</div>
 					
 					<span>자기소개</span>
-					<div style="overflow: auto; width: 298px; height: 150px; border: 1px solid black; 
-						background-color: white; margin-top: 10px; margin-bottom: 40px; font-size: 16px;">
+					<div style="overflow: auto; width: 278px; height: 130px; border: 1px solid black; 
+						background-color: white; margin-top: 10px; margin-bottom: 40px; 
+						font-size: 16px; padding: 10px 10px;">
 						${memberDto.member_comments}
 					</div>
 					
