@@ -16,20 +16,20 @@ public class ReportBoardServiceImpl implements ReportBoardService{
 	
 	@Override
 	public List<ReportBoardDto> reportBoardSelectList(String searchOption, String keyword, 
-			String sortOption, int start, int end) {
+			String sortOption, int start, int end, int mno) {
 		// TODO Auto-generated method stub
 		
 		List<ReportBoardDto> reportBoardList = 
-				reportBoardDao.reportBoardSelectList(searchOption, keyword, sortOption, start, end);
+				reportBoardDao.reportBoardSelectList(searchOption, keyword, sortOption, start, end, mno);
 		
 		return reportBoardList;
 	}
 
 	@Override
-	public int reportBoardSelectTotalCount(String searchOption, String keyword, String sortOption) {
+	public int reportBoardSelectTotalCount(String searchOption, String keyword, String sortOption, int mno) {
 		// TODO Auto-generated method stub
 		
-		return reportBoardDao.reportBoardSelectTotalCount(searchOption, keyword, sortOption);
+		return reportBoardDao.reportBoardSelectTotalCount(searchOption, keyword, sortOption, mno);
 	}
 
 	@Override
@@ -69,6 +69,13 @@ public class ReportBoardServiceImpl implements ReportBoardService{
 		// TODO Auto-generated method stub
 		
 		return reportBoardDao.selectProjectBoardNumber(title);
+	}
+
+	@Override
+	public void reportBoardDeleteOne(int report_board_no) {
+		// TODO Auto-generated method stub
+		
+		reportBoardDao.reportBoardDeleteOne(report_board_no);
 	}
 
 }

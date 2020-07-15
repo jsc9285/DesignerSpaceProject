@@ -348,7 +348,10 @@
 								border-radius: 50%; background-color: #D4D4D4; color: white;" onclick="answerCompleteFnc();">
 						</div>
 					</c:if>
+<<<<<<< HEAD
+=======
 					
+>>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 					
 					<div style="text-align: center; margin-top: 50px;">
 						<input type="submit" value="수정" id='updateButton'>
@@ -356,7 +359,17 @@
 							 onclick="pageMoveDeleteFnc(${qnaBoardDto.qna_board_no});">
 						<input type="button" value="목록" id='listButton' onclick="pageMoveListFnc();">
 					</div>
+					
 				</c:when>
+				
+				<c:when test="${memberDto.member_grade == 1}">
+					<div style="text-align: center; margin-top: 50px;">
+						<input type="button" value="삭제" id='deleteButton'
+							 onclick="pageMoveDeleteFnc(${qnaBoardDto.qna_board_no});">
+						<input type="button" value="목록" id='listButton' onclick="pageMoveListFnc();">
+					</div>
+				</c:when>
+				
 				<c:otherwise>
 					<div style="text-align: center; margin-top: 50px;">
 						<input type="button" value="목록" id='listButton' onclick="pageMoveListFnc();">
@@ -394,7 +407,7 @@
 						<c:forEach var="qnaBoardComment" items="${qnaBoardCommentList}">
 							<div style="margin-left: 154px; width: 950px; height: 116px; clear: both;">
 								<img alt="프로필 이미지" src="<c:url value='/profileImg
-									/${memberDto.profile_table_stored_name}'/>"
+									/${qnaBoardComment.profile_table_stored_name}'/>"
 									style="border-radius: 50%; width: 75px; height: 75px; float: left;">
 								<div>
 									<span style="font-size: 25px;">
@@ -422,8 +435,6 @@
 										name="qna_comment_comments" id="qna_comment_comments">
 									<input type="hidden" id='qna_comment_no'
 										name="qna_comment_no" value="${qnaBoardComment.qna_comment_no}">
-<!-- 									<input type="hidden" id='qna_comment_qno' -->
-<%-- 										name="qna_comment_no" value="${qnaBoardDto.qna_comment_no}"> --%>
 								</div>
 								
 							</div>

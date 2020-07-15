@@ -54,7 +54,7 @@ public class QnaBoardController {
 		}
 		
 		int totalCount = 
-				qnaBoardService.qnaBoardSelectTotalCount(searchOption, keyword, sortOption);
+				qnaBoardService.qnaBoardSelectTotalCount(searchOption, keyword, sortOption, 0);
 		
 		if(qna_board_no != 0) {
 			curPage 
@@ -66,7 +66,7 @@ public class QnaBoardController {
 		int end = qnaBoardPaging.getPageEnd();
 				
 		List<QnaBoardDto> qnaBoardList = qnaBoardService.qnaBoardSelectList(
-				searchOption, keyword, sortOption, start, end);
+				searchOption, keyword, sortOption, start, end, 0);
 		
 //		 화면의 form의 이름을 맞추기 위한 작업
 		if("member_nick".equals(searchOption)) {
@@ -266,13 +266,21 @@ public class QnaBoardController {
 		
 		log.info("call answerComplete_ctr! " + qna_board_no);
 		
-//		MemberDto sessionMemberDto = (MemberDto) session.getAttribute("memberDto");
-		
 		qnaBoardService.answerCompleteChange(qna_board_no);
 		
-//		qnaBoardService.answerCompleteChange(qna_board_no);
-		
 		return "forward:/qnaBoard/listDetail.do";
+	}
+	
+	@RequestMapping(value = "qnaBoard/managementDeleteCtr.do", method = RequestMethod.GET)
+	public String qnaBoardManagementDelete(int[] qnaCheck, HttpSession session, Model model) {		
+		
+		System.out.println(qnaCheck.length);
+		for (int i = 0; i < qnaCheck.length; i++) {
+			qnaBoardService.qnaCommentDelete(qnaCheck[i]);
+			qnaBoardService.qnaBoardDeleteOne(qnaCheck[i]);
+		}
+		
+		return "redirect:/qnaBoard/list.do";
 	}
 	
 }

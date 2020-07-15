@@ -58,6 +58,40 @@
 	function pageMoveListFnc() {
 		location.href = './list.do';
 	}
+	
+	function checkAddFnc() {
+		if($('#title').val() == '') {
+			alert('신고사유 입력해주세요');
+			return false;
+		}else if($('#contents').val() == ''){
+			alert('신고내용을 입력해주세요');
+			return false;
+		}else{	
+			return true;
+		}
+	}
+	
+	$(document).ready(function () {
+		
+		$('#title').keyup(function(e) {
+			var title = $(this).val();
+			if(title.length > 30){
+				alert('제목은 최대 30자까지입니다');
+				$(this).val(title.substring(0, 20));
+			}
+		})
+		
+		$('#contents').keyup(function (e){
+			var content = $(this).val();
+			$('#numCount').html("("+content.length+" / 최대 200자)");
+			
+			if(content.length > 200){
+				alert('내용은 최대 200자까지입니다');
+				$(this).val(content.substring(0, 200));
+				$('#numCount').html("(200 / 최대 200자)");
+			}
+		});
+	});
 </script>
 
 </head>
@@ -72,7 +106,7 @@
 			</div>
 			
 			<div id="innerPage" style="height: 809px; margin-top: 40px;">
-				<form action='./addCtr.do' method='post'>
+				<form action='./addCtr.do' onsubmit="return checkAddFnc();" method='post'>
 					<br>
 					<br>
 					<br>
@@ -89,7 +123,6 @@
 					<br>
 					<div style="margin-left: 200px;">
 						<span style="width: 200px;">신고작품</span>
-<%-- 						<span style="margin-left: 84px;">${projectBoardDto.project_board_title}</span> --%>
 						<span style="margin-left: 84px;">${projectBoardDto.project_board_title}</span>
 					</div>
 					<br>
@@ -98,9 +131,9 @@
 					<br>
 					<div style="margin-left: 200px;">
 						<span style="width: 200px;">신고사유</span>
-						<input type="text" name="report_board_reason" value="${reportBoardDto.report_board_reason}" 
-							style="margin-left: 87px;
-							width: 850px; height: 50px;">
+						<input type="text" id="title" name="report_board_reason" 
+							placeholder="신고사유를 적어주세요"
+							style="margin-left: 87px; width: 850px; height: 50px;">
 					</div>
 					<br>
 					<hr>
@@ -108,8 +141,10 @@
 					<br>
 					<div style="margin-left: 200px; height: 400px;">
 						<span style="width: 200px; margin-top: 0px;">신고내용</span>
-						<textarea name="report_board_contents" style="margin-left: 86px; 
+						<textarea id="contents" name="report_board_contents" style="margin-left: 86px; 
 							vertical-align: top;" cols="115" rows="25"></textarea>
+						<br>
+						<span id="numCount" style="margin-left: 123px">(0 / 최대 200자)</span>
 					</div>
 					<br>
 					<hr>

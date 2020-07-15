@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +55,7 @@ public class ReportBoardController {
 		}
 		
 		int totalCount = 
-				reportBoardService.reportBoardSelectTotalCount(searchOption, keyword, sortOption);
+				reportBoardService.reportBoardSelectTotalCount(searchOption, keyword, sortOption, 0);
 		
 		if(report_board_no != 0) {
 			curPage 
@@ -65,7 +67,7 @@ public class ReportBoardController {
 		int end = reportBoardPaging.getPageEnd();
 				
 		List<ReportBoardDto> reportBoardList = reportBoardService.reportBoardSelectList(
-				searchOption, keyword, sortOption, start, end);
+				searchOption, keyword, sortOption, start, end, 0);
 		
 //		 화면의 form의 이름을 맞추기 위한 작업
 		if("member_nick".equals(searchOption)) {
@@ -161,7 +163,25 @@ public class ReportBoardController {
 		return "forward:/reportBoard/list.do";
 	}
 	
+	@RequestMapping(value = "reportBoard/deleteCtr.do", method = RequestMethod.GET)
+	public String reportBoardDeleteCtr(int report_board_no, Model model) {
+		
+		log.info("call reportBoardDelete_ctr! " + report_board_no);
+		
+		reportBoardService.reportBoardDeleteOne(report_board_no);
+		
+		return "redirect:list.do";
+	}
 	
-	
+	@RequestMapping(value = "reportBoard/managementDeleteCtr.do", method = RequestMethod.GET)
+	public String reportBoardManagementDelete(int[] reportCheck, HttpSession session, Model model) {		
+		
+		System.out.println(reportCheck.length);
+		for (int i = 0; i < reportCheck.length; i++) {
+			reportBoardService.reportBoardDeleteOne(reportCheck[i]);
+		}
+		
+		return "redirect:/reportBoard/list.do";
+	}
 }
 

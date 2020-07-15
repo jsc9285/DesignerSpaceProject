@@ -7,7 +7,7 @@ import com.project.qnaBoard.model.QnaBoardDto;
 public interface QnaBoardDao {
 
 	public List<QnaBoardDto> qnaBoardSelectList(String searchOption, String keyword, 
-				String sortOption, int start, int end);
+				String sortOption, int start, int end, int mno);
 	
 	public QnaBoardDto qnaBoardSelectDetail(int qna_board_no);
 	
@@ -17,7 +17,7 @@ public interface QnaBoardDao {
 	
 	public int qnaBoardDeleteOne(int qna_board_no);
 	
-	public int qnaBoardSelectTotalCount(String searchOption, String keyword, String sortOption);
+	public int qnaBoardSelectTotalCount(String searchOption, String keyword, String sortOption, int mno);
 	
 	public int qnaSelectCurPage(String searchOption, String keyword, int qna_board_no);
 	

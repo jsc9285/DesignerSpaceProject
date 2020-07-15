@@ -63,20 +63,37 @@
 
 <script type="text/javascript">
 
-	function pageMoveListFnc() {
+	function pageMoveListAdminFnc() {
 		
 		location.href = './list.do';
 	}
 	
+<<<<<<< HEAD
+	function pageMoveListUserFnc() {
+		
+		location.href = '../member/myReport.do';
+	}
+	
+	function pageMoveDeleteFnc(report_board_no) {
+		var reQuestion = confirm('게시물을 삭제하시겠습니까?');
+=======
 // 	function pageMoveDeleteFnc(qna_board_no) {
 // 		var reQuestion = confirm('게시물을 삭제하시겠습니까?');
+>>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 		
+<<<<<<< HEAD
+		if (reQuestion) {
+			var url = "./deleteCtr.do?report_board_no=" + report_board_no;
+			location.href = url;
+		}
+=======
 // 		if (reQuestion) {
 // 			var url = "./deleteCtr.do?report_board_no=" + qna_board_no;
 // 			location.href = url;
 // 		}else {
 // 			alert("다시 되돌아갑니다");
 // 		}
+>>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 		
 // 	}
 	
@@ -190,9 +207,38 @@
 				</div>
 			</div>
 			
+<<<<<<< HEAD
+			
+			<c:if test="${memberDto.member_grade == 1}">
+				<div style="text-align: center; margin-top: 50px;">
+					<input type="button" value="삭제" id='deleteButton'
+						 onclick="pageMoveDeleteFnc(${reportBoardDto.report_board_no});">
+					<input type="button" value="목록" id='listButton' onclick="pageMoveListAdminFnc();">
+				</div>
+			</c:if>
+			
+			<c:if test="${memberDto.member_grade == 0}">
+				<c:if test="${memberDto.member_nick eq reportBoardDto.member_nick}">
+					<div style="text-align: center; margin-top: 50px;">
+						<input type="button" value="삭제" id='deleteButton'
+							 onclick="pageMoveDeleteFnc(${reportBoardDto.report_board_no});">
+						<input type="button" value="목록" id='listButton' onclick="pageMoveListUserFnc();">
+					</div>
+				</c:if>
+				<c:if test="${memberDto.member_nick ne reportBoardDto.member_nick}">
+					<div style="text-align: center; margin-top: 50px;">
+						<input type="button" value="목록" id='listButton' onclick="pageMoveListUserFnc();">
+					</div>
+				</c:if>	
+			</c:if>
+			
+			
+			
+=======
 			<div style="text-align: center; margin-top: 50px;">
 				<input type="button" value="목록" id='listButton' onclick="pageMoveListFnc();">
 			</div>
+>>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 			
 		</form>
 	</div>

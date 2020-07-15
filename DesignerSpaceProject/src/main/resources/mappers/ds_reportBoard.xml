@@ -33,6 +33,14 @@
         </choose>
 	</sql>
 	
+	<sql id="chkMno">
+      <choose>
+         <when test="mno > 0">
+            and qna_board_mno = #{mno}
+         </when>
+      </choose>
+   </sql>
+	
 	<resultMap type="com.project.reportBoard.model.ReportBoardDto" 
 		id="reportBoardResultMap">
 		
@@ -93,6 +101,7 @@
           		  
           		  <include refid="search"></include>
           		  <include refid="sort"></include>
+          		  <include refid="chkMno"></include>
           		  
           		  ORDER BY RB.REPORT_BOARD_NO DESC) RBM 
      		 )RBMS     
@@ -127,6 +136,7 @@
 		ON RB.REPORT_BOARD_MNO = M.MEMBER_NO
 		<include refid="search"></include>
 		<include refid="sort"></include>
+		<include refid="chkMno"></include>		
 	</select>
 
 	<select id="reportSelectCurPage" parameterType="map"
@@ -166,5 +176,10 @@
 		FROM PROJECT_BOARD
 		WHERE PROJECT_BOARD_TITLE = #{title}
 	</select>
+	
+	<delete id="reportBoardDeleteOne" parameterType="java.lang.Integer" >
+		DELETE FROM REPORT_BOARD
+		WHERE REPORT_BOARD_NO = #{report_board_no}
+	</delete>
 
 </mapper>
