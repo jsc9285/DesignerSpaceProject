@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.freeBoard.model.FreeBoardDto;
+import com.project.reportBoard.model.ReportBoardDto;
 
 
 
@@ -256,6 +257,36 @@ public class FreeBoardDaoImpl implements FreeBoardDao{
 		map.put("rnum", rnum);
 		
 		return sqlSession.selectOne(namespace + "selectNextPage",map);
+	}
+
+	@Override
+	public List<ReportBoardDto> reportBoardSelectList(String searchOption, String keyword, String sortOption, int start,
+			int end, int mno) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<>();
+		map.put("searchOption", searchOption);
+		map.put("keyword", keyword);
+		map.put("sortOption", sortOption);
+		map.put("start", start);
+		map.put("end", end);
+		map.put("mno", mno);
+		
+		List<ReportBoardDto> reportBoardList = sqlSession.selectList(namespace + "reportBoardSelectList", map);
+		
+		return reportBoardList;
+	}
+
+	@Override
+	public int reportBoardSelectTotalCount(String searchOption, String keyword,String sortOption,int mno) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		
+		paramMap.put("searchOption", searchOption);
+		paramMap.put("keyword", keyword);
+		paramMap.put("sortOption", sortOption);
+		paramMap.put("mno", mno);
+		
+		return sqlSession.selectOne(namespace + "reportBoardSelectTotalCount", paramMap);
 	}
 	
 

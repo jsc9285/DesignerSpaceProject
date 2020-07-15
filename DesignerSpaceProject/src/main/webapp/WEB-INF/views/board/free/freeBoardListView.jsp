@@ -206,9 +206,9 @@ function freeBoardListOnePageFnc(obj, event){
 		
 		for (var i = 0; i < $('.freeBoardTitle').length; i++) {
 			var freeBoardTitleStr = $('.freeBoardTitle').eq(i).text();
-			if(freeBoardTitleStr.length >= 15){
+			if(freeBoardTitleStr.length >= 10){
 				
-				freeBoardTitleStr = freeBoardTitleStr.substring(0,15) + "...";	
+				freeBoardTitleStr = freeBoardTitleStr.substring(0,10) + "...";	
 			}
 			$('.freeBoardTitle').eq(i).text(freeBoardTitleStr);
 		}
@@ -227,6 +227,7 @@ function freeBoardListOnePageFnc(obj, event){
 		<div id="innerWrap">
 			<div id='boardTitle'>자유게시판</div>
 			<div>
+				<a href="./myList.do">내신고글</a>
 				<form action="./freeBoardAdd.do" method="post">
 					<input type="submit" value="작성" id='writeButton'>
 					<input type="hidden" id="mno" name="mno" value="${memberDto.member_no}">

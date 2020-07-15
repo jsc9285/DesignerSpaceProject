@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.freeBoard.model.FreeBoardDto;
 import com.project.freeBoard.service.FreeBoardService;
+import com.project.reportBoard.model.ReportBoardDto;
 import com.project.util.CommentPaging;
 import com.project.util.Paging;
 
@@ -306,4 +307,70 @@ public class FreeBoardController {
 		model.addAttribute("lineTitle", lineTitle);
 		return "redirect:/freeBoard/freeBoardListOne.do";
 	}
+	
+	@RequestMapping(value = "/freeBoard/myList.do", method = RequestMethod.GET)
+	public String myReportBoardList(@RequestParam(defaultValue = "1") int curPage
+							 , @RequestParam(defaultValue = "0") int report_board_no
+							 , @RequestParam(defaultValue = "titleAndContent") String searchOption
+							 , @RequestParam(defaultValue = "report_board_whole") String sortOption
+							 , @RequestParam(defaultValue = "") String keyword
+							 , @RequestParam(defaultValue = "5")int mno
+							 , Model model) {
+		log.info("Welcome reportBoardList! " + curPage + " : ????"
+				+ searchOption + " : " + keyword);
+		
+		if("writer".equals(searchOption)) {
+			searchOption = "member_nick";
+		}
+		
+		if("title".equals(searchOption)) {
+			searchOption = "report_board_title";
+		}
+		
+		if("content".equals(searchOption)) {
+			searchOption = "report_board_contents";
+		}
+		
+		int totalCount = 
+				freeBoardService.reportBoardSelectTotalCount(searchOption, keyword, sortOption, mno);
+		System.out.println(totalCount);
+		Paging reportBoardPaging = new Paging(totalCount, curPage);
+		int start = reportBoardPaging.getPageBegin();
+		int end = reportBoardPaging.getPageEnd();
+				
+		List<ReportBoardDto> reportBoardList = freeBoardService.reportBoardSelectList(
+				searchOption, keyword, sortOption, start, end, mno);
+		
+//		 화면의 form의 이름을 맞추기 위한 작업
+		if("member_nick".equals(searchOption)) {
+			searchOption = "writer";
+		}
+		
+		if("report_board_title".equals(searchOption)) {
+			searchOption = "title";
+		}
+		
+		if("report_board_contents".equals(searchOption)) {
+			searchOption = "content";
+		}
+		
+		// 검색
+		HashMap<String, Object> searchMap 
+			= new HashMap<String, Object>();
+		searchMap.put("searchOption", searchOption);
+		searchMap.put("keyword", keyword);
+		searchMap.put("sortOption", sortOption);
+		
+		// 페이징
+		Map<String, Object> pagingMap = new HashMap<>();
+		pagingMap.put("totalCount", totalCount);
+		pagingMap.put("paging", reportBoardPaging);
+
+		model.addAttribute("reportBoardList", reportBoardList);
+		model.addAttribute("pagingMap", pagingMap);
+		model.addAttribute("searchMap", searchMap);
+		
+		return "member/myReport";
+	}
+	
 }
