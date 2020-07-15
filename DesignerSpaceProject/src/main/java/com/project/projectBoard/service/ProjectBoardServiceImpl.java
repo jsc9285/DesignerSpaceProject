@@ -227,5 +227,11 @@ public class ProjectBoardServiceImpl implements ProjectBoardService{
 
 		return projectBoardDao.projectLikeFlag(no, mno);
 	}
+
+	@Override
+	public Map<String, Object> selectInfoList() {
+		
+		return projectBoardDao.selectInfoList();
+	}
 	
 }

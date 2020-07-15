@@ -34,4 +34,6 @@ public interface QnaBoardDao {
 	public void qnaCommentUpdateOne(int qna_comment_no, String qna_comment_comments);
 	
 	public int qnaCommentDelete(int qna_board_no);
+	
+	public void changeUpdateStatus(int qna_comment_qbno);
 }

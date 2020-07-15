@@ -12,6 +12,9 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 	
 	<style type="text/css">
+		#projectListTable{
+			width: 1350px;
+		}
 		#projectListTable tr{
 			text-align: center;
 			border: 3px solid beige;
@@ -73,9 +76,6 @@
 		}
 		#innerPage{
 			margin-top: 10px;
-		}
-		#projectListTable{
-			width: 1350px;
 		}
 		#pagingArea{
 			margin-top: 50px;
@@ -200,8 +200,8 @@
 							<tr>
 								<td><input name='projectCheck' type="checkbox" class='checkbox' value="${projectList.project_board_no}"></td>
 								<td>${projectList.project_board_no}</td>
-								<td><a href="../member/myBoard.do?project_board_no=${projectList.project_board_no}">${projectList.project_board_title}</a></td>
-								<td><a id="memberInfoLink" href="./MyPage.do?mno=${projectList.project_board_mno}">${projectList.member_nick}</a></td>
+								<td><a href="./detail.do?project_board_no=${projectList.project_board_no}&chkPage=2">${projectList.project_board_title}</a></td>
+								<td><a id="memberInfoLink" href="../member/myBoard.do?mno=${projectList.project_board_mno}">${projectList.member_nick}</a></td>
 								<td>
 									<c:choose>
 										<c:when test="${projectList.project_board_category eq 'p'}">

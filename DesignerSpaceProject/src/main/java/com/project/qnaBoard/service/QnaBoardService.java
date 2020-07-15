@@ -35,4 +35,6 @@ public interface QnaBoardService {
 
 	public int qnaCommentDelete(int qna_board_no);
 
+	public void changeUpdateStatus(int qna_comment_qbno);
+
 }

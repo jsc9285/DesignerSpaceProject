@@ -39,4 +39,6 @@ public interface ProjectBoardDao {
 	public int projectCommentDelete(int no);
 	
 	public MemberDto profileSelectOne(int no);
+	
+	public Map<String, Object> selectInfoList();
 }

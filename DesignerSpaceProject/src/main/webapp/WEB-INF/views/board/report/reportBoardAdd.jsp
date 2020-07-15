@@ -68,7 +68,7 @@
 	<div id="wrap">
 		<div id="innerWrap">
 			<div id='boardTitle'>
-				QnA 글작성
+				신고하기
 			</div>
 			
 			<div id="innerPage" style="height: 809px; margin-top: 40px;">
@@ -79,9 +79,9 @@
 					<br>
 					<div style="margin-left: 200px;">
 						<span style="width: 200px;">작성자</span>
-						<span style="margin-left: 100px;">${reportBoardDto.member_nick}</span>
+						<span style="margin-left: 100px;">${memberDto.member_nick}</span>
 						<span style="width: 200px; margin-left: 300px;">신고대상</span>
-						<span style="margin-left: 100px;">${reportBoardDto.member_nick}</span>
+						<span style="margin-left: 100px;">${projectBoardDto.member_nick}</span>
 					</div>
 					<br>
 					<hr>
@@ -89,7 +89,8 @@
 					<br>
 					<div style="margin-left: 200px;">
 						<span style="width: 200px;">신고작품</span>
-						<span style="margin-left: 117px;">${reportBoardDto.report_board_title}</span>
+<%-- 						<span style="margin-left: 84px;">${projectBoardDto.project_board_title}</span> --%>
+						<span style="margin-left: 84px;">${projectBoardDto.project_board_title}</span>
 					</div>
 					<br>
 					<hr>
@@ -97,7 +98,9 @@
 					<br>
 					<div style="margin-left: 200px;">
 						<span style="width: 200px;">신고사유</span>
-						<span style="margin-left: 117px;">${reportBoardDto.report_board_reason}</span>
+						<input type="text" name="report_board_reason" value="${reportBoardDto.report_board_reason}" 
+							style="margin-left: 87px;
+							width: 850px; height: 50px;">
 					</div>
 					<br>
 					<hr>
@@ -105,7 +108,7 @@
 					<br>
 					<div style="margin-left: 200px; height: 400px;">
 						<span style="width: 200px; margin-top: 0px;">신고내용</span>
-						<textarea name="qna_board_contents" style="margin-left: 86px; 
+						<textarea name="report_board_contents" style="margin-left: 86px; 
 							vertical-align: top;" cols="115" rows="25"></textarea>
 					</div>
 					<br>
@@ -115,6 +118,18 @@
 					<div style="text-align: center;">
 						<input type="submit" value="작성완료" id='writeCompleteButton'>
 						<input type="button" value="취소" id='resetButton' onclick="pageMoveListFnc();">
+						<input type="text" value="${projectBoardDto.project_board_mno}" 
+							 name="project_board_mno">
+						<input type="hidden" value="${projectBoardDto.member_nick}" 
+							 name="member_nick">
+						<input type="hidden" value="${projectBoardDto.project_board_mno}"
+							 name="report_board_mno">
+						<input type="hidden" value="${projectBoardDto.project_board_title}"
+							 name="report_board_title">
+						<input type="hidden" value="${memberDto.member_name}"
+							 name="report_board_name">
+						<input type="hidden" value="${project_board_no}"
+							 name="report_board_no">
 					</div>
 				</form>	
 			</div>

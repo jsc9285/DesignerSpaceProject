@@ -99,7 +99,7 @@
 					<div style="margin-left: 200px; height: 400px;">
 						<span style="width: 200px; margin-top: 0px;">질문내용</span>
 						<textarea name="qna_board_contents" style="margin-left: 86px; 
-							vertical-align: top;" cols="115" rows="25"></textarea>
+							vertical-align: top;" cols="125" rows="25"></textarea>
 					</div>
 					<br>
 					<hr>

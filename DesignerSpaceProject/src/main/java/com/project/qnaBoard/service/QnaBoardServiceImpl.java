@@ -121,5 +121,13 @@ public class QnaBoardServiceImpl implements QnaBoardService{
 		return qnaBoardDao.qnaCommentDelete(qna_board_no);
 	}
 
+	@Override
+	public void changeUpdateStatus(int qna_comment_qbno) {
+		// TODO Auto-generated method stub
+		
+		qnaBoardDao.changeUpdateStatus(qna_comment_qbno);
+		
+	}
+
 	
 }

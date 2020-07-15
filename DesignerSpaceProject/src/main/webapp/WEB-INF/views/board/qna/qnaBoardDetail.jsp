@@ -215,7 +215,17 @@
       	location.href = url;
 	}
 
-	   
+	function answerCompleteFnc() {
+		
+		var url = '';
+		
+		url += './list.do?';
+		url += '';
+		url += '';
+		url += '';
+		url += '';
+		
+	}   
 
 
 </script>
@@ -325,7 +335,7 @@
 					
 					<div style="text-align: center; margin-top: -50px;">
 						<input type="button" value="답변완료" disabled="disabled" style="width: 150px; height: 150px;
-							border-radius: 50%; background-color: #D4D4D4; color: white;">
+							border-radius: 50%; background-color: #D4D4D4; color: white;" onclick="answerCompleteFnc();">
 					</div>
 					
 					<div style="text-align: center; margin-top: 50px;">

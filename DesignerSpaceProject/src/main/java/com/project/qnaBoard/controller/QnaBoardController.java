@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.project.member.model.MemberDto;
 import com.project.qnaBoard.model.QnaBoardDto;
 import com.project.qnaBoard.service.QnaBoardService;
 import com.project.util.CommentPaging;
@@ -193,9 +196,15 @@ public class QnaBoardController {
 	
 	@RequestMapping(value="qnaBoard/commentAddCtr.do", method = RequestMethod.GET)
 	public String qnaBoardCommentAddCtr(int qna_comment_mno, int qna_comment_qbno, String searchOption
-			,String keyword ,String qna_comment_comments, Model model) {
+			,String keyword ,String qna_comment_comments, Model model, HttpSession session) {
 		
 		log.info("call qnaBoardCommentAdd_ctr! {} {} ", qna_comment_mno, qna_comment_qbno);
+		
+		MemberDto sessionMemberDto = (MemberDto) session.getAttribute("memberDto");
+		
+		if(sessionMemberDto.getMember_grade() == 0) {
+			qnaBoardService.changeUpdateStatus(qna_comment_qbno);
+		}
 		
 		qnaBoardService.qnaBoardCommentInsertOne(qna_comment_qbno, qna_comment_mno, qna_comment_comments);
 		

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>        
 <!DOCTYPE html>
 <html>
 <head>
@@ -225,7 +226,14 @@
 						</div>
 						
 						<input type="submit" value="확인" onclick="fileNamingFnc();">
-						<input type="button" value="취소" onclick="location.href='./list.do'">
+						<c:choose>
+							<c:when test="${chkPage eq 0}">
+								<input type="button" value="취소" onclick="location.href='../main/member.do'">
+							</c:when>
+							<c:when test="${chkPage eq 1}">
+								<input type="button" value="취소" onclick="location.href='../member/myBoard.do?mno=${memberDto.member_no}'">	
+							</c:when>							
+						</c:choose>						
 					</div>
 				</form>
 			</div>
