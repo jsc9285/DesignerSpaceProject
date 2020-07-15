@@ -12,28 +12,48 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 
 	<style type="text/css">
-		body {
+		#innerPage {
 			font-size: 20px;
 			font-weight: bold;
 			color: #60524E;
 		}
-		input {
+		.input {
 			width: 292px;
 			height: 30px;
 			margin-top : 10px;
-			margin-bottom: 20px;
+			margin-bottom: 30px;
 			border-radius: 5px;
 			border: 1px solid #60524E
 		}
-		button {
-			width: 300px;
-			height: 35px;
+		#button {
+			width: 300px; 
+	 		height: 35px; 
 			color: #FFFFFF;
 			margin-bottom: 10px;
 			background-color: #60524E;
 			font-weight: bold;
+			border: none;
+			border-radius: 5px;
+		}
+		#cancel{
+			width: 300px;
+			height: 35px;
+			color: #000;
+			margin-bottom: 10px;
+			background-color: #fff;
+			font-weight: bold;
 			border: 1px solid #60524E;
 			border-radius: 5px;
+			cursor: pointer;
+			
+		}
+		
+		#button:hover{
+			background-color: #4AD674;
+		}
+		#cancel:hover{
+			color: #fff;
+			background-color: #4AD674;
 		}
 		.input_span{
 			color: #60524E;
@@ -71,6 +91,20 @@
 		function backMoveFnc() {
 			location.href='<%=request.getContextPath()%>/projectBoard/list.do';
 		}
+		
+		function moidDetailFnc(){
+			
+			var pwdOne = document.getElementById("chk_pwd");
+			var pwdTwo = document.getElementById("chk_pwd2");
+			
+			if(pwdOne.value==pwdTwo.value){
+				location.href='modInfoDetail.do';
+			}else {
+				alert('비밀번호가 틀렸습니다');
+				pwdOne.focus();
+			}
+			
+		}
 	
 	</script>
 	
@@ -83,6 +117,7 @@
 	<div id="wrap">
 		<div id="innerWrap">
 			<div id="innerPage" style="padding: 60px 0px;">
+				
 				<div style="margin-bottom: 80px; text-align: center;">
 					<span style="font-size: 50px;">회원정보 수정</span>
 				</div> 
@@ -104,16 +139,15 @@
 					
 					
 					
-					<input type="password" id="chkpwd" placeholder="비밀번호를 입력해주세요">
+					<input type="password" id="chk_pwd" class="input" placeholder="비밀번호를 입력해주세요">
 					
-					<input type="hidden" value="${member_pwd}" name='member_pwd'>
+					<input type="hidden" id="chk_pwd2" value="${member_pwd}" name='member_pwd'>
 				
 					
 					
-					<button onclick="location.href='modInfoDetail.do'" style="margin-top: 30px;">
+					<button id="button" onclick="moidDetailFnc()" style="margin-top: 30px;">
 						확인</button>
-					<button style="background-color: #FFFFFF;
-						color: #60524E;" onclick="backMoveFnc()">취소</button>
+					<button id="cancel" onclick="backMoveFnc()">취소</button>
 				</div>
 			</div>
 		</div>

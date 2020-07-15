@@ -271,7 +271,7 @@ function freeBoardListOnePageFnc(obj, event){
 					<c:when test="${searchMap.searchOption eq 'all'}">
 						<option value="all" selected="selected">제목+작성자</option>
 						<option value="free_board_title">제목</option>
-						<option value="member_nick">작성자	</option>
+						<option value="member_nick">작성자</option>
 					</c:when>
 					
 					<c:when test="${searchMap.searchOption eq 'free_board_title'}">

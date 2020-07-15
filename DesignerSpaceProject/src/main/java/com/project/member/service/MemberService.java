@@ -23,4 +23,9 @@ public interface MemberService {
 	public int memberSelectCurPage(String searchOption, String keyword, int no);
 	public List<MemberBoardDto> memberSelectList(String searchOption, String keyword, int start, int end);
 	public void memberRemove(int member_no);
+	
+	//중복체크
+	public int checkNick(String nick);
+	public int checkEmail(String email);
+	public int checkPhone(String phone);
 }

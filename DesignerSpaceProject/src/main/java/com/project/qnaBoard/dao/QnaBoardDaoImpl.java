@@ -153,5 +153,13 @@ public class QnaBoardDaoImpl implements QnaBoardDao{
 		return sqlSession.delete(namespace + "qnaCommentDelete", qna_board_no);
 	}
 
+	@Override
+	public void changeUpdateStatus(int qna_comment_qbno) {
+		// TODO Auto-generated method stub
+		
+		sqlSession.update(namespace + "changeUpdateStatus", qna_comment_qbno);
+		
+	}
+
 
 }

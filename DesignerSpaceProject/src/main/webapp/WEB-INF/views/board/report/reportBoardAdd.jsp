@@ -120,16 +120,16 @@
 						<input type="button" value="취소" id='resetButton' onclick="pageMoveListFnc();">
 						<input type="text" value="${projectBoardDto.project_board_mno}" 
 							 name="project_board_mno">
-						<input type="text" value="${projectBoardDto.member_nick}" 
+						<input type="hidden" value="${projectBoardDto.member_nick}" 
 							 name="member_nick">
-<%-- 						<input type="text" value="${projectBoardDto.project_board_title}" --%>
-<!-- 							 name="project_board_title"> -->
-						<input type="text" value="${projectBoardDto.project_board_mno}"
+						<input type="hidden" value="${projectBoardDto.project_board_mno}"
 							 name="report_board_mno">
-						<input type="text" value="${projectBoardDto.project_board_title}"
+						<input type="hidden" value="${projectBoardDto.project_board_title}"
 							 name="report_board_title">
-						<input type="text" value="${memberDto.member_name}"
+						<input type="hidden" value="${memberDto.member_name}"
 							 name="report_board_name">
+						<input type="hidden" value="${project_board_no}"
+							 name="report_board_no">
 					</div>
 				</form>	
 			</div>

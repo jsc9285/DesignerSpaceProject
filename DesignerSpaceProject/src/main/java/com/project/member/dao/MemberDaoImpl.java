@@ -3,6 +3,7 @@ package com.project.member.dao;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -188,6 +189,30 @@ public class MemberDaoImpl implements MemberDao{
 		
 		sqlSession.insert(namespace + "memberRemove", member_no);
 		
+	}
+
+	@Override
+	public int checkNick(String nick) {
+		// TODO Auto-generated method stub
+		
+		System.out.println("checkNick들어왔다"+nick);
+		
+		return sqlSession.selectOne(namespace + "checkNick", nick);
+		
+	}
+
+	@Override
+	public int checkEmail(String email) {
+		// TODO Auto-generated method stub
+		System.out.println("checkEmail들어왔다"+email);
+		
+		return sqlSession.selectOne(namespace + "checkEmail", email);
+	}
+
+	@Override
+	public int checkPhone(String phone) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace + "checkPhone", phone);
 	}
 
 }

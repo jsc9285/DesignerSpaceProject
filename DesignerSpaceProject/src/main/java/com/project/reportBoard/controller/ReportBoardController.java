@@ -105,7 +105,6 @@ public class ReportBoardController {
 			 , @RequestParam(defaultValue = "0") int report_board_no
 			 , @RequestParam(defaultValue = "titleAndContent") String searchOption
 			 , @RequestParam(defaultValue = "") String keyword
-			 , ProjectBoardDto projectBoardDto
 			 , Model model) {
 		
 		log.info("Welcome reportBoardListDetail! " + curPage + " : ????"
@@ -116,7 +115,6 @@ public class ReportBoardController {
 		model.addAttribute("reportBoardDto", reportBoardDto);
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);
-		model.addAttribute("projectBoardDto", projectBoardDto);
 		
 		return "board/report/reportBoardDetail";
 	}
@@ -154,7 +152,7 @@ public class ReportBoardController {
 //		
 //		model.addAttribute("projectBoardDto", projectBoardDto);
 		
-		return "redirect:../projectBoard/detail.do";
+		return "redirect:../reportBoard/listDetail.do?report_board_no=" + reportBoardDto.getReport_board_no();
 	}
 	
 }

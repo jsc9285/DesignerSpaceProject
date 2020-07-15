@@ -13,50 +13,75 @@
 
 
 <style type="text/css">
-	body {
+	
+	#innerPage {
 		font-size: 20px;
 		font-weight: bold;
 		color: #60524E;
 	}
-	input {
+	.input {
 		width: 292px;
 		height: 30px;
 		margin-top : 10px;
-		margin-bottom: 20px;
 		border-radius: 5px;
 		border: 1px solid #60524E
 	}
-	button {
-		width: 300px;
-		height: 35px;
+	#button {
+		width: 300px; 
+ 		height: 35px; 
 		color: #FFFFFF;
 		margin-bottom: 10px;
 		background-color: #60524E;
 		font-weight: bold;
+		border: none;
+		border-radius: 5px;
+	}
+	#cancel{
+		width: 300px;
+		height: 35px;
+		margin-bottom: 10px;
+		font-weight: bold;
 		border: 1px solid #60524E;
 		border-radius: 5px;
+		cursor: pointer;
+		background-color: #fff;
+		color: #000
 	}
-	select{
-		width: 298px;
+	
+	#exit{
+		width: 300px;
 		height: 35px;
+		margin-bottom: 10px;
+		font-weight: bold;
+		border: none;
 		border-radius: 5px;
-		margin-top: 10px;
+		cursor: pointer;
+		background-color: #FF0000;
+		color: #fff
 	}
-	textarea {
-	resize: none;
-	border-radius: 5px;
-	margin-top: 10px;
-	margin-bottom: 20px;
-	border-radius: 5px;
+	
+	#button:hover{
+		background-color: #4AD674;
 	}
+	#cancel:hover{
+		color: #fff;
+		background-color: #4AD674;
+	}
+	#exit:hover{
+		color: #fff;
+		background-color: #4AD674;
+	}
+	
 	.input_span{
 		color: #60524E;
 		font-size: 20px;
 		font-weight: bold;
 	}
-	.overlap{
-		width: 85px;
+	#select{
+		width: 298px;
 		height: 35px;
+		border-radius: 5px;
+		margin-top: 10px;
 	}
 	#join_div{
 		width : 300px;
@@ -69,14 +94,28 @@
 		border-radius: 50%;
 	}
 	
-	#img_div{
-		border:1px solid black;
-		width: 100px;
-		height: 100px;
-		border-radius: 50%;
+	#image_container{
+		width: 100px; 
+		height: 100px; 
+		border: 1px solid black;
 		margin: auto;
-		margin-bottom: 20px;
+		border-radius: 50%;
+		margin-bottom: 10px;
 		margin-top: 20px;
+	}
+	#profile_btn{
+		width: 80px;
+		height: 32px;
+		border: 1px solid #60524E;
+		cursor: pointer;
+		border-radius: 5px;
+	}
+	.overlap{
+		width: 83px;
+		height: 35px;
+		border-radius: 5px;
+		border: 1px solid #60524E;
+		cursor: pointer;
 	}
 	.file_input label{
 		position: relative;
@@ -103,7 +142,8 @@
 		border: 0;
 		
 	}
-	.file_input input[type=text]{
+	.file_input input[type=text]
+	{
 		vertical-align: middle;
 		display: inline-block;
 		width: 120px;
@@ -114,12 +154,44 @@
 		padding: 0;
 		margin: 0;
 	}
+	.overlap_div{
+		font-size: 10px;
+		margin-bottom: 30px;
+	}
+	
+	input[type=checkbox]{
+		width: 15px;
+		height: 15px;
+	}
+	
+	#textarea {
+	width: 292px;
+	resize: none;
+	border-radius: 5px;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	}
 
 </style>
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 	
+<script type="text/javascript">
+
+	function exitMemberFnc() {
+		var delConfirm = confirm('정말로 탈퇴하시겠습니까?');
+		
+		if (delConfirm) {
+			location.href='../member/remove.do';
+			
+		}else {
+		    alert('삭제가 취소되었습니다.');
+		}
+	 
+}
+</script>
+
 
 </head>
 
@@ -176,21 +248,40 @@
 				<div id="join_div">
 					<form action="modInfoDetailCtr.do" method="post" enctype="multipart/form-data">
 						<input type="hidden" name="member_no" value="${memberDto.member_no}">
-						성명<br> 
-						<input type="text" name="member_name" value="${memberDto.member_name}"><br> 
-						닉네임<br>
-						<input type="text" name="member_nick" value="${memberDto.member_nick}"
-						style="width: 200px;">
-						<input type="button" class="overlap" value="중복확인"><br>
-						이메일<br> 
-						<input type="email" name="member_email" value="${memberDto.member_email}"><br> 
-						비밀번호<br> 
-						<input type="password" name="member_pwd" value="${memberDto.member_pwd}"><br>
-						비밀번호확인<br> 
-						<input type="password" value=""><br> 
-						휴대폰 번호<br>
-						<input type="text" name="member_phone" value="${memberDto.member_phone}"><br>
-						본인확인<br> <select name="member_check_question">
+						
+						<span>성명</span> 
+						<input type="text" class="input" name="member_name" style="background-color: #EAEAEA" 
+							value="${memberDto.member_name}" readonly="readonly"> 
+						<div class="overlap_div"></div>
+							
+						<span>닉네임</span> 
+						<div>
+							<input type="text" class="input" name="member_nick" 
+								value="${memberDto.member_nick}" style="width: 200px;">
+							<input type="button" id="check_nick" class="overlap" value="중복확인">
+						</div>
+						<div class="overlap_div"></div>
+						
+						<span>이메일</span> 
+						<input type="email" class="input" name="member_email" style="background-color: #EAEAEA"
+							value="${memberDto.member_email}" readonly="readonly"> 
+						<div class="overlap_div"></div>
+							
+						<span>비밀번호</span> 
+						<input type="password" class="input" name="member_pwd" 
+							value="${memberDto.member_pwd}">
+						<div class="overlap_div"></div>
+							
+						<span>비밀번호 확인</span>  
+						<input type="password" class="input" value=""> 
+						<div class="overlap_div"></div>
+						
+						<span>휴대폰 번호</span> 
+						<input type="text" class="input" name="member_phone" value="${memberDto.member_phone}">
+						<div class="overlap_div"></div>
+						
+						<span>본인확인</span>
+						<select id="select" name="member_check_question">
 							<c:choose>
 								<c:when test="${memberDto.member_check_question eq 1}">
 									<option value="1" selected="selected">나의 보물1호는?</option>
@@ -216,11 +307,12 @@
 								</c:otherwise>
 							</c:choose>
 						</select> <br> 
-						<input name="member_check_answer" value="${memberDto.member_check_answer}"><br>
+						<input class="input" name="member_check_answer" value="${memberDto.member_check_answer}"><br>
+						<div class="overlap_div"></div>
 						
 						
-						 프로필사진<br>
-						<div id="img_div">
+						<span>프로필사진</span>
+						<div id="image_container">
 							<c:choose>
 								<c:when test="${empty memberDto.profile_table_stored_name}">
 									<img id="p_image" alt="기본 프로필 이미지"  src="<%=request.getContextPath()%>/resources/img/profile.png">
@@ -232,25 +324,27 @@
 							</c:choose>
 						</div>
 						
-						<div class="file_input">
+						<div class="file_input" style="margin: 20px 0px 30px 0px;">
 						  <input type = "text" readonly="readonly" id="file_route" placeholder="기본프로필 이미지.jpg" 
-						  	value="${memberDto.profile_table_original_name}">
+						  	value="${memberDto.profile_table_original_name}" style="border-radius: 5px; height: 29px;">
 							
 							<label>
 								첨부파일
 								<input type="file" id="file_name" name="file" accept="image/*" onchange="setThumbnailFnc(event);"
-							style="width: 100px;"/> 
+							style="width: 35px;"/> 
 							</label>
 							
-							<input type="button" value="기본프로필" onclick="defaultProfileFnc()" style="width: 80px;">
+							<input type="button" id="profile_btn" value="기본프로필" onclick="defaultProfileFnc()" style="width: 80px;">
 						</div>
 						<input type="hidden" id="chang_flag" name="change" value="N">
 						
-						소개<br>
-						<textarea rows="8" cols="38"  name="member_comments" >${memberDto.member_comments}</textarea>
-						<button>확인</button>
+						<span>소개</span>
+						<textarea id="textarea" rows="8" cols="38"  name="member_comments" >${memberDto.member_comments}</textarea>
+						
+						<button id="button">확인</button>
 					</form>
-					<button>취소</button>
+					<button id="exit" onclick="exitMemberFnc();">탈퇴</button>
+					<button id="cancel">취소</button>
 				</div>
 			</div>
 		</div>

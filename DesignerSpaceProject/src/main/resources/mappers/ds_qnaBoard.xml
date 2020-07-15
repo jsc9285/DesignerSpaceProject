@@ -213,4 +213,13 @@
 		DELETE FROM QNA_COMMENT
 		WHERE QNA_COMMENT_QBNO = #{qna_board_no}
 	</delete>
+	
+	<update id="changeUpdateStatus" parameterType="int">
+		UPDATE QNA_BOARD
+		SET
+		QNA_BOARD_ANSWER_STATUS = '답변중',
+   		QNA_BOARD_ANSWER_DATE = SYSDATE
+		WHERE QNA_BOARD_NO = #{qna_board_no}
+	</update>
+	
 </mapper>

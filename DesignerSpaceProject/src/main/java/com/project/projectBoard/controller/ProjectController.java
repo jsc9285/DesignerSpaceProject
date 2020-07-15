@@ -243,7 +243,7 @@ public class ProjectController {
 	public String projectBoardManagement(@RequestParam(defaultValue="1") int curPage
 			, @RequestParam(defaultValue="project_board_no") String sortOption
 			, @RequestParam(defaultValue="all") String categoryOption
-			, @RequestParam(defaultValue="member_nick") String searchOption
+			, @RequestParam(defaultValue="project_board_title") String searchOption
 			, @RequestParam(defaultValue="") String keyword
 			, @RequestParam(defaultValue="admin") String pageOption
 			,HttpSession session, Model model) {		
@@ -292,26 +292,25 @@ public class ProjectController {
 		return "redirect:/projectBoard/management.do";
 	}
 	
-//	============================== 테스트용 ( 마이 페이지 - 내글목록 )
+//	============================== 마이 페이지 - 내글목록 )
 	
 	@RequestMapping(value = "projectBoard/MyPage.do", method = RequestMethod.GET)
-	public String projectBoardMyPage(@RequestParam(defaultValue="1") int curPage
+	public String projectBoardMyPage(int mno
+			, @RequestParam(defaultValue="1") int curPage
 			, @RequestParam(defaultValue="project_board_no") String sortOption
 			, @RequestParam(defaultValue="all") String categoryOption
-			, @RequestParam(defaultValue="member_nick") String searchOption
+			, @RequestParam(defaultValue="project_board_title") String searchOption
 			, @RequestParam(defaultValue="") String keyword
 			, @RequestParam(defaultValue="my") String pageOption
 			, HttpSession session, Model model) {		
-			
-		MemberDto sessionMemberDto = (MemberDto)session.getAttribute("memberDto");
-		int memberNo = sessionMemberDto.getMember_no();
+
 		//개인 정보 조회
-		MemberDto myMemberDto = projectBoardService.profileSelectOne(memberNo);
+		MemberDto myMemberDto = projectBoardService.profileSelectOne(mno);
 		
 		// 전체 작품리스트 조회		
 //		작품 페이징 관련
 		
-		int totalCnt = projectBoardService.projectBoardTotalCount(searchOption, keyword, categoryOption, pageOption, memberNo); 
+		int totalCnt = projectBoardService.projectBoardTotalCount(searchOption, keyword, categoryOption, pageOption, mno); 
 		
 		CommentPaging projectBoardPaging = new CommentPaging(totalCnt, curPage);
 		int start = projectBoardPaging.getPageBegin();
@@ -326,13 +325,14 @@ public class ProjectController {
 		
 //		작품 리스트 조회
 		List<ProjectBoardDto> projectBoardList = 
-			projectBoardService.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, start, end, pageOption, memberNo);
+			projectBoardService.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, start, end, pageOption, mno);
 		
 		// 모델로 필요정보 넘김
 		model.addAttribute("projectBoardList", projectBoardList);
 		model.addAttribute("projectBoardPaging", projectBoardPaging);
 		model.addAttribute("listOptionMap", listOptionMap);	
 		model.addAttribute("myMemberDto", myMemberDto);
+		model.addAttribute("mno", mno);
 		
 		return "member/myBoard";
 	}
