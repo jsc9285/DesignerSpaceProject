@@ -212,4 +212,25 @@ public class MemberServiceImpl implements MemberService{
 		// TODO Auto-generated method stub
 		memberDao.memberRemove(member_no);
 	}
+
+	@Override
+	public int checkNick(String nick) {
+		// TODO Auto-generated method stub
+		
+		return memberDao.checkNick(nick);
+		
+		
+	}
+
+	@Override
+	public int checkEmail(String email) {
+		// TODO Auto-generated method stub
+		return memberDao.checkEmail(email);
+	}
+
+	@Override
+	public int checkPhone(String phone) {
+		// TODO Auto-generated method stub
+		return memberDao.checkPhone(phone);
+	}
 }

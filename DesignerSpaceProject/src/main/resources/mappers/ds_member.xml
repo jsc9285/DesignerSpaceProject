@@ -64,7 +64,7 @@
 	<select id="memberExist" parameterType="map" 
 		resultMap="memberResultMap">
 		
-		SELECT M.MEMBER_NO, M.MEMBER_NICK, PT.PROFILE_TABLE_STORED_NAME, M.MEMBER_GRADE
+		SELECT M.MEMBER_NO, M.MEMBER_NICK, M.MEMBER_NAME, PT.PROFILE_TABLE_STORED_NAME, M.MEMBER_GRADE
 		FROM MEMBER M LEFT JOIN PROFILE_TABLE PT
         ON MEMBER_NO = PROFILE_TABLE_MNO
 		WHERE M.MEMBER_EMAIL = #{member_email}
@@ -239,5 +239,29 @@
 		WHERE MEMBER_NO =#{member_no}
 	</update>
 	
+<!-- 	중복체크   -->
+	<select id="checkNick" parameterType="String" 
+		resultType="int">
+		
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE MEMBER_NICK = #{nick}
+	</select>
+	
+	<select id="checkEmail" parameterType="String" 
+		resultType="int">
+		
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE MEMBER_EMAIL = #{email}
+	</select>
+	
+	<select id="checkPhone" parameterType="String" 
+		resultType="int">
+		
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE MEMBER_PHONE = #{phone}
+	</select>
 	
 </mapper>

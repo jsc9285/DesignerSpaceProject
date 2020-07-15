@@ -126,6 +126,8 @@
 		var fbnoObj = $('#fbno');
 		var keywordObj = $('#keyword');
 		var searchOptionObj = $('#searchOption');
+		var rnumObj = $('#rnum');
+		var lineTitleObj = $('#lineTitle');
 		
 		var url = '';
 		
@@ -134,6 +136,8 @@
 		url += '&keyword=' + keywordObj.val();
 		url += '&searchOption=' + searchOptionObj.val();
 		url += '&mno=' + mnoObj.val();
+		url += '&rnum=' + rnumObj.val();
+		url += '&lineTitleObj=' + lineTitleObj.val();
 		
 		location.href = url;
 	}
@@ -144,6 +148,8 @@
 		var fbnoObj = $('#fbno');
 		var keywordObj = $('#keyword');
 		var searchOptionObj = $('#searchOption');
+		var rnumObj = $('#rnum');
+		var lineTitleObj = $('#lineTitle');
 
 		var url = '';
 		
@@ -152,6 +158,8 @@
 		url += '&keyword=' + keywordObj.val();
 		url += '&searchOption=' + searchOptionObj.val();
 		url += '&mno=' + mnoObj.val();
+		url += '&rnum=' + rnumObj.val();
+		url += '&lineTitleObj=' + lineTitleObj.val();
 		
 		location.href = url;
 	}
@@ -161,6 +169,8 @@
 		var fbnoObj = $('#fbno');
 		var keywordObj = $('#keyword');
 		var searchOptionObj = $('#searchOption');
+		var rnumObj = $('#rnum');
+		var lineTitleObj = $('#lineTitle');
 		
 		var url = '';
 		
@@ -169,6 +179,8 @@
 		url += '&keyword=' + keywordObj.val();
 		url += '&searchOption=' + searchOptionObj.val();
 		url += '&mno=' + mnoObj.val();
+		url += '&rnum=' + rnumObj.val();
+		url += '&lineTitleObj=' + lineTitleObj.val();
 		
 		location.href = url;
 	}
@@ -519,7 +531,9 @@
 								
 								</c:when>
 								<c:otherwise>
-									<input type="button" id="preBtn" onclick="prePageFnc();" value="이전 글">
+									<input type="button" id="preBtn" style="text-align: center; 
+											 width: 150px;  height: 50px; 
+											 background-color: #60600E;  color: white;" onclick="prePageFnc();" value="이전 글">
 								</c:otherwise>
 								</c:choose>
 								<c:if test="${freeBoardDto.memberNo eq memberDto.member_no}">
@@ -540,7 +554,9 @@
 								
 								</c:when>
 								<c:otherwise>
-									<input type="button" id="nextBtn" onclick="nextPageFnc();" value="다음 글">
+									<input type="button" id="nextBtn" style="text-align: center; 
+											 width: 150px;  height: 50px; 
+											 background-color: #60600E;  color: white;" onclick="nextPageFnc();" value="다음 글">
 								</c:otherwise>
 								</c:choose>			 
 								</div>
@@ -602,6 +618,8 @@
 				<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
 				<input type="hidden" id='keyword' name="keyword" value="${keyword}">
 				<input type="hidden" id="comments" name="comments">
+				<input type="hidden" id="rnum" name="rnum" value="${rnum}">
+				<input type="hidden" id="lineTitle" name="lineTitle" value="${lineTitle}">
 			</form>
 			</div>
 		</div>

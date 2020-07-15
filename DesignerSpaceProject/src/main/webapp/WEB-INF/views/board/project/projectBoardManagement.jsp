@@ -80,6 +80,13 @@
 		#pagingArea{
 			margin-top: 50px;
 		}
+		#memberInfoLink{
+			text-decoration: none;
+			color: #000;
+		}
+		#memberInfoLink:hover{
+			text-decoration: underline;
+		}
 	</style>
 	
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
@@ -193,8 +200,8 @@
 							<tr>
 								<td><input name='projectCheck' type="checkbox" class='checkbox' value="${projectList.project_board_no}"></td>
 								<td>${projectList.project_board_no}</td>
-								<td><a href="./detail.do?project_board_no=${projectList.project_board_no}">${projectList.project_board_title}</a></td>
-								<td>${projectList.member_nick}</td>
+								<td><a href="../member/myBoard.do?project_board_no=${projectList.project_board_no}">${projectList.project_board_title}</a></td>
+								<td><a id="memberInfoLink" href="./MyPage.do?mno=${projectList.project_board_mno}">${projectList.member_nick}</a></td>
 								<td>
 									<c:choose>
 										<c:when test="${projectList.project_board_category eq 'p'}">
