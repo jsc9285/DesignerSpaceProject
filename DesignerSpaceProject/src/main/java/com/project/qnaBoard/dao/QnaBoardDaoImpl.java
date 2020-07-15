@@ -19,12 +19,14 @@ public class QnaBoardDaoImpl implements QnaBoardDao{
 	String namespace = "com.project.qnaBoard.";
 	
 	@Override
-	public List<QnaBoardDto> qnaBoardSelectList(String searchOption, String keyword, int start, int end) {
+	public List<QnaBoardDto> qnaBoardSelectList(String searchOption, String keyword,
+			String sortOption, int start, int end) {
 		// TODO Auto-generated method stub
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("searchOption", searchOption);
 		map.put("keyword", keyword);
+		map.put("sortOption", sortOption);
 		map.put("start", start);
 		map.put("end", end);
 		
@@ -142,6 +144,13 @@ public class QnaBoardDaoImpl implements QnaBoardDao{
 		map.put("qna_comment_comments", qna_comment_comments);
 		
 		sqlSession.update(namespace + "qnaCommentUpdateOne", map);
+	}
+
+	@Override
+	public int qnaCommentDelete(int qna_board_no) {
+		// TODO Auto-generated method stub
+		
+		return sqlSession.delete(namespace + "qnaCommentDelete", qna_board_no);
 	}
 
 

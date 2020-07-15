@@ -79,25 +79,33 @@
 					<br>
 					<div style="margin-left: 200px;">
 						<span style="width: 200px;">작성자</span>
-						<span style="margin-left: 100px;">${qnaBoardDto.MEMBER_NICK}</span>
+						<span style="margin-left: 100px;">${reportBoardDto.member_nick}</span>
+						<span style="width: 200px; margin-left: 300px;">신고대상</span>
+						<span style="margin-left: 100px;">${reportBoardDto.member_nick}</span>
 					</div>
 					<br>
 					<hr>
 					<br>
 					<br>
 					<div style="margin-left: 200px;">
-						<span style="width: 200px;">제목</span>
-						<input type="text" name="QNA_BOARD_TITLE" placeholder="제목을 입력해 주세요" 
-							style="margin-left: 117px;
-							width: 850px; height: 50px;">
+						<span style="width: 200px;">신고작품</span>
+						<span style="margin-left: 117px;">${reportBoardDto.report_board_title}</span>
+					</div>
+					<br>
+					<hr>
+					<br>
+					<br>
+					<div style="margin-left: 200px;">
+						<span style="width: 200px;">신고사유</span>
+						<span style="margin-left: 117px;">${reportBoardDto.report_board_reason}</span>
 					</div>
 					<br>
 					<hr>
 					<br>
 					<br>
 					<div style="margin-left: 200px; height: 400px;">
-						<span style="width: 200px; margin-top: 0px;">질문내용</span>
-						<textarea name="QNA_BOARD_CONTENTS" style="margin-left: 86px; 
+						<span style="width: 200px; margin-top: 0px;">신고내용</span>
+						<textarea name="qna_board_contents" style="margin-left: 86px; 
 							vertical-align: top;" cols="115" rows="25"></textarea>
 					</div>
 					<br>
@@ -107,8 +115,6 @@
 					<div style="text-align: center;">
 						<input type="submit" value="작성완료" id='writeCompleteButton'>
 						<input type="button" value="취소" id='resetButton' onclick="pageMoveListFnc();">
-						<input type="hidden" value="3" name="QNA_BOARD_MNO">
-						<input type="hidden" value="MEMBER_NICK" name="MEMBER_NICK">
 					</div>
 				</form>	
 			</div>

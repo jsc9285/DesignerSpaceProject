@@ -135,7 +135,7 @@ public class FreeBoardController {
 	}
 	
 	@RequestMapping(value="/freeBoard/like.do", method = RequestMethod.GET)
-	public String like(int mno, int no,String searchOption
+	public String like(int mno, int no,String searchOption,int rnum
 			,String keyword) {
 		log.info("좋아요 추가"+mno + ": 회원번호 " + no + "게시물 번호"+ searchOption + keyword);
 		freeBoardService.freeBoardLikeInsert(no, mno);
@@ -143,7 +143,7 @@ public class FreeBoardController {
 	}
 	
 	@RequestMapping(value="/freeBoard/likeUpdate.do", method = RequestMethod.GET)
-	public String likeUpdate(int mno, int no,String searchOption
+	public String likeUpdate(int mno, int no,String searchOption,int rnum
 			,String keyword) {
 		log.info("좋아요 수정"+mno + ": 회원번호 " + no + "게시물 번호"+ searchOption + keyword);
 		freeBoardService.freeBoardLikeUpdate(no,mno);
@@ -153,7 +153,7 @@ public class FreeBoardController {
 	
 	
 	@RequestMapping(value="/freeBoard/likeDel.do", method = RequestMethod.GET)
-	public String likeDel(int mno, int no, String searchOption
+	public String likeDel(int mno, int no, String searchOption,int rnum
 			,String keyword) {
 		log.info("좋아요 삭제"+mno + ": 회원번호 " + no + "게시물 번호" + searchOption + keyword);
 		freeBoardService.freeBoardLikeDel(no, mno);
