@@ -126,7 +126,7 @@
 					<form name="loginForm" action="./member/loginCtr.do" method="post" onsubmit="return loginOrderFnc();">
 						<c:choose>
 							<c:when test="${empty member_email}">
-								<input id="email_input" class="input" type="email" name='member_email' 
+								<input id="email_input" class="input" type="text" name='member_email' 
 									maxlength="20" placeholder="이메일 입력" >
 							</c:when>
 							<c:otherwise>

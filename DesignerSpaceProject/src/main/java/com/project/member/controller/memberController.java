@@ -380,7 +380,7 @@ public class memberController {
 		}
 		
 		//회원탈퇴
-		@RequestMapping(value = "/member/remove.do", method = RequestMethod.GET)
+		@RequestMapping(value = "/member/remove.do", method = {RequestMethod.GET, RequestMethod.POST})
 		public String removeOne(int[] member_chk, 
 				@RequestParam(defaultValue = "0") int member_no,HttpSession session){
 			

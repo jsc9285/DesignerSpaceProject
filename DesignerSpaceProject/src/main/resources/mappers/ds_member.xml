@@ -69,6 +69,7 @@
         ON MEMBER_NO = PROFILE_TABLE_MNO
 		WHERE M.MEMBER_EMAIL = #{member_email}
 		AND M.MEMBER_PWD = #{member_pwd}
+		AND M.MEMBER_DEL_FLAG ='N'
 	</select>
 	
 	<select id="memberIdFind" parameterType="map" 

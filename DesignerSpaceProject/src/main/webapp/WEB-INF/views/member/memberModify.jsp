@@ -139,7 +139,8 @@
 					
 					
 					
-					<input type="password" id="chk_pwd" class="input" placeholder="비밀번호를 입력해주세요">
+					<input type="password" id="chk_pwd" class="input" placeholder="비밀번호를 입력해주세요"
+						maxlength="16">
 					
 					<input type="hidden" id="chk_pwd2" value="${member_pwd}" name='member_pwd'>
 				

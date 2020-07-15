@@ -178,29 +178,217 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 	
 <script type="text/javascript">
-
-	function exitMemberFnc() {
-		var delConfirm = confirm('정말로 탈퇴하시겠습니까?');
+	var originalNick ="";//기존의 비밀번호
+	var originalPhone ="";//기존의 비밀번호
+	var nickPass ="";//중복확인 할때 저장되는 닉네임값
+	var nickFlag = "Y";//중복햇나안햇나
+	var pwdFlag  = "Y";//비밀번호 패스
+	var pwdChkFlag  = "N";//비밀번호 패스
+	var phoneFlag = "Y";//전화번호 패스
+	
+$(function(){
 		
-		if (delConfirm) {
-			location.href='../member/remove.do';
+	originalNick = $('#member_nick').val();
+	nickPass = $('#member_nick').val();
+	originalPhone = $('#member_phone').val();
+		
+		$("#check_nick").click(function() {
+		   var nickObj = $('#member_nick').val();
+		   
+		   $.ajax({
+		      url : "./checkNick.do",
+		      type : "GET",
+		      data : "nick=" + nickObj,
+		      success : function(data) {
+		         console.log("1 = 중복o / 0 = 중복x : "+ data);                     
+		         
+		         if(originalNick != nickObj){
+		        	 if (data == 1) {
+			        	 $('#member_nick').css('border', '2px solid #ff0000');
+			        	 $('#nick_div').css('color', '#ff0000');
+			        	 $('#nick_div').html("사용중인 닉네임입니다.");
+			        	 
+			        	 nickFlag = "N";
+			        	 
+			         }else{
+			        	 $('#member_nick').css('border', '2px solid #4B89DC');
+			        	 $('#nick_div').css('color', '#4B89DC');
+			        	 $('#nick_div').html('사용가능한 닉네임입니다.');
+			        	 
+			        	 nickFlag = "Y";
+			        	 nickPass =$('#member_nick').val();
+			         }  
+		    	 }else {
+		    		 $('#member_nick').css('border', '2px solid #4B89DC');
+		        	 $('#nick_div').css('color', '#4B89DC');
+		        	 $('#nick_div').html("현재 닉네임입니다.");
+		        	 nickFlag = "Y";
+				 }
+		      },
+		      error : function() {
+				  console.log("닉네임 실패");
+			  } 
+		        
+		   });
+		   
+	    });
+		
+		
+		$("#member_pwd").change(function() {
 			
+			var pwdObj = $('#member_pwd').val();
+			var num = pwdObj.search(/[0-9]/g);
+			var eng = pwdObj.search(/[a-z]/ig);
+			var spe = pwdObj.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+			
+			
+			if(pwdObj.length < 8 || pwdObj.length > 20){
+				
+				$('#member_pwd').css('border', '2px solid #ff0000');
+	        	$('#pwd_div').css('color', '#ff0000');
+	        	$('#pwd_div').html("8자리 ~ 16자리 이내로 입력해주세요");
+	        	pwdFlag = "N";
+	        	
+	        	return false;
+				
+		   }else if(pwdObj.search(/\s/) != -1){
+			    $('#member_pwd').css('border', '2px solid #ff0000');
+	        	$('#pwd_div').css('color', '#ff0000');
+	        	$('#pwd_div').html("비밀번호는 공백 없이 입력해주세요");
+	        	pwdFlag = "N";
+	        	
+				return false;
+		    
+		   }else if(num < 0 || eng < 0 || spe < 0 ){
+			    $('#member_pwd').css('border', '2px solid #ff0000');
+	        	$('#pwd_div').css('color', '#ff0000');
+	        	$('#pwd_div').html("영문,숫자, 특수문자를 혼합하여 입력해주세요");
+	        	pwdFlag = "N";
+	        	
+				return false;
+		  
+		   }else {
+			   $('#member_pwd').css('border', '2px solid #4B89DC');
+			   $('#pwd_div').css('color', '#4B89DC');
+			   $('#pwd_div').html('사용가능한 비밀번호입니다.');
+			   console.log("통과"); 
+			   pwdFlag = "Y";
+			   return true; 	
+		   }
+		   
+		   
+	    });
+		
+		//비밀번호 체크
+		$("#pwd_check").blur(function() {
+			
+			var pwdObj = $('#member_pwd').val();
+			var pwdChkObj = $('#pwd_check').val();			
+			
+			if(pwdObj!=pwdChkObj){
+				
+				$('#pwd_check').css('border', '2px solid #ff0000');
+	        	$('#pwd_chk_div').css('color', '#ff0000');
+	        	$('#pwd_chk_div').html("비밀번호와 일치하지 않습니다");
+	        	
+	        	pwdChkFlag="N";
+	        	
+	        	return false;
+				
+		   }else {
+			   $('#pwd_check').css('border', '2px solid #4B89DC');
+			   $('#pwd_chk_div').css('color', '#4B89DC');
+			   $('#pwd_chk_div').html('비밀번호와 일치합니다');
+			   
+			   pwdChkFlag="Y";
+
+			   return true; 	
+		   } 
+	    });
+		
+		//휴대폰번호 확인
+		$("#member_phone").change(function() {
+		   var phoneObj = $('#member_phone').val();
+		   
+		   $.ajax({
+		      url : "./checkPhone.do",
+		      type : "GET",
+		      data : "phone=" + phoneObj,
+		      success : function(data) {
+		         console.log("1 = 중복o / 0 = 중복x : "+ data);                     
+		         
+		        if (originalPhone != phoneObj) {
+		        	if (data == 1) {
+			        	 $('#member_phone').css('border', '2px solid #ff0000');
+			        	 $('#phone_div').css('color', '#ff0000');
+			        	 $('#phone_div').html("사용중인 번호입니다.");
+			        	 
+			        	 phoneFlag="N";
+			        	 
+			         }else{
+			        	 $('#member_phone').css('border', '2px solid #4B89DC');
+			        	 $('#phone_div').css('color', '#4B89DC');
+			        	 $('#phone_div').html('사용가능한 번호입니다.');
+			        	 
+			        	 phoneFlag="Y";
+			        	 
+			         }   
+				}else {
+					 $('#member_phone').css('border', '2px solid #4B89DC');
+		        	 $('#phone_div').css('color', '#4B89DC');
+		        	 $('#phone_div').html("현재 휴대폰번호입니다.");
+		        	 phoneFlag="Y";
+				}  
+		      },
+		      error : function() {
+		    	  console.log("번호 실패");
+		      }
+		   });
+		   
+	    });
+		
+	});
+	
+	
+	function modiOrderFnc() {//로그인 버튼 
+		
+		var nick = document.getElementById("member_nick");
+		var pwd = document.getElementById("member_pwd");
+		var pwdCheck = document.getElementById("pwd_check");
+		var phone = document.getElementById("member_phone");
+		var answer = document.getElementById("member_answer");
+		
+		if(!(nick.value==nickPass && nickFlag=="Y")) {
+			alert('닉네임을 확인해주세요');
+			nick.focus();
+			return false;
+			
+		}else if(pwdFlag=="N"){
+			alert('비밀번호를 확인해주세요');
+			pwd.focus();
+			return false;
+			
+		}else if (pwdChkFlag=="N") {
+			alert('비밀번호확인을 확인해주세요');
+			pwdCheck.focus();
+			return false;
+			
+		}else if(!(phoneFlag=="Y")){
+			alert('휴대폰번호를 확인해주세요');
+			phone.focus();
+			return false;
+		}else if (answer.value=="" || answer.value==null) {
+			alert('본인확인을 확인해주세요');
+			answer.focus();
+			return false;
 		}else {
-		    alert('삭제가 취소되었습니다.');
+			return true;
 		}
-	 
-}
-</script>
-
-
-</head>
-
-
-
-<script type="text/javascript">
+		
+	}
 	
-	
-	
+
+
 	function setThumbnailFnc(event) { 
 		
 		
@@ -231,8 +419,25 @@
 	    $("#p_image").attr('src', '<%=request.getContextPath()%>/resources/img/profile.png');
 
  	}
-
+	
+	function exitMemberFnc() {
+		if(confirm("정말 탈퇴하시겠습니까?")==true){
+			
+			var remove_no = $('#member_no').val();
+			
+			location.href='./remove.do?member_no='
+				+remove_no;	
+		}else {
+			alert("탈퇴가 취소되었습니다");
+		}
+	}
+	
 </script>
+
+
+</head>
+
+
 <body>
 
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
@@ -246,39 +451,40 @@
 				</div> 
 				
 				<div id="join_div">
-					<form action="modInfoDetailCtr.do" method="post" enctype="multipart/form-data">
-						<input type="hidden" name="member_no" value="${memberDto.member_no}">
+					<form action="modInfoDetailCtr.do" method="post" enctype="multipart/form-data" onsubmit="return modiOrderFnc();">
+						<input type="text" id="member_no" name="member_no" value="${memberDto.member_no}">
 						
 						<span>성명</span> 
 						<input type="text" class="input" name="member_name" style="background-color: #EAEAEA" 
 							value="${memberDto.member_name}" readonly="readonly"> 
-						<div class="overlap_div"></div>
+						<div id="name_div" class="overlap_div"></div>
 							
 						<span>닉네임</span> 
 						<div>
-							<input type="text" class="input" name="member_nick" 
+							<input type="text" class="input" id="member_nick" name="member_nick" maxlength="10"
 								value="${memberDto.member_nick}" style="width: 200px;">
 							<input type="button" id="check_nick" class="overlap" value="중복확인">
 						</div>
-						<div class="overlap_div"></div>
+						<div id="nick_div" class="overlap_div"></div>
 						
 						<span>이메일</span> 
-						<input type="email" class="input" name="member_email" style="background-color: #EAEAEA"
+						<input type="email" class="input" id="member_email" name="member_email" style="background-color: #EAEAEA"
 							value="${memberDto.member_email}" readonly="readonly"> 
-						<div class="overlap_div"></div>
+						<div id="email_div" class="overlap_div"></div>
 							
 						<span>비밀번호</span> 
-						<input type="password" class="input" name="member_pwd" 
+						<input type="password" id="member_pwd" class="input" name="member_pwd" maxlength="16"
 							value="${memberDto.member_pwd}">
-						<div class="overlap_div"></div>
+						<div id="pwd_div" class="overlap_div"></div>
 							
 						<span>비밀번호 확인</span>  
-						<input type="password" class="input" value=""> 
-						<div class="overlap_div"></div>
+						<input type="password" id="pwd_check" class="input" value="" maxlength="16"> 
+						<div id="pwd_chk_div" class="overlap_div"></div>
 						
 						<span>휴대폰 번호</span> 
-						<input type="text" class="input" name="member_phone" value="${memberDto.member_phone}">
-						<div class="overlap_div"></div>
+						<input type="text" id="member_phone" class="input" name="member_phone" value="${memberDto.member_phone}"
+							onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" maxlength="15">
+						<div id="phone_div" class="overlap_div"></div>
 						
 						<span>본인확인</span>
 						<select id="select" name="member_check_question">
@@ -307,8 +513,9 @@
 								</c:otherwise>
 							</c:choose>
 						</select> <br> 
-						<input class="input" name="member_check_answer" value="${memberDto.member_check_answer}"><br>
-						<div class="overlap_div"></div>
+						<input class="input" id="member_answer" name="member_check_answer" maxlength="30"
+							value="${memberDto.member_check_answer}"><br>
+						<div id="answer_div" class="overlap_div"></div>
 						
 						
 						<span>프로필사진</span>
@@ -339,11 +546,12 @@
 						<input type="hidden" id="chang_flag" name="change" value="N">
 						
 						<span>소개</span>
-						<textarea id="textarea" rows="8" cols="38"  name="member_comments" >${memberDto.member_comments}</textarea>
+						<textarea id="textarea" rows="8" cols="38"  name="member_comments" maxlength="100">
+						${memberDto.member_comments}</textarea>
 						
 						<button id="button">확인</button>
 					</form>
-					<button id="exit" onclick="exitMemberFnc();">탈퇴</button>
+					<button type id="exit" onclick="exitMemberFnc();">탈퇴</button>
 					<button id="cancel">취소</button>
 				</div>
 			</div>

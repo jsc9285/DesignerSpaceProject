@@ -17,11 +17,12 @@
 	
 		window.onload = function() {
 			
-			if(memberDto.getMember_grade()==0) {
-				
-				return "redirect:../login.do";
+			if($('#member_grade').val()==0) {
+				alert("탈퇴가 완료되었습니다");
+				location.href="../login.do";
 			}else {
-				return "redirect:../admin/listAdmin.do";
+				alert("삭제가 완료되었습니다");
+				location.href="../admin/listAdmin.do";
 			}
 		}
 	
@@ -35,7 +36,7 @@
 	
 	<div id="wrap">
 		<div id="innerWrap">
-			<input type="hidden" name="member_grade" value="${memberDto.member_grade}">
+			<input type="hidden" id="member_grade" name="member_grade" value="${memberDto.member_grade}">
 		</div>
 	</div>
 	
