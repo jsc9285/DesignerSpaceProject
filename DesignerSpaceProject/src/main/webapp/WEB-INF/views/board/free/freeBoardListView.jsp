@@ -187,12 +187,12 @@ function freeBoardListOnePageFnc(obj, event){
 		
 		freeBoardNoObj = aTagObj.parent().parent().children('td').eq(0);
 		
-		var answer = confirm('회원 정보를 수정하시겠습니까?');
+		var answer = confirm('회원 정보를 삭제하시겠습니까?');
         if (answer) {
            	url += './freeBoardDeleteCtr.do?';
    			url += 'no=' + freeBoardNoObj.html();  			
    			location.href = url;
-   			alert('성공적으로 수정되었습니다.');
+   			alert('성공적으로 삭제되었습니다.');
            return true;
         }else {
            return false;
@@ -205,17 +205,9 @@ function freeBoardListOnePageFnc(obj, event){
 		
 		for (var i = 0; i < $('.freeBoardTitle').length; i++) {
 			var freeBoardTitleStr = $('.freeBoardTitle').eq(i).text();
-<<<<<<< HEAD
 			if(freeBoardTitleStr.length >= 30){
-=======
-			if(freeBoardTitleStr.length >= 10){
->>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 				
-<<<<<<< HEAD
 				freeBoardTitleStr = freeBoardTitleStr.substring(0,30) + "...";	
-=======
-				freeBoardTitleStr = freeBoardTitleStr.substring(0,10) + "...";	
->>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 			}
 			$('.freeBoardTitle').eq(i).text(freeBoardTitleStr);
 		}
@@ -234,11 +226,6 @@ function freeBoardListOnePageFnc(obj, event){
 		<div id="innerWrap">
 			<div id='boardTitle'>자유게시판</div>
 			<div>
-				<a href="./myList.do">내신고글</a>
-<<<<<<< HEAD
-				<a href="./myQnaList.do">내QNA글</a>
-=======
->>>>>>> branch 'master' of https://github.com/jsc9285/DesignerSpaceProject.git
 				<form action="./freeBoardAdd.do" method="post">
 					<input type="submit" value="작성" id='writeButton'>
 					<input type="hidden" id="mno" name="mno" value="${memberDto.member_no}">

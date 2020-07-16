@@ -137,29 +137,61 @@ public class FreeBoardController {
 	}
 	
 	@RequestMapping(value="/freeBoard/like.do", method = RequestMethod.GET)
-	public String like(int mno, int no,String searchOption,int rnum
-			,String keyword) {
+	public String like(int mno, int no
+			,String searchOption
+			,int rnum
+			,String keyword
+			,String lineTitle
+			,Model model) {
 		log.info("좋아요 추가"+mno + ": 회원번호 " + no + "게시물 번호"+ searchOption + keyword);
 		freeBoardService.freeBoardLikeInsert(no, mno);
-		return "forward:/freeBoard/freeBoardListOne.do";
+		
+		model.addAttribute("rnum", rnum);
+		model.addAttribute("mno", mno);
+		model.addAttribute("no", no);
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("lineTitle", lineTitle);
+		return "redirect:/freeBoard/freeBoardListOne.do#date";
 	}
 	
 	@RequestMapping(value="/freeBoard/likeUpdate.do", method = RequestMethod.GET)
-	public String likeUpdate(int mno, int no,String searchOption,int rnum
-			,String keyword) {
+	public String likeUpdate(int mno, int no
+			,String searchOption
+			,int rnum
+			,String keyword
+			,String lineTitle
+			,Model model) {
 		log.info("좋아요 수정"+mno + ": 회원번호 " + no + "게시물 번호"+ searchOption + keyword);
 		freeBoardService.freeBoardLikeUpdate(no,mno);
-		return "forward:/freeBoard/freeBoardListOne.do";
+		
+		model.addAttribute("rnum", rnum);
+		model.addAttribute("mno", mno);
+		model.addAttribute("no", no);
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("lineTitle", lineTitle);
+		return "redirect:/freeBoard/freeBoardListOne.do#date";
 	}
 	
 	
 	
 	@RequestMapping(value="/freeBoard/likeDel.do", method = RequestMethod.GET)
-	public String likeDel(int mno, int no, String searchOption,int rnum
-			,String keyword) {
+	public String likeDel(int mno, int no
+			,String searchOption
+			,int rnum
+			,String keyword
+			,String lineTitle
+			,Model model) {
 		log.info("좋아요 삭제"+mno + ": 회원번호 " + no + "게시물 번호" + searchOption + keyword);
 		freeBoardService.freeBoardLikeDel(no, mno);
-		return "forward:/freeBoard/freeBoardListOne.do";
+		model.addAttribute("rnum", rnum);
+		model.addAttribute("mno", mno);
+		model.addAttribute("no", no);
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("lineTitle", lineTitle);
+		return "redirect:/freeBoard/freeBoardListOne.do#date";
 	}
 	
 	@RequestMapping(value="/freeBoard/freeBoardAdd.do", method = {RequestMethod.GET, RequestMethod.POST}) 
@@ -203,19 +235,30 @@ public class FreeBoardController {
 	}
 	
 	@RequestMapping(value="/freeBoard/commentAdd.do", method = RequestMethod.GET)
-	public String commentAdd(int mno, int no,String searchOption
-			,int rnum
+	public String commentAdd(int mno, int no
+			,String searchOption
 			,String keyword
-			,String comments) {
+			,int rnum
+			,String comments
+			,String lineTitle
+			,Model model) {
 		log.info("댓글 추가"+mno + ": 회원번호 " + no + "게시물 번호"+ searchOption + keyword);
 		freeBoardService.freeBoardCommentAdd(no,mno,comments);
-		return "forward:/freeBoard/freeBoardListOne.do";
+		
+		model.addAttribute("rnum", rnum);
+		model.addAttribute("mno", mno);
+		model.addAttribute("no", no);
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("lineTitle", lineTitle);
+		return "redirect:/freeBoard/freeBoardListOne.do#comments";
 	}
 	@RequestMapping(value="/freeBoard/freeBoardUpdate.do", method = {RequestMethod.GET, RequestMethod.POST}) 
 	public String freeBoardUpdate(@RequestParam(defaultValue = "0") int no
 			,int mno		,String writer
 			,String title	,String contents
 			,String searchOption	,String keyword
+			,String lineTitle
 			,Model model, int rnum) {
 		log.info("수정 알넘 : "+ rnum);
 		String memInfo = freeBoardService.freeBoardAddOne(mno);
@@ -227,6 +270,7 @@ public class FreeBoardController {
 		map.put("keyword", keyword);
 		map.put("writer", writer);
 		map.put("title", title);
+		map.put("lineTitle", lineTitle);
 		map.put("contents", contents);
 		map.put("rnum", rnum);
 		
@@ -240,20 +284,43 @@ public class FreeBoardController {
 			,String title
 			,String contents
 			,String searchOption
+			,int mno
 			,String keyword
-			,int rnum) {
+			,String lineTitle
+			,int rnum
+			,Model model) {
 		log.info("게시물 수정 "+no +"게시물번호" + title + contents);
 		freeBoardService.freeBoardUpdate(no, title, contents);
-		return "forward:/freeBoard/freeBoardListOne.do";
+		
+		model.addAttribute("rnum", rnum);
+		model.addAttribute("mno", mno);
+		model.addAttribute("no", no);
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("lineTitle", lineTitle);
+		return "redirect:/freeBoard/freeBoardListOne.do";
 	}
 	
 	@RequestMapping(value="/freeBoard/freeBoardCommentDeleteCtr.do", method = RequestMethod.GET)
-	public String freeBoardCommentDeleteCtr(int no, int fcno) {
+	public String freeBoardCommentDeleteCtr(int no, int fcno
+			,int rnum
+			,int mno
+			, String searchOption
+			,String keyword
+			,String lineTitle
+			,Model model) {
 		log.info("게시물 댓글 삭제"+ ": 댓글번호 " + fcno);
 		
 		freeBoardService.freeBoardCommentOneDelete(fcno);
 		
-		return "forward:/freeBoard/freeBoardListOne.do";
+		model.addAttribute("rnum", rnum);
+		model.addAttribute("mno", mno);
+		model.addAttribute("no", no);
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("lineTitle", lineTitle);
+		
+		return "redirect:/freeBoard/freeBoardListOne.do#upd";
 	}
 	
 	@RequestMapping(value="/freeBoard/freeBoardCommentUpdateCtr.do", method = RequestMethod.GET) 
@@ -262,12 +329,22 @@ public class FreeBoardController {
 			,String title
 			,String searchOption
 			,String keyword
+			,int mno
 			,int rnum
 			,String comments
-			,int fcno) {
+			,String lineTitle
+			,int fcno
+			,Model model) {
 		log.info("댓글 수정 "+fcno +"댓글 내용" + comments);
 		freeBoardService.freeBoardCommentUpdate(fcno, comments);
-		return "forward:/freeBoard/freeBoardListOne.do";
+		
+		model.addAttribute("rnum", rnum);
+		model.addAttribute("mno", mno);
+		model.addAttribute("no", no);
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("lineTitle", lineTitle);
+		return "redirect:/freeBoard/freeBoardListOne.do#upd";
 	}
 	
 	
@@ -278,9 +355,6 @@ public class FreeBoardController {
 		FreeBoardDto freeBoardDto = freeBoardService.selectPrePage(searchOption, keyword
 				,lineTitle, rnum);
 		
-		System.out.println(freeBoardDto.getFreeBoardRownum());
-		System.out.println(freeBoardDto.getMemberNo());
-		System.out.println(freeBoardDto.getFreeBoardNo());
 		model.addAttribute("rnum", freeBoardDto.getFreeBoardRownum());
 		model.addAttribute("mno", freeBoardDto.getMemberNo());
 		model.addAttribute("no", freeBoardDto.getFreeBoardNo());
@@ -297,9 +371,6 @@ public class FreeBoardController {
 		FreeBoardDto freeBoardDto = freeBoardService.selectNextPage(searchOption, keyword
 				,lineTitle, rnum);
 		
-		System.out.println(freeBoardDto.getFreeBoardRownum());
-		System.out.println(freeBoardDto.getMemberNo());
-		System.out.println(freeBoardDto.getFreeBoardNo());
 		model.addAttribute("rnum", freeBoardDto.getFreeBoardRownum());
 		model.addAttribute("mno", freeBoardDto.getMemberNo());
 		model.addAttribute("no", freeBoardDto.getFreeBoardNo());
@@ -307,136 +378,6 @@ public class FreeBoardController {
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("lineTitle", lineTitle);
 		return "redirect:/freeBoard/freeBoardListOne.do";
-	}
-	
-	@RequestMapping(value = "/freeBoard/myList.do", method = RequestMethod.GET)
-	public String myReportBoardList(@RequestParam(defaultValue = "1") int curPage
-							 , @RequestParam(defaultValue = "0") int report_board_no
-							 , @RequestParam(defaultValue = "titleAndContent") String searchOption
-							 , @RequestParam(defaultValue = "report_board_whole") String sortOption
-							 , @RequestParam(defaultValue = "") String keyword
-							 , @RequestParam(defaultValue = "5")int mno
-							 , Model model) {
-		log.info("Welcome reportBoardList! " + curPage + " : ????"
-				+ searchOption + " : " + keyword);
-		
-		if("writer".equals(searchOption)) {
-			searchOption = "member_nick";
-		}
-		
-		if("title".equals(searchOption)) {
-			searchOption = "report_board_title";
-		}
-		
-		if("content".equals(searchOption)) {
-			searchOption = "report_board_contents";
-		}
-		
-		int totalCount = 
-				freeBoardService.reportBoardSelectTotalCount(searchOption, keyword, sortOption, mno);
-		
-		Paging reportBoardPaging = new Paging(totalCount, curPage);
-		int start = reportBoardPaging.getPageBegin();
-		int end = reportBoardPaging.getPageEnd();
-				
-		List<ReportBoardDto> reportBoardList = freeBoardService.reportBoardSelectList(
-				searchOption, keyword, sortOption, start, end, mno);
-		
-//		 화면의 form의 이름을 맞추기 위한 작업
-		if("member_nick".equals(searchOption)) {
-			searchOption = "writer";
-		}
-		
-		if("report_board_title".equals(searchOption)) {
-			searchOption = "title";
-		}
-		
-		if("report_board_contents".equals(searchOption)) {
-			searchOption = "content";
-		}
-		
-		// 검색
-		HashMap<String, Object> searchMap 
-			= new HashMap<String, Object>();
-		searchMap.put("searchOption", searchOption);
-		searchMap.put("keyword", keyword);
-		searchMap.put("sortOption", sortOption);
-		
-		// 페이징
-		Map<String, Object> pagingMap = new HashMap<>();
-		pagingMap.put("totalCount", totalCount);
-		pagingMap.put("paging", reportBoardPaging);
-
-		model.addAttribute("reportBoardList", reportBoardList);
-		model.addAttribute("pagingMap", pagingMap);
-		model.addAttribute("searchMap", searchMap);
-		
-		return "member/myReport";
-	}
-	
-	@RequestMapping(value = "/freeBoard/myQnaList.do", method = RequestMethod.GET)
-	public String myQnaList(@RequestParam(defaultValue = "1") int curPage
-							 , @RequestParam(defaultValue = "0") int qna_board_no
-							 , @RequestParam(defaultValue = "titleAndContent") String searchOption
-							 , @RequestParam(defaultValue = "qna_board_whole") String sortOption
-							 , @RequestParam(defaultValue = "") String keyword
-							 , @RequestParam(defaultValue = "5")int mno
-							 , Model model) {
-		log.info("Welcome qnaBoardList! " + curPage + " : ????"
-				+ searchOption + " : " + keyword);
-		
-		if("writer".equals(searchOption)) {
-			searchOption = "member_nick";
-		}
-		
-		if("title".equals(searchOption)) {
-			searchOption = "qna_board_title";
-		}
-		
-		if("content".equals(searchOption)) {
-			searchOption = "qna_board_contents";
-		}
-		
-		int totalCount = 
-				freeBoardService.qnaBoardSelectTotalCount(searchOption, keyword, sortOption, mno);
-		
-		Paging qnaBoardPaging = new Paging(totalCount, curPage);
-		int start = qnaBoardPaging.getPageBegin();
-		int end = qnaBoardPaging.getPageEnd();
-		System.out.println("총 카운트 : "+totalCount);		
-		List<QnaBoardDto> qnaBoardList = freeBoardService.qnaBoardSelectList(
-				searchOption, keyword, sortOption, start, end, mno);
-//		 화면의 form의 이름을 맞추기 위한 작업
-
-		if("member_nick".equals(searchOption)) {
-			searchOption = "writer";
-		}
-		
-		if("qna_board_title".equals(searchOption)) {
-			searchOption = "title";
-		}
-		
-		if("qna_board_contents".equals(searchOption)) {
-			searchOption = "content";
-		}
-		
-		// 검색
-		HashMap<String, Object> searchMap 
-			= new HashMap<String, Object>();
-		searchMap.put("searchOption", searchOption);
-		searchMap.put("keyword", keyword);
-		searchMap.put("sortOption", sortOption);
-		
-		// 페이징
-		Map<String, Object> pagingMap = new HashMap<>();
-		pagingMap.put("totalCount", totalCount);
-		pagingMap.put("paging", qnaBoardPaging);
-
-		model.addAttribute("qnaBoardList", qnaBoardList);
-		model.addAttribute("pagingMap", pagingMap);
-		model.addAttribute("searchMap", searchMap);
-		
-		return "member/myQna";
 	}
 	
 }

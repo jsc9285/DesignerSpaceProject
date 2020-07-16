@@ -69,6 +69,8 @@
 		var fbnoObj = $('#no');
 		var keywordObj = $('#keyword');
 		var searchOptionObj = $('#searchOption');
+		var lineTitleObj = $('#lineTitle');
+		var rnumObj = $('#rnum');
 		
 		var url = '';
 		
@@ -77,6 +79,8 @@
 		url += '&keyword=' + keywordObj.val();
 		url += '&searchOption=' + searchOptionObj.val();
 		url += '&mno=' + mnoObj.val();
+		url += '&lineTitle=' + lineTitleObj.val();
+		url += '&rnum=' + rnumObj.val();
 		
 		location.href = url;
 	}
@@ -162,6 +166,9 @@
 						<br>
 						<br>
 						<input type="hidden" id="no" name="no" value="${map.no}">
+						<input type="hidden" id="rnum" name="rnum" value="${map.rnum}">
+						<input type="hidden" id="title" name="title" value="${map.title}">
+						<input type="hidden" id="lineTitle" name="lineTitle" value="${map.lineTitle}">
 						<input type="hidden" id="mno" name="mno" value="${map.mno}">
 						<input type="hidden" id='searchOption' 
 								name="searchOption" value="${map.searchOption}">

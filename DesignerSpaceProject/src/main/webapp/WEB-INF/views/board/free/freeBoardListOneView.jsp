@@ -80,14 +80,14 @@
 	
 	.imgObj{
 		position: absolute;
-		top: 1200px;
+		top: 1230px;
   		left: 930px;
   		bottom: auto;
   		right: auto;
 	}
  	#likeCount{ 
  		position: absolute; 
- 		top: 1240px; 
+ 		top: 1280px; 
    		left: 950px; 
    		bottom: auto; 
    		right: auto; 
@@ -255,84 +255,97 @@
 	}
 
 	function freeBoardCommentUpdateOneFnc(obj, event) {
-		var aTagObj = $(obj);
+		var answer = confirm('댓글을 수정하시겠습니까?');
+	        if (answer) {
+	        	var aTagObj = $(obj);
+	    		
+	    		event.preventDefault();
+	    		
+	    		var commentsObj = '';
+	    		
+	    		commentsObj = aTagObj.parent().parent().children('div').eq(1).children('span').eq(0);
+	    		
+	    		var updaObj = '';
+	    		
+	    		updaObj = aTagObj.parent().parent().children('div').eq(0).children('input').eq(0);
+	    		
+	    		var confirmBtn = $('<input type="button" value="수정 완료" onclick="freeBoardCommentUpdateFnc(this,event);">');
+	    		
+	    		updaObj.after(confirmBtn);
+	    		updaObj.remove();
+	    		var reTextarea = $('<textarea rows="5" cols="112" class="comments" onkeyup="reTextareaFnc();" id="comments" name="comments">');
+	    		commentsObj.after(reTextarea);
+	    		commentsObj.remove();
+	    	return true;
+	        }else {
+	           return false;
+	        }
 		
-		event.preventDefault();
-		
-		var commentsObj = '';
-		
-		commentsObj = aTagObj.parent().parent().children('div').eq(1).children('span').eq(0);
-		
-// 		alert(commentsObj.html());
-// 		commentsObj.removeAttr('disabled');
-		
-		var updaObj = '';
-		
-		updaObj = aTagObj.parent().parent().children('div').eq(0).children('input').eq(0);
-		
-		var confirmBtn = $('<input type="button" value="수정 완료" onclick="freeBoardCommentUpdateFnc(this,event);">');
-		
-		updaObj.after(confirmBtn);
-		updaObj.remove();
-		var reTextarea = $('<textarea rows="5" cols="112" class="comments" onkeyup="reTextareaFnc();" name="comments">');
-		commentsObj.after(reTextarea);
-		commentsObj.remove();
 	}
 	
 	function freeBoardCommentDeleteFnc(obj, event) {
-		var aTagObj = $(obj);
+		var answer = confirm('댓글을 삭제하시겠습니까?');
+	        if (answer) {
+	        	var aTagObj = $(obj);
+	    		
+	    		event.preventDefault();
+	    		
+	    		var mnoObj = $('#mno')
+	    		var fbnoObj = $('#fbno');
+	    		var keywordObj = $('#keyword');
+	    		var rnumObj = $('#rnum');
+	    		var searchOptionObj = $('#searchOption');
+	    		var lineTitleObj = $('#lineTitle');
+	    		var commentsObj = '';
+	    		var fcnoObj = '';
+	    		
+	    		fcnoObj = aTagObj.parent().parent().children('div').eq(1).children().eq(1);
+	    		
+	    		commentsObj = aTagObj.parent().parent().children('div').eq(1).children('span').eq(0);
+	    		
+	    		var url = '';
+	    		
+	    		url += './freeBoardCommentDeleteCtr.do?';
+	    		url += 'no=' + fbnoObj.val();
+	    		url += '&keyword=' + keywordObj.val();
+	    		url += '&searchOption=' + searchOptionObj.val();
+	    		url += '&mno=' + mnoObj.val();
+	    		url += '&fcno=' + fcnoObj.val();
+	    		url += '&rnum=' + rnumObj.val();
+	    		url += '&comments=' + commentsObj.val();
+	    		url += '&lineTitleObj=' + lineTitleObj.val();
+	    		
+	    		location.href = url;
+	    	return true;
+	        }else {
+	           return false;
+	        }
 		
-		event.preventDefault();
-		
-		var mnoObj = $('#mno')
-		var fbnoObj = $('#fbno');
-		var keywordObj = $('#keyword');
-		var rnumObj = $('#rnum');
-		var searchOptionObj = $('#searchOption');
-		var lineTitleObj = $('#lineTitle');
-		var commentsObj = '';
-		var fcnoObj = '';
-		
-		fcnoObj = aTagObj.parent().parent().children('div').eq(1).children().eq(1);
-		
-		commentsObj = aTagObj.parent().parent().children('div').eq(1).children('span').eq(0);
-		
-		var url = '';
-		
-		url += './freeBoardCommentDeleteCtr.do?';
-		url += 'no=' + fbnoObj.val();
-		url += '&keyword=' + keywordObj.val();
-		url += '&searchOption=' + searchOptionObj.val();
-		url += '&mno=' + mnoObj.val();
-		url += '&fcno=' + fcnoObj.val();
-		url += '&rnum=' + rnumObj.val();
-		url += '&comments=' + commentsObj.val();
-		url += '&lineTitleObj=' + lineTitleObj.val();
-		
-		location.href = url;
 	}
 	
 	function freeBoardDelteFnc() {
-		var fbnoObj = $('#fbno');
-		var url = '';
+		var answer = confirm('회원 정보를 삭제하시겠습니까?');
+	        if (answer) {
+	        	var fbnoObj = $('#fbno');
+	    		var url = '';
+	    		
+	    		url += './freeBoardDeleteCtr.do?';
+	    		url += 'no=' + fbnoObj.val();
+	    		
+	    		location.href = url;
+	    	return true;
+	        }else {
+	           return false;
+	        }
 		
-		url += './freeBoardDeleteCtr.do?';
-		url += 'no=' + fbnoObj.val();
-		
-		location.href = url;
 	}
-	
-// 	$(document).ready(function() {
-// 		var likeObj = $('#like');
-// 		likeObj.focus();		
-// 	});
 
 	function reTextareaFnc() {
 		$('.comments').keyup(function (e){
 			var comments = $(this).val();		
-			if(comments.length > 20){
-				alert('댓글은 최대 20자까지입니당.');
-				$(this).val(content.substring(0, 20));
+			if(comments.length > 30){
+				alert('댓글은 최대 30자까지입니당.');
+				$(this).val(comments.substring(0, 30));
 			}
 		});
 	}
@@ -386,9 +399,9 @@
 	$(document).ready(function () {
 		$('.comments').keyup(function (e){
 			var comments = $(this).val();		
-			if(comments.length > 20){
-				alert('댓글은 최대 20자까지입니당.');
-				$(this).val(content.substring(0, 20));
+			if(comments.length > 30){
+				alert('댓글은 최대 30자까지입니당.');
+				$(this).val(comments.substring(0, 30));
 			}
 		});
 	});
@@ -438,7 +451,7 @@
 						<br>
 						<br>
 						<div style="margin-left: 200px; height: 400px;">
-							<span style="width: 50px; margin-bottom: 50px;">내용</span>
+							<span style="width: 50px; margin-bottom: 50px; vertical-align: top;">내용</span>
 							<span id="contents" style=" margin-left: 86px;
 									width: 780px; height: 400px; display:inline-block; white-space: pre-wrap;">${freeBoardDto.freeBoardContents}</span>
 						</div>
@@ -447,7 +460,7 @@
 						<br>
 						<br>
 						<div style="margin-left: 200px;">
-						<span style="width: 600px;">작성일&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; 
+						<span id='date' style="width: 600px;">작성일&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; 
 						<fmt:formatDate value="${freeBoardDto.freeBoardCreDate}" 
 																pattern="yyyy.MM.dd HH:mm"/> 
 						</span>
@@ -471,9 +484,9 @@
 									<div>
 									<br>
 									<br>
-									<input type="button" id="like" onclick="likeFnc();" value="" 
+									<input type="button" id="like" name="like" onclick="likeFnc();" value="" 
 									style="border-radius: 50%; 
-									width:75px; height:75px; background-color:#4AD674; ">
+									width:120px; height:120px; background-color:#4AD674; ">
 									<img class="imgObj" src="<%=request.getContextPath()%>/resources/img/iconLike_Brown.png">
 									</div>
 							</c:if>
@@ -484,8 +497,8 @@
 									<div>
 									<br>
 									<br>
-										<input style="border-radius: 50%; width:75px; height:75px; 
-										background-color:#60524E; color:#4AD674" type="button" id="like" onclick="likeDelFnc();" 
+										<input style="border-radius: 50%; width:120px; height:120px; 
+										background-color:#60524E; color:#4AD674" type="button" id="like" name="like" onclick="likeDelFnc();" 
 										value="">
 										<span id="likeCount">${freeBoardDto.freeBoardLike}</span>
 										<img class="imgObj" src="<%=request.getContextPath()%>/resources/img/iconLike_Green.png"> 
@@ -496,8 +509,8 @@
 									<div>
 									<br>
 									<br>
-										<input style="border-radius: 50%; width:75px; height:75px; 
-										background-color:#4AD674; " type="button" id="like" 
+										<input style="border-radius: 50%; width:120px; height:120px; 
+										background-color:#4AD674; " type="button" id="like" name="like"
 										onclick="likeUpdateFnc();" value="">
 										<img class="imgObj" src="<%=request.getContextPath()%>/resources/img/iconLike_Brown.png">
 									</div>
@@ -594,7 +607,7 @@
 		                           </span>
 		                           <fmt:formatDate value="${freeBoardDto.freeCommentCreDate}" pattern="yyyy.MM.dd / hh:mm"/>
 		                           <c:if test="${freeBoardDto.freeCommentMno eq memberDto.member_no || memberDto.member_grade eq '1'}">
-		                           		<input type="button" value="수정 " onclick="freeBoardCommentUpdateOneFnc(this,event);">
+		                           		<input id="upd" type="button" value="수정 " onclick="freeBoardCommentUpdateOneFnc(this,event);">
 		                           		<input type="button" value="삭제 " onclick="freeBoardCommentDeleteFnc(this,event);">
 		                           </c:if>
 		                        </div>
