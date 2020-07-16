@@ -12,29 +12,50 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 
 	<style type="text/css">
-		.title {
+		#innerPage {
 			font-size: 20px;
 			font-weight: bold;
 			color: #60524E;
+			padding: 60px 0px;
 		}
-		input {
-			width: 292px;
+		.input {
+			padding : 0px 10px;
+			width: 277px;
 			height: 30px;
 			margin-top : 10px;
-			margin-bottom: 20px;
+			margin-bottom: 30px;
 			border-radius: 5px;
 			border: 1px solid #60524E;
-			background-color: red;
+			background-color: #EAEAEA;
 		}
-		button {
-			width: 300px;
-			height: 35px;
+		#button {
+			width: 300px; 
+	 		height: 35px; 
 			color: #FFFFFF;
 			margin-bottom: 10px;
-			background-color: #60524E;
+			background-color: #FF0000;
+			font-weight: bold;
+			border: none;
+			border-radius: 5px;
+		}
+		#cancel{
+			width: 300px;
+			height: 35px;
+			margin-bottom: 10px;
 			font-weight: bold;
 			border: 1px solid #60524E;
 			border-radius: 5px;
+			cursor: pointer;
+			background-color: #fff;
+			color: #000
+		}
+		#button:hover{
+			background-color: #4AD674;
+		}
+		#cancel:hover{
+			color: #fff;
+			background-color: #4AD674;
+			border: none;
 		}
 		.input_span{
 			color: #60524E;
@@ -61,7 +82,16 @@
 			border-radius: 50%;
 			margin: auto;
 			margin-top: 20px;
-			margin-bottom: 20px;	
+			margin-bottom: 30px;	
+		}
+		#textarea {
+			padding: 10px;
+			width: 277px;
+			resize: none;
+			border-radius: 5px;
+			margin-top: 10px;
+			margin-bottom: 40px;
+			background-color: #EAEAEA;
 		}
 	</style>
 
@@ -99,45 +129,39 @@
 	
 	<div id="wrap">
 		<div id="innerWrap">
-			<div id="innerPage" style="padding: 60px 0px;">
+			<div id="innerPage">
+				
 				<div style="margin-bottom: 80px; text-align: center;">
 					<span style="font-size: 50px; font-weight: bold; color: #60524E;">회원정보 조회</span>
 				</div> 
 			
 				<div id="join_div">
-					<input type="hidden" id="member_no" value="${memberDto.member_no}" name='member_no' readonly="readonly">
-					<div class="title">
-						닉네임
-					</div>
-					<input type="text" value="${memberDto.member_nick}" name='member_nick' readonly="readonly">
+					<input type="hidden" id="member_no" class="input" value="${memberDto.member_no}" 
+						name='member_no' readonly="readonly">
+					<span>닉네임</span>
+					<input type="text" value="${memberDto.member_nick}" class="input"
+						name='member_nick' readonly="readonly">
 					
+					<span>이메일</span>
+					<input type="text" value="${memberDto.member_email}" class="input"
+						name='member_email' readonly="readonly">
 					
-					<div class="title">
-						이메일
-					</div>
-					<input type="text" value="${memberDto.member_email}" name='member_email' readonly="readonly">
+					<span>성명</span>
+					<input type="text" value="${memberDto.member_name}" class="input"
+						name='member_name' readonly="readonly">
+										
+					<span>휴대번호</span>
+					<input type="text" value="${memberDto.member_phone}" class="input"
+						name='member_phone' readonly="readonly">
 					
-					
-					<div class="title">
-						성명
-					</div>
-					<input type="text" value="${memberDto.member_name}" name='member_name' readonly="readonly">
-					
-					
-					<div class="title">
-						휴대번호
-					</div>
-					<input type="text" value="${memberDto.member_phone}" name='member_phone' readonly="readonly">
-					
-					
-					 
 					<div class="title">
 						프로필 이미지
 					</div>
+					
 					<div id="img_div">
 						<c:choose>
 							<c:when test="${empty memberDto.profile_table_stored_name}">
-								<img id="p_image" alt="기본 프로필 이미지"  src="<%=request.getContextPath()%>/resources/img/profile.png">
+								<img id="p_image" alt="기본 프로필 이미지"  src="<%=request.getContextPath()%>/resources/img/defaultProfile.png">
 							</c:when>
 							<c:otherwise>
 								<img id="p_image" alt="프로필 이미지" 
@@ -146,20 +170,12 @@
 						</c:choose>
 					</div>
 					
+					<span>자기소개</span>					
+					<textarea id="textarea"  rows="8" cols="38" readonly="readonly">${memberDto.member_comments}</textarea>
 					
-					<div class="title">
-						자기소개
-					</div>
-					
-					<div style="overflow: auto; width: 298px; height: 150px; border: 1px solid black; 
-						background-color: white; margin-top: 10px; margin-bottom: 40px; font-size: 16px;">
-						${memberDto.member_comments}
-					</div>
-					
-					<button style="background-color: #ff0000" onclick="removeMemberFnc()">
+					<button id="button" onclick="removeMemberFnc()">
 						삭제</button>
-					<button style="background-color: #FFFFFF;
-					color: #60524E;" onclick="backMoveFnc()">뒤로가기</button>
+					<button id="cancel" onclick="backMoveFnc()">뒤로가기</button>
 					
 				</div>	
 				

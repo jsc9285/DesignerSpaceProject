@@ -304,48 +304,4 @@ public class ProjectController {
 		return "redirect:/projectBoard/management.do";
 	}
 	
-//	============================== 마이 페이지 - 내글목록 )
-	
-	@RequestMapping(value = "projectBoard/MyPage.do", method = RequestMethod.GET)
-	public String projectBoardMyPage(int mno
-			, @RequestParam(defaultValue="1") int curPage
-			, @RequestParam(defaultValue="project_board_no") String sortOption
-			, @RequestParam(defaultValue="all") String categoryOption
-			, @RequestParam(defaultValue="project_board_title") String searchOption
-			, @RequestParam(defaultValue="") String keyword
-			, @RequestParam(defaultValue="my") String pageOption
-			, HttpSession session, Model model) {		
-
-		//개인 정보 조회
-		MemberDto myMemberDto = projectBoardService.profileSelectOne(mno);
-		
-		// 전체 작품리스트 조회		
-//		작품 페이징 관련
-		
-		int totalCnt = projectBoardService.projectBoardTotalCount(searchOption, keyword, categoryOption, pageOption, mno); 
-		
-		CommentPaging projectBoardPaging = new CommentPaging(totalCnt, curPage);
-		int start = projectBoardPaging.getPageBegin();
-		int end = projectBoardPaging.getPageEnd();
-		
-//		리스트 조회조건 맵에 저장
-		Map<String, Object> listOptionMap = new HashMap<>();
-		listOptionMap.put("sortOption", sortOption);
-		listOptionMap.put("categoryOption", categoryOption);
-		listOptionMap.put("searchOption", searchOption);
-		listOptionMap.put("keyword", keyword);
-		
-//		작품 리스트 조회
-		List<ProjectBoardDto> projectBoardList = 
-			projectBoardService.projectBoardSelectList(searchOption, keyword, sortOption, categoryOption, start, end, pageOption, mno);
-		
-		// 모델로 필요정보 넘김
-		model.addAttribute("projectBoardList", projectBoardList);
-		model.addAttribute("projectBoardPaging", projectBoardPaging);
-		model.addAttribute("listOptionMap", listOptionMap);	
-		model.addAttribute("myMemberDto", myMemberDto);
-		model.addAttribute("mno", mno);
-		
-		return "member/myBoard";
-	}
 }
