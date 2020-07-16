@@ -13,7 +13,8 @@
 	
 	<style type="text/css">
 		.input {
-			width: 292px;
+			padding : 0px 10px;
+			width: 276px;
 			height: 30px;
 			margin-bottom: 10px;
 			border-radius: 5px;
@@ -126,7 +127,7 @@
 					<form name="loginForm" action="./member/loginCtr.do" method="post" onsubmit="return loginOrderFnc();">
 						<c:choose>
 							<c:when test="${empty member_email}">
-								<input id="email_input" class="input" type="text" name='member_email' 
+								<input id="email_input" class="input" type="email" name='member_email' 
 									maxlength="20" placeholder="이메일 입력" >
 							</c:when>
 							<c:otherwise>
@@ -145,9 +146,7 @@
 						<a class="aTag" style="margin: 7px;">|</a>
 						<a class="aTag" href="member/findPwd.do">비밀번호찾기</a>
 						<a class="aTag" style="margin: 7px;">|</a>
-						<a class="aTag" href="member/join.do">회원가입</a>
-						<a class="aTag" href="admin/listAdmin.do" style="color : red;">회원목록</a>
-						
+						<a class="aTag" href="member/join.do">회원가입</a>						
 				</div>
 			</div>
 			

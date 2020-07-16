@@ -52,8 +52,17 @@
 		width: 150px;
 		height: 50px;
 		margin-top: 40px;
+		margin-right: 185px;
 		font-size: 20px;
 		background-color: #7D7471;
+		border-radius: 5px;
+		border: none;
+		cursor: pointer;
+	}
+	
+	#writeButton:hover{
+		color: #fff;
+		background-color: #4AD674;
 	}
 	
 	#selectProcessStatus{
@@ -67,38 +76,28 @@
 		font-size: 17px;
 		float: right;
 	}
-	
-	#columnTitle{
-		clear: both;
-		margin-top: 100px;
-		width: 100%;
-	}
-	
-	#lineTitle{
-		border-bottom: 1px solid black;
-		height: 77px;
-	}
-	
-	.cell{
-		border-bottom: 1px solid black;
-		border-top: 1px solid black;
-		border-color: #D8D8D8;
-		background-color: #7D7471;
-		vertical-align: middle;
-		font-size: 30px;
-		color: white;
-	}
-	
-	.cell2{
-		border-bottom: 1px solid black;
-		border-top: 1px solid black;
-		border-color: #D8D8D8;
-		vertical-align: middle;
-		font-size: 30px;
-		font-weight: bold;
-		text-align: center;
-	}
-	
+	#projectListTable{
+       width: 1350px;
+    }
+    #projectListTable tr{
+       text-align: center;
+       border: 1px solid #D8D8D8;
+    }
+    #projectListTable th{
+       background-color: #7D7471;
+       color: #fff;
+       font-size: 20px;
+       font-weight: bold;
+       height: 50px;
+       vertical-align: middle;
+    }
+    #projectListTable td{         
+       height: 50px;
+       vertical-align: middle;
+    }
+    #innerPage{
+    	margin-top: 100px;
+    }
 </style>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
@@ -171,9 +170,7 @@ function sortOptionChangeFnc(e) {
 				
 				<input type="text" id='keyword' name="keyword" value="${searchMap.keyword}">
 				<input type="submit" value="검색" id='searchButton'>
-				<input id="reportWrite" name="reportWrite" type="button" onclick="reportWriteFnc();" 
-				    style="float:right; margin-top: 40px; width: 105px; height: 50px; text-align: center;
-		                   background-color: #60524E;  color: white;" value="작성">
+				<input id="writeButton" name="reportWrite" type="button" onclick="reportWriteFnc();" value="작성">
 				<select id='selectProcessStatus' onchange="sortOptionChangeFnc(this);">
 					<c:choose>
 						<c:when test="${searchMap.sortOption eq 'report_board_whole'}">
@@ -205,73 +202,74 @@ function sortOptionChangeFnc(e) {
 					
 			</form>
 		
-			
-			<table id='columnTitle'>
-				<tr id='lineTitle'>
-					<th class="cell">글번호</th>
-					<th class="cell">제목</th>
-					<th class="cell">작성자</th>
-					<th class="cell">작성일</th>
-					<th class="cell">답변일</th>
-					<th class="cell">처리상태</th>
-				</tr>
-				
-				<c:choose>
-					<c:when test="${empty reportBoardList}">
-						<tr>
-							<td colspan="6" style="text-align: center; font-size: 20px;">
-								등록된 게시글이 없습니다.
-							</td>
-						</tr>
-					</c:when>
+			<div id="innerPage">
+				<table id='projectListTable'>
+					<tr id='lineTitle'>
+						<th class="cell">글번호</th>
+						<th class="cell">제목</th>
+						<th class="cell">작성자</th>
+						<th class="cell">작성일</th>
+						<th class="cell">답변일</th>
+						<th class="cell">처리상태</th>
+					</tr>
 					
-					<c:otherwise>
-`						<c:forEach var="reportBoardDto" items="${reportBoardList}">
+					<c:choose>
+						<c:when test="${empty reportBoardList}">
 							<tr>
-								<td class="cell2">${reportBoardDto.report_board_no}</td>
-								<td class="cell2">
-									<a href="#">
-										${reportBoardDto.report_board_title}
-									</a>
+								<td colspan="6" style="text-align: center; font-size: 20px;">
+									등록된 게시글이 없습니다.
 								</td>
-								<td class="cell2">
-									${reportBoardDto.member_nick}
-								</td>
-								<td class="cell2">
-									<fmt:formatDate value="${reportBoardDto.report_board_cre_date}" 
-										pattern="yyyy.MM.dd HH:mm"/>
-								</td>
-								<td class="cell2">
-									<c:choose>
-									<c:when test="${empty reportBoardDto.report_board_answer_date}">
-										-
-									</c:when>
-									<c:otherwise>
-									<fmt:formatDate value="${reportBoardDto.report_board_answer_date}" 
-										pattern="yyyy.MM.dd HH:mm"/>
-									</c:otherwise>
-									</c:choose>
-								</td>
-								<c:if test="${reportBoardDto.report_board_answer_status eq '접수중'}">
-									<td class="cell2" style="color: #E14E4E;">
-										${reportBoardDto.report_board_answer_status}
-									</td>
-								</c:if>
-								<c:if test="${reportBoardDto.report_board_answer_status eq '처리기각'}">
-									<td class="cell2" style="color: #BFC506;">
-										${reportBoardDto.report_board_answer_status}
-									</td>
-								</c:if>
-								<c:if test="${reportBoardDto.report_board_answer_status eq '처리완료'}">
-									<td class="cell2" style="color: #BABABA;">
-										${reportBoardDto.report_board_answer_status}
-									</td>
-								</c:if>
 							</tr>
-						</c:forEach>
-					</c:otherwise>
-				</c:choose>
-			</table>
+						</c:when>
+						
+						<c:otherwise>
+	`						<c:forEach var="reportBoardDto" items="${reportBoardList}">
+								<tr>
+									<td class="cell2">${reportBoardDto.report_board_no}</td>
+									<td class="cell2">
+										<a href="#">
+											${reportBoardDto.report_board_title}
+										</a>
+									</td>
+									<td class="cell2">
+										${reportBoardDto.member_nick}
+									</td>
+									<td class="cell2">
+										<fmt:formatDate value="${reportBoardDto.report_board_cre_date}" 
+											pattern="yyyy.MM.dd HH:mm"/>
+									</td>
+									<td class="cell2">
+										<c:choose>
+										<c:when test="${empty reportBoardDto.report_board_answer_date}">
+											-
+										</c:when>
+										<c:otherwise>
+										<fmt:formatDate value="${reportBoardDto.report_board_answer_date}" 
+											pattern="yyyy.MM.dd HH:mm"/>
+										</c:otherwise>
+										</c:choose>
+									</td>
+									<c:if test="${reportBoardDto.report_board_answer_status eq '접수중'}">
+										<td class="cell2" style="color: #E14E4E;">
+											${reportBoardDto.report_board_answer_status}
+										</td>
+									</c:if>
+									<c:if test="${reportBoardDto.report_board_answer_status eq '처리기각'}">
+										<td class="cell2" style="color: #BFC506;">
+											${reportBoardDto.report_board_answer_status}
+										</td>
+									</c:if>
+									<c:if test="${reportBoardDto.report_board_answer_status eq '처리완료'}">
+										<td class="cell2" style="color: #BABABA;">
+											${reportBoardDto.report_board_answer_status}
+										</td>
+									</c:if>
+								</tr>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
+				</table>
+			</div>
 			
 				<jsp:include page="/WEB-INF/views/common/paging.jsp">
 					<jsp:param value="${pagingMap}" name="pagingMap"/>

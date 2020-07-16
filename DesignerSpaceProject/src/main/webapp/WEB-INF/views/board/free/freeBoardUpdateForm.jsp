@@ -87,10 +87,10 @@
 	
 	function checkUpdateFnc() {
 		if($('#title').val() == '') {
-			alert('제목을 입력해주세용');
+			alert('제목을 입력해주세요');
 			return false;
 		}else if($('#contents').val() == ''){
-			alert('내용을 입력해주세용');
+			alert('내용을 입력해주세요');
 			return false;
 		}else{	
 			return true;
@@ -99,22 +99,22 @@
 	
 	$(document).ready(function () {
 		
-		$('#title').keyup(function(e) {
+		$('#title').keydown(function(e) {
 			var title = $(this).val();
-			if(title.length > 20){
-				alert('제목은 최대 20자까지입니당');
-				$(this).val(title.substring(0, 20));
+			if(title.length > 50){
+				alert('제목은 최대 50자까지입니다.');
+				$(this).val(title.substring(0, 50));
 			}
-		})
+		});
 		
-		$('#contents').keyup(function (e){
+		$('#contents').keydown(function (e){
 			var content = $(this).val();
-			$('#numCount').html("("+content.length+" / 최대 200자)");
+			$('#numCount').html("("+content.length+" / 최대 1000자)");
 			
-			if(content.length > 200){
-				alert('내용은 최대 200자까지입니당.');
-				$(this).val(content.substring(0, 200));
-				$('#numCount').html("(200 / 최대 200자)");
+			if(content.length > 1000){
+				alert('내용은 최대 1000자까지입니다.');
+				$(this).val(content.substring(0, 1000));
+				$('#numCount').html("(1000 / 최대 1000자)");
 			}
 		});
 	});
@@ -132,59 +132,58 @@
 				<div id="innerPage" style="height: 809px; margin-top: 40px;">
 					<form action='./freeBoardUpdateCtr.do' onsubmit="return checkUpdateFnc();" method='post' 
 						enctype="multipart/form-data">
-						<br>
-						<br>
-						<br>
-						<br>
-						<div style="margin-left: 200px;">
-							<span style="width: 200px;">작성자</span>
-							<span id="writer" style="margin-left: 80px;">${map.writer}</span>
-							<input type="hidden" id="rnum" name="rnum" value="${map.rnum}">
-						</div>
-						<br>
-						<hr>
-						<br>
-						<br>
-						<div style="margin-left: 200px;">
-							<span style="width: 200px;">제목</span>
-							<input type='text' style="margin-left: 86px;
-								width: 780px; height: 50px;" value="${map.title}" id="title" name='title'>
-						</div>
-						<br>
-						<hr>
-						<br>
-						<br>
-						<div style="margin-left: 200px; height: 400px;">
-									<span style="width: 200px;">내용</span>
-									<textarea id="contents" name='contents'
-									 style="margin-left: 86px; vertical-align: top;" cols="115" rows="25">${map.contents}</textarea>
-									<br>
-									<span id="numCount" style="margin-left: 123px"></span>
-						</div>
-						<br>
-						<hr>
-						<br>
-						<br>
-						<input type="hidden" id="no" name="no" value="${map.no}">
+					<br>
+					<br>
+					<br>
+					<br>
+					<div style="margin-left: 200px;">
+						<span style="width: 200px;">작성자</span>
+						<span id="writer" style="margin-left: 80px;">${map.writer}</span>
 						<input type="hidden" id="rnum" name="rnum" value="${map.rnum}">
-						<input type="hidden" id="title" name="title" value="${map.title}">
-						<input type="hidden" id="lineTitle" name="lineTitle" value="${map.lineTitle}">
-						<input type="hidden" id="mno" name="mno" value="${map.mno}">
-						<input type="hidden" id='searchOption' 
-								name="searchOption" value="${map.searchOption}">
-							<input type="hidden" id='keyword' 
-								name="keyword" value="${map.keyword}">
-						<div style="text-align: center;">
-							<input style="text-align: center; 
-										 width: 150px;  height: 50px; 
-										 background-color: #60524E;  color: white;" type='submit' value='수정완료'>
-							<input style="text-align: center; 
-										 width: 150px;  height: 50px; 
-										 background-color: #60524E;  color: white;" type='button'
-										 value='취소' onclick="pageMoveListFnc();">
-						</div>
-					</form>
-				</div>
+					</div>
+					<br>
+					<hr>
+					<br>
+					<br>
+					<div style="margin-left: 200px;">
+						<span style="width: 200px;">제목</span>
+						<input type='text' style="margin-left: 86px;
+							width: 780px; height: 50px;" value="${map.title}" id="title" name='title'>
+					</div>
+					<br>
+					<hr>
+					<br>
+					<br>
+					<div style="margin-left: 200px; height: 400px;">
+								<span style="width: 200px;">내용</span>
+								<textarea id="contents" name='contents'
+								 style="margin-left: 86px; vertical-align: top;" cols="115" rows="25">${map.contents}</textarea>
+								<br>
+								<span id="numCount" style="margin-left: 123px"></span>
+					</div>
+					<br>
+					<hr>
+					<br>
+					<br>
+					<input type="hidden" id="no" name="no" value="${map.no}">
+					<input type="hidden" id="rnum" name="rnum" value="${map.rnum}">
+					<input type="hidden" id="lineTitle" name="lineTitle" value="${map.lineTitle}">
+					<input type="hidden" id="mno" name="mno" value="${map.mno}">
+					<input type="hidden" id='searchOption' 
+							name="searchOption" value="${map.searchOption}">
+					<input type="hidden" id='keyword' 
+							name="keyword" value="${map.keyword}">
+					<div style="text-align: center;">
+						<input style="text-align: center; 
+									 width: 150px;  height: 50px; 
+									 background-color: #60524E;  color: white; cursor: pointer;" type='submit' value='수정완료'>
+						<input style="text-align: center; 
+									 width: 150px;  height: 50px; 
+									 background-color: #60524E;  color: white; cursor: pointer;" type='button'
+									 value='취소' onclick="pageMoveListFnc();">
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 	

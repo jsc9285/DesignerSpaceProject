@@ -54,9 +54,18 @@
 			<div id="h_inner_myPage">
 				<a id="h_myPage_back" href="#none"><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/backIcon.png"></a>
 				<span id="h_myPage_logo">Designer's Space</span>
-						
+					
 				<div id="h_myPage_profile">
-					<div id="h_myPage_profileImg" style="background-image: url(<c:url value='/profileImg/${memberDto.profile_table_stored_name}'/>);"></div>
+					<c:choose>
+						<c:when test="${empty memberDto.profile_table_stored_name}">
+							<div id="h_myPage_profileImg" 
+                        		style="background-image: url(<c:url value='/resources/img/defaultProfile.png'/>);"></div>
+                        </c:when>
+                        <c:otherwise>
+                        	<div id="h_myPage_profileImg" 
+                        		style="background-image: url(<c:url value='/profileImg/${memberDto.profile_table_stored_name}'/>);"></div>
+                        </c:otherwise>
+					</c:choose>
 					<h6 id="h_myPage_profileName">${memberDto.member_nick}</h6>
 				</div>
 						
@@ -66,8 +75,8 @@
 					<ul>
 						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage1.png"><a href='<%=request.getContextPath()%>/member/info.do'>회원정보조회</a></li>
 						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage2.png"><a href='<%=request.getContextPath()%>/member/myBoard.do?mno=${memberDto.member_no}'>글 목록</a></li>
-						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage3.png"><a href='<%=request.getContextPath()%>/member/myQna.do'>QnA 조회</a></li>
-						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage4.png"><a href='<%=request.getContextPath()%>/member/myReport.do'>신고글 조회</a></li>
+						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage3.png"><a href='<%=request.getContextPath()%>/member/myQna.do?mno=${memberDto.member_no}'>QnA 조회</a></li>
+						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage4.png"><a href='<%=request.getContextPath()%>/member/myReport.do?mno=${memberDto.member_no}'>신고글 조회</a></li>
 					</ul>
 				</nav>
 				
