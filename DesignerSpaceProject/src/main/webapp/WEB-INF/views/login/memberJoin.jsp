@@ -515,7 +515,7 @@
 					<span>프로필 사진</span>
 					<div id="image_container">
 						<c:if  test="${empty fileList}">
-							<img id="p_image" src="<%=request.getContextPath()%>/resources/img/profile.png">
+							<img id="p_image" src="<%=request.getContextPath()%>/resources/img/defaultProfile.png">
 						</c:if>
 					</div>
 					
