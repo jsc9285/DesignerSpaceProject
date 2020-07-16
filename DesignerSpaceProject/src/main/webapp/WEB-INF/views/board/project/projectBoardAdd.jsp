@@ -53,12 +53,15 @@
 		#contextArea{
 			padding: 0px 100px;
 			text-align: center;
+			position: relative;
 		}
 		#contextArea textarea{	
 			width: 100%;
 			resize: none;
 			margin-bottom: 20px;
 			border-radius: 3px;
+			border: 1px solid #60524E;
+			box-shadow: 4px 4px 10px 1px rgba(0,0,0,0.3);
 		}
 		#contextArea h1{
 			float: left;
@@ -80,6 +83,9 @@
 		}
 		#contextArea input:hover{
 			background-color: #4AD674;
+		}
+		#categoryArea span{
+			vertical-align: middle;			 
 		}
 		.exProjectPic{
 			width: 1350px;
@@ -193,6 +199,60 @@
 			
 			return true;
 		}
+ 		
+		var message = "";
+		var MAX_MESSAGE_BYTE = 100;
+		var MAX_MESSAGE_BYTE_TWO = 600;
+		
+		window.onload = function() {
+			commentObj = document.getElementsByClassName('commentContext');
+			commentObj[0].addEventListener('keyup', checkByte);	
+			commentObj[1].addEventListener('keyup', checkByteTwo);	
+
+			maxCountObj = document.getElementsByClassName('maxCount')
+			maxCountObj[0].innerHTML = MAX_MESSAGE_BYTE.toString();				
+			maxCountObj[1].innerHTML = MAX_MESSAGE_BYTE_TWO.toString();				
+		}		
+		
+		function count(message) {
+			var totalByte = 0;
+			
+			for (var i = 0, length = message.length; i < length; i++) {
+				var currentByte = message.charCodeAt(i);
+				(currentByte > 128) ? totalByte += 3 : totalByte++;
+			}
+			return totalByte;
+		}
+		
+		function checkByte(event) {
+			const totalByte = count(event.target.value);
+			var countSpan = event.target.nextSibling.nextSibling.childNodes[0];
+// 			var countSpan = document.getElementById('count');
+
+			if(totalByte <= MAX_MESSAGE_BYTE){
+				countSpan.innerText = totalByte.toString();
+				message = event.target.value;
+			}else{
+				alert("제목은 " + MAX_MESSAGE_BYTE + "Byte까지 작성가능합니다.");
+				countSpan.innerText = count(message).toString();
+				event.target.value = message;
+			}
+		}
+		
+		function checkByteTwo(event) {
+			const totalByte = count(event.target.value);
+			var countSpan = event.target.nextSibling.nextSibling.childNodes[0];
+// 			var countSpan = document.getElementById('count');
+
+			if(totalByte <= MAX_MESSAGE_BYTE_TWO){
+				countSpan.innerText = totalByte.toString();
+				message = event.target.value;
+			}else{
+				alert("내용은 " + MAX_MESSAGE_BYTE_TWO + "Byte까지 작성가능합니다.");
+				countSpan.innerText = count(message).toString();
+				event.target.value = message;
+			}
+		}
 	</script>
 	
 </head>
@@ -216,13 +276,14 @@
 					<div id="contextArea">
 						<input type="hidden" name="project_board_mno" value="${memberDto.member_no}">
 						<h1>제목</h1>
-						<textarea id="project_board_title" name="project_board_title" style="height: 120px;"></textarea>
+						<textarea id="project_board_title" class="commentContext" name="project_board_title" style="height: 120px; font-size: 40px;"></textarea>
+						<div style="opacity: 0; position: absolute;"><span>0</span> / <span class="maxCount">0</span></div>
 						<h1>설명</h1>
-						<textarea id="project_board_contents" name="project_board_contents" style="height: 360px;"></textarea>
-						
-						<div>
-							사진<input type="radio" name='project_board_category' value="p"/>
-							일러스트<input type='radio' name='project_board_category' value="i"/>
+						<textarea id="project_board_contents" class="commentContext" name="project_board_contents" style="height: 360px; font-size: 20px;"></textarea>
+						<div style="opacity: 0; position: absolute;"><span>0</span> / <span class="maxCount">0</span></div>
+						<div id="categoryArea">
+							<span>사진</span><input type="radio" name='project_board_category' value="p"/>
+							<span>일러스트</span><input type='radio' name='project_board_category' value="i"/>
 						</div>
 						
 						<input type="submit" value="확인" onclick="fileNamingFnc();">

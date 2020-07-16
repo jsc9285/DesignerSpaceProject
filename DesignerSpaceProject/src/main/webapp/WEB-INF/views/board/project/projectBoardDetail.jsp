@@ -41,8 +41,12 @@
 			margin: auto;
 			background-color: #fff;
 			text-align: right;
+			box-shadow: 5px 5px 20px rgba(0,0,0,0.3);
+			border-radius: 5px;
 		}
-		#projectArea input{
+		.btnList{
+			float: right;
+			margin-right: 10px;
 			width: 150px;
 			height: 50px;
 			border-style: none;
@@ -52,7 +56,7 @@
 			font-size: 20px;
 			cursor: pointer;
 		}
-		#projectArea input:hover{
+		.btnList:hover{
 			background-color: #4AD674;
 		}
 		#exProjectPic2{
@@ -114,6 +118,8 @@
 			padding: 50px 0px;
 			background-color: #fff;
 			text-align: center;
+			box-shadow: 5px 5px 20px rgba(0,0,0,0.3);
+			border-radius: 5px;
 		}
 		#commentArea img{
 			vertical-align: middle;
@@ -147,6 +153,14 @@
 			width: 750px;
 			height: 100px;		
 			box-sizing: border-box;	
+			vertical-align: middle;
+			resize: none;
+			font-size: 20px;
+		}
+		#commentInput::placeholder{
+			font-size: 20px;	
+			padding-top: 35px;
+			padding-left: 10px;
 		}
 		#commentWriteBtn{
 			width: 100px;
@@ -221,10 +235,13 @@
 			}
 		}
 		
+		var tempCommentValue;
+		
 		function commentUpdateFnc(obj) {
 			var commentContextObj = obj.parentNode.lastElementChild;
 			var otherBtn = obj.nextSibling.nextSibling;
 			var commentNo = obj.previousSibling.previousSibling;
+			var textValObj = obj.parentNode.nextSibling.nextSibling;
 			
 			var sendCommentNoObj = document.getElementById('PROJECT_COMMENT_NO');
 			var sendCommentCommentsObj = document.getElementById('PROJECT_COMMENT_COMMENTS');
@@ -234,11 +251,14 @@
 			sendCommentCommentsObj.value = commentContextObj.value;
 
 			if(obj.innerHTML == "수정"){
+				textValObj.style.opacity = '1';
+				tempCommentValue = commentContextObj.value;
 				commentContextObj.removeAttribute("readonly");
 				commentContextObj.setAttribute("style", "border: 1px solid #000;")	
 				obj.innerHTML = "수정완료";
 				otherBtn.innerHTML = "취소";
 			}else if(obj.innerHTML == "수정완료"){
+				textValObj.style.opacity = '0';
 				commentContextObj.setAttribute("readonly", "readonly");
 				commentContextObj.setAttribute("style", "")	
 				obj.innerHTML = "수정";
@@ -254,6 +274,7 @@
 			var commentContextObj = obj.parentNode.lastElementChild;
 			var otherBtn = obj.previousSibling.previousSibling;
 			var commentNo = otherBtn.previousSibling.previousSibling;
+			var textValObj = obj.parentNode.nextSibling.nextSibling;
 			
 			var sendCommentNoObj = document.getElementById('PROJECT_COMMENT_NO_DELETE');
 			var deleteFormObj = document.getElementById('commentDeleteForm');
@@ -269,11 +290,53 @@
 				}else{
 					return false;
 				}
-			}else if(obj.innerHTML == "취소"){ // 취소 경우
+			}else if(obj.innerHTML == "취소"){ // 취소 경우		
+				textValObj.style.opacity = '0';
 				commentContextObj.setAttribute("readonly", "readonly");
-				commentContextObj.setAttribute("style", "")					
+				commentContextObj.setAttribute("style", "")	
+				commentContextObj.value = tempCommentValue;
 				otherBtn.innerHTML = "수정";
 				obj.innerHTML = "삭제";
+			}
+		}
+				
+		var message = "";
+		var MAX_MESSAGE_BYTE = 300;
+		
+		window.onload = function() {
+			document.getElementById('commentInput').addEventListener('keyup', checkByte);
+			commentObj = document.getElementsByClassName('commentContext');
+			for (var i = 0; i < commentObj.length; i++) {
+				commentObj[i].addEventListener('keyup', checkByte);	
+			}
+			maxCountObj = document.getElementsByClassName('maxCount')
+			for (var i = 0; i < maxCountObj.length; i++) {
+				maxCountObj[i].innerHTML = MAX_MESSAGE_BYTE.toString();	
+			}			
+		}		
+		
+		function count(message) {
+			var totalByte = 0;
+			
+			for (var i = 0, length = message.length; i < length; i++) {
+				var currentByte = message.charCodeAt(i);
+				(currentByte > 128) ? totalByte += 3 : totalByte++;
+			}
+			return totalByte;
+		}
+		
+		function checkByte(event) {
+			const totalByte = count(event.target.value);
+			var countSpan = event.target.parentNode.nextSibling.nextSibling.childNodes[0];
+// 			var countSpan = document.getElementById('count');
+
+			if(totalByte <= MAX_MESSAGE_BYTE){
+				countSpan.innerText = totalByte.toString();
+				message = event.target.value;
+			}else{
+				alert("댓글은 " + MAX_MESSAGE_BYTE + "Byte까지 작성가능합니다.");
+				countSpan.innerText = count(message).toString();
+				event.target.value = message;
 			}
 		}
 	</script>
@@ -317,35 +380,38 @@
 				<c:forEach var="projectBoardFileDto" items="${projectBoardFileList}">
 					<div class="exProjectPic" style="background-image: url(<c:url value='/projectImg/${projectBoardFileDto.FILE_TABLE_STORED_FILE_NAME}'/>)"></div>
 				</c:forEach>				
-				
-				<c:choose>
+			</div>
+			<c:choose>
+				<c:when test="${chkPage eq 0}">
+					<input class="btnList" style="margin-right: 175px;" type="button" onclick="location.href='./list.do'" value="목록">					
+				</c:when>
+				<c:when test="${chkPage eq 1}">
+					<input class="btnList" style="margin-right: 175px;" type="button" onclick="location.href='../member/myBoard.do?mno=${projectBoardDto.project_board_mno}'" value="목록">
+				</c:when>
+				<c:when test="${chkPage eq 2}">
+					<input class="btnList" style="margin-right: 175px;" type="button" onclick="location.href='./management.do'" value="목록">
+				</c:when>
+				<c:when test="${chkPage eq 3}">
+					<input class="btnList" style="margin-right: 175px;" type="button" onclick="location.href='../reportBoard/list.do'" value="목록">
+				</c:when>
+			</c:choose>
+			<c:choose>
 					<c:when test="${memberDto.member_grade eq 0}">
 						<c:choose>
 							<c:when test="${memberDto.member_no eq projectBoardDto.project_board_mno}">
-								<input type="button" onclick="location.href='./update.do?project_board_no=${projectBoardDto.project_board_no}&chkPage=${chkPage}'" value="수정">			
-								<input type="button" onclick="projectDeleteFnc();" value="삭제">					
+								<input class="btnList" type="button" onclick="projectDeleteFnc();" value="삭제">
+								<input class="btnList" type="button" onclick="location.href='./update.do?project_board_no=${projectBoardDto.project_board_no}&chkPage=${chkPage}'" value="수정">					
 							</c:when>
 							<c:when test="${memberDto.member_no ne projectBoardDto.project_board_mno}">
-								<input type="button" onclick="location.href='<%=request.getContextPath()%>/reportBoard/add.do?project_board_no=${projectBoardDto.project_board_no}'" value="신고"> 
+								<input class="btnList" type="button" onclick="location.href='<%=request.getContextPath()%>/reportBoard/add.do?project_board_no=${projectBoardDto.project_board_no}'" value="신고"> 
 							</c:when>
 						</c:choose>
 					</c:when>
 					<c:when test="${memberDto.member_grade eq 1}">
-						<input type="button" onclick="projectDeleteFnc();" value="삭제">
+						<input class="btnList" type="button" onclick="projectDeleteFnc();" value="삭제">
 					</c:when>
 				</c:choose>			
-				<c:choose>
-					<c:when test="${chkPage eq 0}">
-						<input type="button" onclick="location.href='./list.do'" value="목록">					
-					</c:when>
-					<c:when test="${chkPage eq 1}">
-						<input type="button" onclick="location.href='../member/myBoard.do?mno=${projectBoardDto.project_board_mno}'" value="목록">
-					</c:when>
-					<c:when test="${chkPage eq 2}">
-						<input type="button" onclick="location.href='./management.do'" value="목록">
-					</c:when>
-				</c:choose>
-			</div>
+			
 			<div id="projectInfoArea">
 				<c:choose>
 					<c:when test="${projectLikeFlag eq null || projectLikeFlag.PROJECT_LIKE_FLAG eq 'N'}">
@@ -379,7 +445,7 @@
 				</div>								
 			</div>
 			<div id="commentArea">
-				<div style="padding: 0px 190px;">
+				<div style="position: relative; padding: 0px 190px;">
 					<form action="./commentAddCtr.do#commentArea" method="get">
 <!-- 			▶(댓글작성)컨트롤러로 보내야 할 데이터 : 작성자번호, 게시물번호, 댓글내용 -->
 						<input type="hidden" name="PROJECT_COMMENT_MNO" value="${memberDto.member_no}">
@@ -388,9 +454,10 @@
 						<div class="profileImg" 
 							style="background-image: url(<c:url value='/profileImg/${memberDto.profile_table_stored_name}'/>);
 								   margin-top: 13px;"></div>
-						<input id="commentInput" type="text" name="PROJECT_COMMENT_COMMENTS" placeholder="댓글 작성하기...">
-						<input id="commentWriteBtn" type="submit" value="등록">
+						<textarea rows="10" cols="3" id="commentInput" name="PROJECT_COMMENT_COMMENTS" placeholder="댓글 작성하기..."></textarea>						
+						<input id="commentWriteBtn" type="submit" value="등록">						
 					</form>
+					<div style="position: absolute; right: 330px; top: 70px;"><span id="count">0</span> / <span class="maxCount">0</span></div>
 							
 <!-- 			▶업데이트 시 컨트롤러로 전달																											 -->
 					<form action="./commentUpdateCtr.do#commentArea" id="commentUpdateForm" method="get">
@@ -406,7 +473,7 @@
 					</form>															
 					
 					<c:forEach var="projectCommentDto" items="${projectCommentList}">						
-						<div style="width: 840px; text-align: left; padding: 30px 0px;">
+						<div style="position:relative; width: 840px; text-align: left; padding: 30px 0px;">
 							<div class="profileImg"
 								style="background-image: url(<c:url value='/profileImg/${projectCommentDto.profile_table_stored_name}'/>);"></div>
 							<div class="profileInfo">
@@ -443,8 +510,9 @@
 										</c:choose>										
 									</c:when>
 								</c:choose>								
-								<textarea class="commentContext" readonly="readonly">${projectCommentDto.PROJECT_COMMENT_COMMENTS}</textarea>
+								<textarea class="commentContext" readonly="readonly">${projectCommentDto.PROJECT_COMMENT_COMMENTS}</textarea>								
 							</div>							
+							<div style="opacity: 0; position: absolute; right: -100px; bottom: -20px;"><span id="count">0</span> / <span class="maxCount">0</span></div>
 						</div>
 					</c:forEach>
 					
