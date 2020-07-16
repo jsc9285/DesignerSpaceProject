@@ -146,9 +146,7 @@
 						<a class="aTag" style="margin: 7px;">|</a>
 						<a class="aTag" href="member/findPwd.do">비밀번호찾기</a>
 						<a class="aTag" style="margin: 7px;">|</a>
-						<a class="aTag" href="member/join.do">회원가입</a>
-						<a class="aTag" href="admin/listAdmin.do" style="color : red;">회원목록</a>
-						
+						<a class="aTag" href="member/join.do">회원가입</a>						
 				</div>
 			</div>
 			

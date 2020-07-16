@@ -53,6 +53,14 @@
 		margin-right: 175px;
 		font-size: 20px;
 		background-color: #7D7471;
+		border-radius: 5px;
+		border: none;
+		cursor: pointer;
+	}
+	
+	#writeButton:hover{
+		color: #fff;
+		background-color: #4AD674;
 	}
 	
 	#selectProcessStatus{
@@ -93,27 +101,27 @@
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 
 <script type="text/javascript">
-function sortOptionChangeFnc(e) {
-	var sortOption = document.getElementById('sortOption');
-	
-	if(e.value == "qna_board_whole"){
-		sortOption.value = e.value;
-	}else if(e.value == "qna_board_accept"){
-		sortOption.value = e.value;
-	}else if(e.value == "qna_board_answer"){
-		sortOption.value = e.value;
-	}else if (e.value == "qna_board_time_limit") {
-		sortOption.value = e.value;
-	}else if (e.value == "qna_board_answer_complete") {
-		sortOption.value = e.value;
+	function sortOptionChangeFnc(e) {
+		var sortOption = document.getElementById('sortOption');
+		
+		if(e.value == "qna_board_whole"){
+			sortOption.value = e.value;
+		}else if(e.value == "qna_board_accept"){
+			sortOption.value = e.value;
+		}else if(e.value == "qna_board_answer"){
+			sortOption.value = e.value;
+		}else if (e.value == "qna_board_time_limit") {
+			sortOption.value = e.value;
+		}else if (e.value == "qna_board_answer_complete") {
+			sortOption.value = e.value;
+		}
+		
+		var curPage = document.getElementById('curPage');
+		curPage.value = 1;
+		
+		var pagingForm = document.getElementById('pagingForm'); 
+		pagingForm.submit();				
 	}
-	
-	var curPage = document.getElementById('curPage');
-	curPage.value = 1;
-	
-	var pagingForm = document.getElementById('pagingForm'); 
-	pagingForm.submit();				
-}
 </script>	
 
 </head>

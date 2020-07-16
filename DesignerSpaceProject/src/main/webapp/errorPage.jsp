@@ -14,11 +14,13 @@
 
 <style type="text/css">
 
-	.errorDiv{
+	#errorTitle{
 		 margin-top: 30px; 
 		 margin-bottom: 30px;
 		 font-weight: bold;
 		 font-size: 30px;
+		 color: #FF0000;
+		 text-align: center;
 	}
 	
 	#backBtn{
@@ -27,6 +29,29 @@
 		margin: auto;
 	}
 	
+	#errorContext{
+		padding-left : 50px;
+		line-height: 20px;
+		margin-bottom: 30px;
+	}
+	
+	#backBtn{
+		margin : auto;
+		text-align: center;
+		color: white;
+		width: 120px;
+		height: 40px;
+		font-size: 15px;
+		background-color: #7D7471;
+		border-radius: 5px;
+		border: none;
+		cursor: pointer;
+	}
+	
+	#backBtn:hover{
+		color: #fff;
+		background-color: #4AD674;
+	}
 </style>
 
 
@@ -36,9 +61,11 @@
 	src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 
 <script type="text/javascript">
+
 	function backBtnFnc() {
 		history.back();
 	}
+	
 </script>
 
 
@@ -50,35 +77,29 @@
 
 	<div id="wrap">
 		<div id="innerWrap">
-			
-			<div style=" width: 500px; margin: auto;" >
-				<c:if
-					test="${requestScope['javax.servlet.error.status_code'] == 404}">
-					
-					<img alt="404error" src="<%=request.getContextPath()%>/resources/error/404error.png">
-					<div class="errorDiv">
-						<p>404(찾을 수 없음): 서버가 요청한 페이지를 찾을 수 없습니다.</p><br/>
-						<p>죄송합니다 빠르게 수정하겠습니다</p>
-					</div>
-					
-				</c:if>
-				<c:if
-					test="${requestScope['javax.servlet.error.status_code'] == 500}">
-					
-					<img alt="404error" src="<%=request.getContextPath()%>/resources/error/500error.png">
-					<div class="errorDiv">
-						<p>500(찾을 수 없음): 서버가 요청한 페이지를 찾을 수 없습니다.</p><br/>
-						<p>죄송합니다 빠르게 수정하겠습니다</p>
-					</div>
-				</c:if>
-					<div id="backBtn">
-						<button onclick="backBtnFnc();"
-							style="width: 100px; height: 40px; background-color: #FFFFFF">
-							돌아가기
-						</button>
-					</div>
+			<div id="innerPage" style="padding : 80px 0px;">
 				
+				<div style=" width: 600px; margin: auto;" >
+				
+					
+					<img alt="error" src="<%=request.getContextPath()%>/resources/error/dreamBug.jpeg"
+						style="width: 600px;">
+					<div id="errorTitle">
+						<p>페이지를 찾을 수 없습니다</p>
+					</div>
+					<div id="errorContext">
+						방문하시려는 페이지의 주소가 잘못 입력되었거나,<br>
+						페이지의 주소가 변경 혹은 삭제되어 요청하신 페이지를 찾을 수 없습니다.<br>
+						입력하신 주소가 정확한지 다시 한번 확인해 주시기 바랍니다.
+					</div>
+					<div style="width: 120px; margin: auto;">
+					<button id="backBtn" onclick="backBtnFnc();">이전 페이지로</button>
+					</div>
+					
+					
 				</div>
+				
+			</div>	
 		</div>
 	</div>
 
