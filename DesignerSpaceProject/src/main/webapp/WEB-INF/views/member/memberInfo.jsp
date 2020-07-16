@@ -84,6 +84,15 @@
 			margin-top: 20px;
 			margin-bottom: 20px;	
 		}
+		
+		#textarea {
+		padding: 10px;
+		width: 277px;
+		resize: none;
+		border-radius: 5px;
+		margin-top: 10px;
+		margin-bottom: 40px;
+	}
 	</style>
 
 
@@ -92,7 +101,18 @@
 	
 	<script type="text/javascript">
 		function backMoveFnc() {
-			location.href='<%=request.getContextPath()%>/projectBoard/list.do';
+			
+			var grade = document.getElementById('member_grade').value;
+			
+			if(grade==0){
+				location.href='<%=request.getContextPath()%>/main/member.do';
+				
+			}else {
+				location.href='<%=request.getContextPath()%>/main/admin.do';
+			}
+			
+			
+			
 		}
 		
 		
@@ -114,9 +134,10 @@
 			
 				<div id="join_div">
 					<input type="hidden" class="input" value="${memberDto.member_no}" 
-						name='member_no' readonly="readonly">
-					<span>닉네임</span>
-					
+						name='member_no'>
+					<input type="hidden" id="member_grade" class="input" value="${memberDto.member_grade}" 
+						name='member_grade'>
+					<span>닉네임</span>					
 					<input type="text" class="input" value="${memberDto.member_nick}" 
 						name='member_nick' readonly="readonly">
 					<span>이메일</span>
@@ -132,7 +153,7 @@
 					<div id="img_div">
 						<c:choose>
 							<c:when test="${empty memberDto.profile_table_stored_name}">
-								<img id="p_image" alt="기본 프로필 이미지"  src="<%=request.getContextPath()%>/resources/img/profile.png">
+								<img id="p_image" alt="기본 프로필 이미지"  src="<%=request.getContextPath()%>/resources/img/defaultProfile.png">
 							</c:when>
 							<c:otherwise>
 								<img id="p_image" alt="프로필 이미지" 
@@ -142,15 +163,14 @@
 					</div>
 					
 					<span>자기소개</span>
-					<div style="overflow: auto; width: 278px; height: 130px; border: 1px solid black; 
-						background-color: white; margin-top: 10px; margin-bottom: 40px; 
-						font-size: 16px; padding: 10px 10px;">
-						${memberDto.member_comments}
-					</div>
+					<textarea id="textarea" rows="8" cols="38" readonly="readonly"
+					name="member_comments">${memberDto.member_comments}</textarea>
+					
+					
 					
 					
 					<button id="button" onclick="location.href='modInfo.do'">수정</button>
-					<button id="cancel" onclick="backMoveFnc();">뒤로가기</button>
+					<button id="cancel" onclick="backMoveFnc();">목록으로</button>
 				</div>	
 				
 			</div>

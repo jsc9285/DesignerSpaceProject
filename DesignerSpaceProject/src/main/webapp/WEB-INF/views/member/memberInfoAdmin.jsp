@@ -161,7 +161,7 @@
 					<div id="img_div">
 						<c:choose>
 							<c:when test="${empty memberDto.profile_table_stored_name}">
-								<img id="p_image" alt="기본 프로필 이미지"  src="<%=request.getContextPath()%>/resources/img/profile.png">
+								<img id="p_image" alt="기본 프로필 이미지"  src="<%=request.getContextPath()%>/resources/img/defaultProfile.png">
 							</c:when>
 							<c:otherwise>
 								<img id="p_image" alt="프로필 이미지" 

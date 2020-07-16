@@ -276,6 +276,7 @@ public class memberController {
 		      return "member/myBoard";
 		   }
 		
+		//내 신고글 이동
 		@RequestMapping(value = "/member/myReport.do", method = RequestMethod.GET)
 		public String myReportBoardList(@RequestParam(defaultValue = "1") int curPage
 								 , @RequestParam(defaultValue = "0") int report_board_no

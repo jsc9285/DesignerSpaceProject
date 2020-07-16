@@ -89,11 +89,7 @@
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 	
 	<script type="text/javascript">
-		
-		function backMoveFnc() {
-			location.href='<%=request.getContextPath()%>/projectBoard/list.do';
-		}
-		
+				
 		function moidDetailFnc(){
 			
 			var pwdOne = document.getElementById("chk_pwd");
@@ -128,7 +124,7 @@
 					<div id="img_div">
 					<c:choose>
 						<c:when test="${empty memberDto.profile_table_stored_name}">
-							<img id="p_image" alt="기본 프로필 이미지"  src="<%=request.getContextPath()%>/resources/img/profile.png">
+							<img id="p_image" alt="기본 프로필 이미지"  src="<%=request.getContextPath()%>/resources/img/defaultProfile.png">
 						</c:when>
 						<c:otherwise>
 							<img id="p_image" alt="프로필 이미지" 
@@ -150,7 +146,7 @@
 					
 					<button id="button" onclick="moidDetailFnc()" style="margin-top: 30px;">
 						확인</button>
-					<button id="cancel" onclick="backMoveFnc()">취소</button>
+					<button id="cancel" onclick="location.href='info.do;'">취소</button>
 				</div>
 			</div>
 		</div>
