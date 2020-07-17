@@ -199,7 +199,6 @@ $(function(){
 		$("#check_nick").click(function() {
 			
 		   var nickObj = $('#member_nick').val();
-		   var indexSpace = nickObj.indexOf(" ");
 		   
 		   $.ajax({
 		      url : "./checkNick.do",
@@ -210,15 +209,7 @@ $(function(){
 		         
 		         if(originalNick != nickObj){
 		        	 
-		        	 if (indexSpace != -1) {
-			        	 
-			        	 $('#member_nick').css('border', '2px solid #ff0000');
-			        	 $('#nick_div').css('color', '#ff0000');
-			        	 $('#nick_div').html("띄어쓰기를 제거해 주세요");
-			        	 
-			        	 nickFlag = "N";
-			         
-		        	 }else if (data == 1) {
+		        	 if (data == 1) {
 			        	 $('#member_nick').css('border', '2px solid #ff0000');
 			        	 $('#nick_div').css('color', '#ff0000');
 			        	 $('#nick_div').html("사용중인 닉네임입니다.");
