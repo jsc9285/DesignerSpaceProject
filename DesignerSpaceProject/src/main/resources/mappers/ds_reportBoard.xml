@@ -33,6 +33,14 @@
         </choose>
 	</sql>
 	
+	<sql id="chkMno">
+      <choose>
+         <when test="mno > 0">
+            and report_board_mno = #{mno}
+         </when>
+      </choose>
+   </sql>
+	
 	<resultMap type="com.project.reportBoard.model.ReportBoardDto" 
 		id="reportBoardResultMap">
 		
@@ -92,11 +100,12 @@
           		  ON RB.REPORT_BOARD_MNO = M.MEMBER_NO
           		  
           		  <include refid="search"></include>
+          		  <include refid="sort"></include>
+          		  <include refid="chkMno"></include>
           		  
           		  ORDER BY RB.REPORT_BOARD_NO DESC) RBM 
      		 )RBMS     
 		WHERE RBMS.RNUM BETWEEN #{start} AND #{end}
-		<include refid="sort"></include>
 	</select>
 	
 	<select id="reportBoardSelectDetail" parameterType="int"
@@ -126,9 +135,11 @@
 		FROM REPORT_BOARD RB LEFT OUTER JOIN MEMBER M
 		ON RB.REPORT_BOARD_MNO = M.MEMBER_NO
 		<include refid="search"></include>
+		<include refid="sort"></include>
+		<include refid="chkMno"></include>		
 	</select>
 
-	<select id="qnaSelectCurPage" parameterType="map"
+	<select id="reportSelectCurPage" parameterType="map"
 		resultType="int">
 		SELECT FLOOR((RNUM-1) / 10) + 1 NO
 		FROM(SELECT ROWNUM RNUM, RBA.REPORT_BOARD_NO, RBA.REPORT_BOARD_TITLE, RBA.MEMBER_NICK,
@@ -143,6 +154,32 @@
           		  ORDER BY RB.REPORT_BOARD_NO DESC) RBA 
      		 )    
 		WHERE REPORT_BOARD_NO = #{report_board_no}
+		<include refid="sort"></include>
 	</select>
+	
+	<update id="processingComplete" parameterType="com.project.reportBoard.model.ReportBoardDto">
+		UPDATE 
+		(
+		    SELECT RB.REPORT_BOARD_ANSWER_STATUS, RB.REPORT_BOARD_ANSWER_DATE
+		    FROM PROJECT_BOARD PB, REPORT_BOARD RB
+		    WHERE PB.PROJECT_BOARD_DEL_FLAG = 'Y'
+		    AND PB.PROJECT_BOARD_TITLE = RB.REPORT_BOARD_TITLE
+		)
+		SET
+		REPORT_BOARD_ANSWER_STATUS = '처리완료',
+		REPORT_BOARD_ANSWER_DATE = SYSDATE
+	</update>
+	
+	<select id="selectProjectBoardNumber" parameterType="String"
+		 resultType="int">
+		SELECT PROJECT_BOARD_NO
+		FROM PROJECT_BOARD
+		WHERE PROJECT_BOARD_TITLE = #{title}
+	</select>
+	
+	<delete id="reportBoardDeleteOne" parameterType="java.lang.Integer" >
+		DELETE FROM REPORT_BOARD
+		WHERE REPORT_BOARD_NO = #{report_board_no}
+	</delete>
 
 </mapper>

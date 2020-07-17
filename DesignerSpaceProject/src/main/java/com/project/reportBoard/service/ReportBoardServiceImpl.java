@@ -16,20 +16,20 @@ public class ReportBoardServiceImpl implements ReportBoardService{
 	
 	@Override
 	public List<ReportBoardDto> reportBoardSelectList(String searchOption, String keyword, 
-			String sortOption, int start, int end) {
+			String sortOption, int start, int end, int mno) {
 		// TODO Auto-generated method stub
 		
 		List<ReportBoardDto> reportBoardList = 
-				reportBoardDao.reportBoardSelectList(searchOption, keyword, sortOption, start, end);
+				reportBoardDao.reportBoardSelectList(searchOption, keyword, sortOption, start, end, mno);
 		
 		return reportBoardList;
 	}
 
 	@Override
-	public int reportBoardSelectTotalCount(String searchOption, String keyword) {
+	public int reportBoardSelectTotalCount(String searchOption, String keyword, String sortOption, int mno) {
 		// TODO Auto-generated method stub
 		
-		return reportBoardDao.reportBoardSelectTotalCount(searchOption, keyword);
+		return reportBoardDao.reportBoardSelectTotalCount(searchOption, keyword, sortOption, mno);
 	}
 
 	@Override
@@ -54,6 +54,28 @@ public class ReportBoardServiceImpl implements ReportBoardService{
 		
 		reportBoardDao.reportBoardInsertOne(reportBoardDto);
 		
+	}
+
+	@Override
+	public void processingComplete(ReportBoardDto reportBoardDto) {
+		// TODO Auto-generated method stub
+		
+		reportBoardDao.processingComplete(reportBoardDto);
+		
+	}
+
+	@Override
+	public int selectProjectBoardNumber(String title) {
+		// TODO Auto-generated method stub
+		
+		return reportBoardDao.selectProjectBoardNumber(title);
+	}
+
+	@Override
+	public void reportBoardDeleteOne(int report_board_no) {
+		// TODO Auto-generated method stub
+		
+		reportBoardDao.reportBoardDeleteOne(report_board_no);
 	}
 
 }

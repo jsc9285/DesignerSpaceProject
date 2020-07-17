@@ -93,7 +93,7 @@
 					<br>
 					<div style="margin-left: 200px; height: 400px;">
 						<span style="width: 200px; margin-top: 0px;">질문내용</span>
-						<textarea id='textSpace' cols="125" rows="17"
+						<textarea id='textSpace' cols="84" rows="17"
 							 name="qna_board_contents">${qnaBoardDto.qna_board_contents}</textarea>
 					</div>
 					<br>

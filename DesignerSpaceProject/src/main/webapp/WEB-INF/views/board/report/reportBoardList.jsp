@@ -12,6 +12,9 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 
 <style type="text/css">
+	#innerPage{
+		margin-top: 100px;
+	}
 	#boardTitle{
 		font-size: 80px;
 		font-weight: bold;
@@ -42,6 +45,10 @@
 		width: 50px;
 		height: 50px;
 		float: left;
+	 	background-color: #60524E;
+	 	border-style: none;
+	 	border-radius: 5px;
+	 	vertical-align: middle;
 	}
 	
 	#writeButton{
@@ -51,6 +58,7 @@
 		width: 150px;
 		height: 50px;
 		margin-top: 40px;
+		margin-right: 90px;
 		font-size: 20px;
 		background-color: #7D7471;
 	}
@@ -60,42 +68,37 @@
 		margin-left: 20px;
 		width: 138px;
 		height: 50px;
-		margin-right: 10px;
+		margin-right: 90px;
 		vertical-align: middle;
 		text-align-last: center;
 		font-size: 17px;
 		float: right;
 	}
+	#projectListTable{
+       width: 1350px;
+    }
+    #projectListTable tr{
+       text-align: center;
+       border: 1px solid #D8D8D8;
+    }
+    #projectListTable th{
+       background-color: #7D7471;
+       color: #fff;
+       font-size: 20px;
+       font-weight: bold;
+       height: 50px;
+       vertical-align: middle;
+    }
+    #projectListTable td{         
+       height: 50px;
+       vertical-align: middle;
+    }
 	
-	#columnTitle{
-		clear: both;
-		margin-top: 100px;
-		width: 100%;
-	}
-	
-	#lineTitle{
-		border-bottom: 1px solid black;
-		height: 77px;
-	}
-	
-	.cell{
-		border-bottom: 1px solid black;
-		border-top: 1px solid black;
-		border-color: #D8D8D8;
-		background-color: #7D7471;
-		vertical-align: middle;
-		font-size: 30px;
-		color: white;
-	}
-	
-	.cell2{
-		border-bottom: 1px solid black;
-		border-top: 1px solid black;
-		border-color: #D8D8D8;
-		vertical-align: middle;
-		font-size: 30px;
+	#deleteBtn{
+		color: red;
 		font-weight: bold;
-		text-align: center;
+		margin-left: 540px;
+		vertical-align: bottom;
 	}
 	
 </style>
@@ -105,7 +108,7 @@
 
 <script type="text/javascript">
 	
-	function listDetailPageFnc(obj, event) {
+	function listDetailAdminPageFnc(obj, event) {
 		
 		var aTagObj = $(obj);
 		
@@ -116,7 +119,7 @@
 		var searchOptionObj = $('#searchOption');
 		
 		// 회원이름 클릭시 자신의 회원번호 td태그
-		reportBoardNoObj = aTagObj.parent().parent().children('td').eq(0);
+		reportBoardNoObj = aTagObj.parent().parent().children('td').eq(1);
 		
 		var url = '';
 		
@@ -149,6 +152,57 @@
 		var pagingForm = document.getElementById('pagingForm'); 
 		pagingForm.submit();						
 	}
+	
+	function processingCompleteFnc() {
+		
+// 		var noObj = $('#report_board_no');
+		var keywordObj = $('#keyword');
+		var searchOptionObj = $('#searchOption');
+		
+		var url = '';
+		
+		url += './processingCompleteCtr.do?';
+// 		url += 'report_board_no=' + noObj.val();
+		url += 'keyword=' + keywordObj.val();
+		url += '&searchOption=' + searchOptionObj.val();
+
+		location.href = url;
+	}
+	
+	$(document).ready(function() {
+		//체크박스 전체선택
+	   $('#allCheck').click(function() {
+	      var allChecked = $(this).prop('checked');
+	      
+	      if (allChecked) {
+	         $('.checkbox').each(function(){
+	        	 $(this).prop('checked', true);
+	         });
+	      } else{
+	         $('.checkbox').prop('checked', false);
+	      }
+	      
+	   });
+	   //전체선택에서 개별 선택시 전체선택 비활성화
+	   $('.checkbox').click(function() {
+	       if (!$(this).prop('checked')) {
+	           $("#allCheck").prop('checked', false);
+	       }
+	   });
+	});	
+	
+	function projectDeleteFnc() {			
+		var deleteFormObj = document.getElementById('deleteForm');			
+		
+		if(confirm('정말로 삭제하시겠습니까?')){
+			
+			deleteFormObj.submit();
+	 		return true;
+	 	}else{
+	 		return false;
+	 	}
+	}
+	
 </script>
 
 </head>
@@ -196,6 +250,9 @@
 				<input type="text" id='keyword' name="keyword" value="${searchMap.keyword}">
 				<input type="submit" value="검색" id='searchButton'>
 				
+				
+				<a type="submit" id="deleteBtn" onclick="projectDeleteFnc();">게시물삭제</a>
+				
 				<select id='selectProcessStatus' onchange="sortOptionChangeFnc(this);">
 					<c:choose>
 						<c:when test="${searchMap.sortOption eq 'report_board_whole'}">
@@ -224,68 +281,88 @@
 						</c:when>
 					</c:choose>
 				</select>
+				<div>
+					<input type="button" value="처리완료" style="float: right; 
+						width: 138px; height: 50px; margin-top: 40px;" onclick="processingCompleteFnc();">
+					
+				</div>
+				
 			</form>
 			
-			<table id='columnTitle'>
-				<tr id='lineTitle'>
-					<th class="cell">글번호</th>
-					<th class="cell">제목</th>
-					<th class="cell">작성자</th>
-					<th class="cell">작성일</th>
-					<th class="cell">답변일</th>
-					<th class="cell">처리상태</th>
-				</tr>
-				
-				<c:choose>
-					<c:when test="${empty reportBoardList}">
-						<tr>
-							<td colspan="6" style="text-align: center;">
-								등록된 게시글이 없습니다.
-							</td>
+			<div id="innerPage">
+				<form action="./managementDeleteCtr.do" id="deleteForm" method="get">
+					<table id='projectListTable'>
+						<tr id='lineTitle' style="border: 1px solid #7D7471;">
+							<th class="cell"><input id="allCheck" type="checkbox"></th>
+							<th class="cell">글번호</th>
+							<th class="cell">제목</th>
+							<th class="cell">작성자</th>
+							<th class="cell">작성일</th>
+							<th class="cell">처리일</th>
+							<th class="cell">처리상태</th>
 						</tr>
-					</c:when>
-					
-					<c:otherwise>
-`						<c:forEach var="reportBoardDto" items="${reportBoardList}">
-							<tr>
-								<td class="cell2">${reportBoardDto.report_board_no}</td>
-								<td class="cell2">
-									<a href='#' onclick="listDetailPageFnc(this, event);">
-										${reportBoardDto.report_board_reason}
-									</a>
-								</td>
-								<td class="cell2">
-									${reportBoardDto.member_nick}
-								</td>
-								<td class="cell2">
-									<fmt:formatDate value="${reportBoardDto.report_board_cre_date}" 
-										pattern="yyyy.MM.dd hh:mm"/>
-								</td>
-								<td class="cell2">
-									<fmt:formatDate value="${reportBoardDto.report_board_answer_date}" 
-										pattern="yyyy.MM.dd hh:mm"/>
-								</td>
-								<c:if test="${reportBoardDto.report_board_answer_status eq '접수중'}">
-									<td class="cell2" style="color: #E14E4E;">
-										${reportBoardDto.report_board_answer_status}
+						
+						<c:choose>
+							<c:when test="${empty reportBoardList}">
+								<tr>
+									<td colspan="6" style="text-align: center;">
+										등록된 게시글이 없습니다.
 									</td>
-								</c:if>
-								<c:if test="${reportBoardDto.report_board_answer_status eq '처리기각'}">
-									<td class="cell2" style="color: #BFC506;">
-										${reportBoardDto.report_board_answer_status}
-									</td>
-								</c:if>
-								<c:if test="${reportBoardDto.report_board_answer_status eq '처리완료'}">
-									<td class="cell2" style="color: #BABABA;">
-										${reportBoardDto.report_board_answer_status}
-									</td>
-								</c:if>
-							</tr>
-						</c:forEach>
-					</c:otherwise>
-				</c:choose>
-			</table>
-			
+								</tr>
+							</c:when>
+							
+							<c:otherwise>
+								<c:forEach var="reportBoardDto" items="${reportBoardList}">
+									<tr>
+										<td><input name="reportCheck" type="checkbox" class='checkbox' 
+												value="${reportBoardDto.report_board_no}"></td>
+										<td class="cell2">${reportBoardDto.report_board_no}</td>
+										<td class="cell2">
+											<a href='#' onclick="listDetailAdminPageFnc(this, event);">
+												${reportBoardDto.report_board_reason}
+											</a>
+										</td>
+										<td class="cell2">
+											${reportBoardDto.member_nick}
+										</td>
+										<td class="cell2">
+											<fmt:formatDate value="${reportBoardDto.report_board_cre_date}" 
+												pattern="yyyy.MM.dd HH:mm"/>
+										</td>
+										<td class="cell2">
+											<c:choose>
+												<c:when test="${empty reportBoardDto.report_board_answer_date}">
+													-
+												</c:when>
+												<c:otherwise>
+													<fmt:formatDate value="${reportBoardDto.report_board_answer_date}" 
+														pattern="yyyy.MM.dd HH:mm"/>
+												</c:otherwise>
+											</c:choose>
+										</td>
+										
+										<c:if test="${reportBoardDto.report_board_answer_status eq '접수중'}">
+											<td class="cell2" style="color: #E14E4E;">
+												${reportBoardDto.report_board_answer_status}
+											</td>
+										</c:if>
+										<c:if test="${reportBoardDto.report_board_answer_status eq '처리기각'}">
+											<td class="cell2" style="color: #BFC506;">
+												${reportBoardDto.report_board_answer_status}
+											</td>
+										</c:if>
+										<c:if test="${reportBoardDto.report_board_answer_status eq '처리완료'}">
+											<td class="cell2" style="color: #BABABA;">
+												${reportBoardDto.report_board_answer_status}
+											</td>
+										</c:if>
+									</tr>
+								</c:forEach>
+							</c:otherwise>
+						</c:choose>
+					</table>
+				</form>
+			</div>
 		</div>
 	</div>
 	
@@ -297,9 +374,9 @@
 		<input type="hidden" id='curPage' name='curPage' 
 			value="${pagingMap.paging.curPage}">
 		<input type="hidden" id='qna_board_no' name="qna_board_no" value="${reportBoardDto.report_board_no}">
-		<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
+		<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
 		<input type="hidden" id='keyword' name="keyword" value="${keyword}">
-		<input type="hidden" id='sortOption' name='sortOption' value="${sortOption}">	
+		<input type="hidden" id='sortOption' name='sortOption' value="${searchMap.sortOption}">	
 	</form>
 	
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>

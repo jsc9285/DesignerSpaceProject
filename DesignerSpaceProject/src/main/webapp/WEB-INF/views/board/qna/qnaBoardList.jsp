@@ -12,6 +12,9 @@
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
 
 <style type="text/css">
+	#innerPage{
+		margin-top: 100px;
+	}
 	#boardTitle{
 		font-size: 80px;
 		font-weight: bold;
@@ -42,6 +45,10 @@
 		width: 50px;
 		height: 50px;
 		float: left;
+	 	background-color: #60524E;
+	 	border-style: none;
+	 	border-radius: 5px;
+	 	vertical-align: middle;
 	}
 	
 	#writeButton{
@@ -51,6 +58,7 @@
 		width: 150px;
 		height: 50px;
 		margin-top: 40px;
+		margin-right: 90px;
 		font-size: 20px;
 		background-color: #7D7471;
 	}
@@ -66,36 +74,31 @@
 		font-size: 17px;
 		float: right;
 	}
-	
-	#columnTitle{
-		clear: both;
-		margin-top: 100px;
-		width: 100%;
-	}
-	
-	#lineTitle{
-		border-bottom: 1px solid black;
-		height: 77px;
-	}
-	
-	.cell{
-		border-bottom: 1px solid black;
-		border-top: 1px solid black;
-		border-color: #D8D8D8;
-		background-color: #7D7471;
-		vertical-align: middle;
-		font-size: 30px;
-		color: white;
-	}
-	
-	.cell2{
-		border-bottom: 1px solid black;
-		border-top: 1px solid black;
-		border-color: #D8D8D8;
-		vertical-align: middle;
-		font-size: 30px;
+	#projectListTable{
+       width: 1350px;
+    }
+    #projectListTable tr{
+       text-align: center;
+       border: 1px solid #D8D8D8;
+    }
+    #projectListTable th{
+       background-color: #7D7471;
+       color: #fff;
+       font-size: 20px;
+       font-weight: bold;
+       height: 50px;
+       vertical-align: middle;
+    }
+    #projectListTable td{         
+       height: 50px;
+       vertical-align: middle;
+    }
+    
+    #deleteBtn{
+		color: red;
 		font-weight: bold;
-		text-align: center;
+		margin-left: 540px;
+		vertical-align: bottom;
 	}
 	
 </style>
@@ -108,7 +111,7 @@
 		location.href = './add.do';
 	}
 	
-	function listDetailPageFnc(obj, event) {
+	function listDetailUserPageFnc(obj, event) {
 		
 		var aTagObj = $(obj);
 		
@@ -120,6 +123,31 @@
 		
 		// 회원이름 클릭시 자신의 회원번호 td태그
 		qnaBoardNoObj = aTagObj.parent().parent().children('td').eq(0);
+		
+		var url = '';
+		
+		url += './listDetail.do?';
+		url += 'qna_board_no=' + qnaBoardNoObj.html();
+		url += '&keyword=' + keywordObj.val();
+		url += '&searchOption=' + searchOptionObj.val();
+				
+		location.href = url;
+
+		return false;
+	}
+	
+	function listDetailAdminPageFnc(obj, event) {
+		
+		var aTagObj = $(obj);
+		
+		event.preventDefault();
+		
+		var qnaBoardNoObj = '';
+		var keywordObj = $('#keyword');
+		var searchOptionObj = $('#searchOption');
+		
+		// 회원이름 클릭시 자신의 회원번호 td태그
+		qnaBoardNoObj = aTagObj.parent().parent().children('td').eq(1);
 		
 		var url = '';
 		
@@ -153,6 +181,40 @@
 		
 		var pagingForm = document.getElementById('pagingForm'); 
 		pagingForm.submit();						
+	}
+	
+	$(document).ready(function() {
+		//체크박스 전체선택
+	   $('#allCheck').click(function() {
+	      var allChecked = $(this).prop('checked');
+	      
+	      if (allChecked) {
+	         $('.checkbox').each(function(){
+	        	 $(this).prop('checked', true);
+	         });
+	      } else{
+	         $('.checkbox').prop('checked', false);
+	      }
+	      
+	   });
+	   //전체선택에서 개별 선택시 전체선택 비활성화
+	   $('.checkbox').click(function() {
+	       if (!$(this).prop('checked')) {
+	           $("#allCheck").prop('checked', false);
+	       }
+	   });
+	});	
+	
+	function projectDeleteFnc() {			
+		var deleteFormObj = document.getElementById('deleteForm');			
+		
+		if(confirm('정말로 삭제하시겠습니까?')){
+			
+			deleteFormObj.submit();
+	 		return true;
+	 	}else{
+	 		return false;
+	 	}
 	}
 </script>
 
@@ -198,11 +260,22 @@
 					</c:choose>
 				</select>
 				
-				<input type="text" id='keyword' name="keyword" value="${searchMap.keyword}">
-				<input type="submit" value="검색" id='searchButton'>
-				<input type="button" value="작성" id='writeButton' onclick="writeButtonFnc();">
 				
-				<select id='selectProcessStatus' onchange="sortOptionChangeFnc(this);">
+				<input type="text" id='keyword' name="keyword" value="${searchMap.keyword}">
+<%-- 				<input type="submit" value="<img src="<%=request.getContextPath()%>/resources/img/iconSearch.png">" --%>
+<!-- 					 id='searchButton'> -->
+				<button id="searchButton" type="submit">
+					<img src="<%=request.getContextPath()%>/resources/img/iconSearch.png">
+				</button>
+				<c:if test="${memberDto.member_grade == 0}">
+					<input type="button" value="작성" id='writeButton' onclick="writeButtonFnc();">
+				</c:if>
+				<c:if test="${memberDto.member_grade == 1}">
+					<a type="submit" id="deleteBtn" onclick="projectDeleteFnc();">게시물삭제</a>
+					<input type="button" value="작성" disabled="disabled" id='writeButton' onclick="writeButtonFnc();">
+				</c:if>
+				
+				<select id='selectProcessStatus' name="sortOption" onchange="sortOptionChangeFnc(this);">
 					<c:choose>
 						<c:when test="${searchMap.sortOption eq 'qna_board_whole'}">
 							<option value="qna_board_whole" selected="selected">전체</option>
@@ -243,77 +316,160 @@
 				</select>
 			</form>
 			
-			<table id='columnTitle'>
-				<tr id='lineTitle'>
-					<th class="cell">글번호</th>
-					<th class="cell">제목</th>
-					<th class="cell">작성자</th>
-					<th class="cell">작성일</th>
-					<th class="cell">답변일</th>
-					<th class="cell">처리상태</th>
-				</tr>
-				
-				<c:choose>
-					<c:when test="${empty qnaBoardList}">
-						<tr>
-							<td colspan="6" style="text-align: center;">
-								등록된 게시글이 없습니다.
-							</td>
-						</tr>
-					</c:when>
-					
-					<c:otherwise>
-`						<c:forEach var="QnaBoardDto" items="${qnaBoardList}">
-							<tr>
-								<td class="cell2">${QnaBoardDto.qna_board_no}</td>
-								<td class="cell2">
-									<a href='#' onclick="listDetailPageFnc(this, event);">
-										${QnaBoardDto.qna_board_title}
-									</a>
-								</td>
-								<td class="cell2">
-									${QnaBoardDto.member_nick}
-								</td>
-								<td class="cell2">
-									<fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
-										pattern="yyyy.MM.dd hh:mm"/>
-								</td>
-								<td class="cell2">
-									<c:choose>
-										<c:when test="${empty qna_comment_no}">
-											-
-										</c:when>
-										<c:otherwise>
-											<fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
-												pattern="yyyy.MM.dd hh:mm"/>
-										</c:otherwise>
-									</c:choose>
-								</td>
-								<c:if test="${QnaBoardDto.qna_board_answer_status eq '접수중'}">
-									<td class="cell2" style="color: #E14E4E;">
-										${QnaBoardDto.qna_board_answer_status}
-									</td>
-								</c:if>
-								<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변중'}">
-									<td class="cell2" style="color: #2E89D4;">
-										${QnaBoardDto.qna_board_answer_status}
-									</td>
-								</c:if>
-								<c:if test="${QnaBoardDto.qna_board_answer_status eq '기한만료'}">
-									<td class="cell2" style="color: #E8CA35;">
-										${QnaBoardDto.qna_board_answer_status}
-									</td>
-								</c:if>
-								<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변완료'}">
-									<td class="cell2" style="color: #BBBBBB;">
-										${QnaBoardDto.qna_board_answer_status}
-									</td>
-								</c:if>
+			<div id="innerPage">
+				<c:if test="${memberDto.member_grade == 1}">
+					<form action="./managementDeleteCtr.do" id="deleteForm" method="get">
+						<table id='projectListTable'>
+							<tr id='lineTitle' style="border: 1px solid #7D7471;">
+								<th class="cell"><input id="allCheck" type="checkbox"></th>
+								<th class="cell">글번호</th>
+								<th class="cell">제목</th>
+								<th class="cell">작성자</th>
+								<th class="cell">작성일</th>
+								<th class="cell">답변일</th>
+								<th class="cell">처리상태</th>
 							</tr>
-						</c:forEach>
-					</c:otherwise>
-				</c:choose>
-			</table>
+							
+							<c:choose>
+								<c:when test="${empty qnaBoardList}">
+									<tr>
+										<td colspan="6" style="text-align: center;">
+											등록된 게시글이 없습니다.
+										</td>
+									</tr>
+								</c:when>
+								
+								<c:otherwise>
+									<c:forEach var="QnaBoardDto" items="${qnaBoardList}">
+										<tr>
+											<td><input name="qnaCheck" type="checkbox" class='checkbox' 
+												value="${QnaBoardDto.qna_board_no}"></td>
+											<td class="cell2">${QnaBoardDto.qna_board_no}</td>
+											<td class="cell2">
+												<a href='#' onclick="listDetailAdminPageFnc(this, event);">
+													${QnaBoardDto.qna_board_title}
+												</a>
+											</td>
+											<td class="cell2">
+												${QnaBoardDto.member_nick}
+											</td>
+											<td class="cell2">
+												<fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
+													pattern="yyyy.MM.dd hh:mm"/>
+											</td>
+											<td class="cell2">
+												<c:choose>
+													<c:when test="${empty QnaBoardDto.qna_board_answer_date}">
+														-
+													</c:when>
+													<c:otherwise>
+														<fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
+															pattern="yyyy.MM.dd hh:mm"/>
+													</c:otherwise>
+												</c:choose>
+											</td>
+											<c:if test="${QnaBoardDto.qna_board_answer_status eq '접수중'}">
+												<td class="cell2" style="color: #E14E4E;">
+													${QnaBoardDto.qna_board_answer_status}
+												</td>
+											</c:if>
+											<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변중'}">
+												<td class="cell2" style="color: #2E89D4;">
+													${QnaBoardDto.qna_board_answer_status}
+												</td>
+											</c:if>
+											<c:if test="${QnaBoardDto.qna_board_answer_status eq '기한만료'}">
+												<td class="cell2" style="color: #E8CA35;">
+													${QnaBoardDto.qna_board_answer_status}
+												</td>
+											</c:if>
+											<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변완료'}">
+												<td class="cell2" style="color: #BBBBBB;">
+													${QnaBoardDto.qna_board_answer_status}
+												</td>
+											</c:if>
+										</tr>
+									</c:forEach>
+								</c:otherwise>
+							</c:choose>
+						</table>
+					</form>		
+				</c:if>
+				
+				<c:if test="${memberDto.member_grade == 0}">
+					<table id='projectListTable'>
+						<tr id='lineTitle' style="border: 1px solid #7D7471;">
+							<th class="cell">글번호</th>
+							<th class="cell">제목</th>
+							<th class="cell">작성자</th>
+							<th class="cell">작성일</th>
+							<th class="cell">답변일</th>
+							<th class="cell">처리상태</th>
+						</tr>
+						
+						<c:choose>
+							<c:when test="${empty qnaBoardList}">
+								<tr>
+									<td colspan="6" style="text-align: center;">
+										등록된 게시글이 없습니다.
+									</td>
+								</tr>
+							</c:when>
+							
+							<c:otherwise>
+								<c:forEach var="QnaBoardDto" items="${qnaBoardList}">
+									<tr>
+										<td class="cell2">${QnaBoardDto.qna_board_no}</td>
+										<td class="cell2">
+											<a href='#' onclick="listDetailUserPageFnc(this, event);">
+												${QnaBoardDto.qna_board_title}
+											</a>
+										</td>
+										<td class="cell2">
+											${QnaBoardDto.member_nick}
+										</td>
+										<td class="cell2">
+											<fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
+												pattern="yyyy.MM.dd hh:mm"/>
+										</td>
+										<td class="cell2">
+											<c:choose>
+												<c:when test="${empty QnaBoardDto.qna_board_answer_date}">
+													-
+												</c:when>
+												<c:otherwise>
+													<fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
+														pattern="yyyy.MM.dd hh:mm"/>
+												</c:otherwise>
+											</c:choose>
+										</td>
+										<c:if test="${QnaBoardDto.qna_board_answer_status eq '접수중'}">
+											<td class="cell2" style="color: #E14E4E;">
+												${QnaBoardDto.qna_board_answer_status}
+											</td>
+										</c:if>
+										<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변중'}">
+											<td class="cell2" style="color: #2E89D4;">
+												${QnaBoardDto.qna_board_answer_status}
+											</td>
+										</c:if>
+										<c:if test="${QnaBoardDto.qna_board_answer_status eq '기한만료'}">
+											<td class="cell2" style="color: #E8CA35;">
+												${QnaBoardDto.qna_board_answer_status}
+											</td>
+										</c:if>
+										<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변완료'}">
+											<td class="cell2" style="color: #BBBBBB;">
+												${QnaBoardDto.qna_board_answer_status}
+											</td>
+										</c:if>
+									</tr>
+								</c:forEach>
+							</c:otherwise>
+						</c:choose>
+					</table>
+				</c:if>
+			</div>
 			
 		</div>
 	</div>
@@ -328,9 +484,9 @@
 		<input type="hidden" id='curPage' name='curPage' 
 			value="${pagingMap.paging.curPage}">
 		<input type="hidden" id='qna_board_no' name="qna_board_no" value="${qnaBoardDto.qna_board_no}">
-		<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
-		<input type="hidden" id='keyword' name="keyword" value="${keyword}">
-		<input type="hidden" id='sortOption' name='sortOption' value="${sortOption}">	
+		<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
+		<input type="hidden" id='keyword' name="keyword" value="${searchMap.keyword}">
+		<input type="hidden" id='sortOption' name='sortOption' value="${searchMap.sortOption}">	
 	</form>
 	
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>

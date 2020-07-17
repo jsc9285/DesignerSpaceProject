@@ -183,6 +183,8 @@
 		$("#check_nick").click(function() {
 		   var nickObj = $('#member_nick').val();
 		   
+		   var indexSpace = nickObj.indexOf(" ");
+		   
 		   $.ajax({
 		      url : "./checkNick.do",
 		      type : "GET",
@@ -190,17 +192,26 @@
 		      success : function(data) {
 		         console.log("1 = 중복o / 0 = 중복x : "+ data);                     
 		         
-		         if (data == 1) {
+		         if (indexSpace != -1) {
+		        	 
 		        	 $('#member_nick').css('border', '2px solid #ff0000');
 		        	 $('#nick_div').css('color', '#ff0000');
-		        	 $('#nick_div').html("사용중인 닉네임입니다.");
+		        	 $('#nick_div').html("띄어쓰기를 제거해 주세요");
+		        	 
+		        	 nickFlag = "N";
+		        	
+					
+				 }else if (data == 1) {
+		        	 $('#member_nick').css('border', '2px solid #ff0000');
+		        	 $('#nick_div').css('color', '#ff0000');
+		        	 $('#nick_div').html("사용중인 닉네임입니다");
 		        	 
 		        	 nickFlag = "N";
 		        	 
 		         }else{
 		        	 $('#member_nick').css('border', '2px solid #4B89DC');
 		        	 $('#nick_div').css('color', '#4B89DC');
-		        	 $('#nick_div').html('사용가능한 닉네임입니다.');
+		        	 $('#nick_div').html('사용가능한 닉네임입니다');
 		        	 
 		        	 nickFlag = "Y";
 		        	 nickPass =$('#member_nick').val();
@@ -214,8 +225,14 @@
 	    });
 		
 		
-		$("#check_email").click(function() {
+		$("#check_email").click(function() {//이메일 유효성 검사
 		   var emailObj = $('#member_email').val();
+		   
+		   var indexSpace = emailObj.indexOf(" ");
+		   var splitArr = emailObj.split("@"); 
+		   var startChar = emailObj.charAt(0);
+		   var lastChar = emailObj.charAt(emailObj.length - 1);
+		   
 		   
 		   $.ajax({
 		      url : "./checkEmail.do",
@@ -224,17 +241,42 @@
 		      success : function(data) {
 		         console.log("1 = 중복o / 0 = 중복x : "+ data);                     
 		         
-		         if (data == 1) {
+		         if (indexSpace != -1) {
+					
 		        	 $('#member_email').css('border', '2px solid #ff0000');
 		        	 $('#email_div').css('color', '#ff0000');
-		        	 $('#email_div').html("사용중인 이메일입니다.");
+		        	 $('#email_div').html("띄어쓰기를 제거해 주세요");
+		        	 
+		        	 emailFlag = "N";
+		        	 
+		        	 
+				 }else if(splitArr.length != 2 ) {
+		        	 
+		        	 $('#member_email').css('border', '2px solid #ff0000');
+		        	 $('#email_div').css('color', '#ff0000');
+		        	 $('#email_div').html("올바르지 않은 이메일 형식입니다");
+		        	 
+		        	 emailFlag = "N";
+		        	 
+				 }else if (startChar=="@" || lastChar=="@") {
+						
+					 $('#member_email').css('border', '2px solid #ff0000');
+		        	 $('#email_div').css('color', '#ff0000');
+		        	 $('#email_div').html("올바르지 않은 이메일 형식입니다");
+		        	 
+		        	 emailFlag = "N";
+					 
+				 }else if (data == 1) {
+		        	 $('#member_email').css('border', '2px solid #ff0000');
+		        	 $('#email_div').css('color', '#ff0000');
+		        	 $('#email_div').html("사용중인 이메일입니다");
 		        	 
 		        	 emailFlag = "N";
 		        	 
 		         }else{
 		        	 $('#member_email').css('border', '2px solid #4B89DC');
 		        	 $('#email_div').css('color', '#4B89DC');
-		        	 $('#email_div').html('사용가능한 이메일입니다.');
+		        	 $('#email_div').html('사용가능한 이메일입니다');
 		        	 
 		        	 emailFlag = "Y";
 		        	 emailPass =$('#member_email').val();
@@ -248,7 +290,7 @@
 	    });
 		
 		
-		$("#member_pwd").change(function() {
+		$("#member_pwd").change(function() { //비밀번호 유효성
 			
 			var pwdObj = $('#member_pwd').val();
 			var num = pwdObj.search(/[0-9]/g);
@@ -263,7 +305,6 @@
 	        	$('#pwd_div').html("8자리 ~ 16자리 이내로 입력해주세요");
 	        	pwdFlag = "N";
 	        	
-	        	return false;
 				
 		   }else if(pwdObj.search(/\s/) != -1){
 			    $('#member_pwd').css('border', '2px solid #ff0000');
@@ -271,7 +312,6 @@
 	        	$('#pwd_div').html("비밀번호는 공백 없이 입력해주세요");
 	        	pwdFlag = "N";
 	        	
-				return false;
 		    
 		   }else if(num < 0 || eng < 0 || spe < 0 ){
 			    $('#member_pwd').css('border', '2px solid #ff0000');
@@ -279,15 +319,13 @@
 	        	$('#pwd_div').html("영문,숫자, 특수문자를 혼합하여 입력해주세요");
 	        	pwdFlag = "N";
 	        	
-				return false;
 		  
 		   }else {
 			   $('#member_pwd').css('border', '2px solid #4B89DC');
 			   $('#pwd_div').css('color', '#4B89DC');
-			   $('#pwd_div').html('사용가능한 비밀번호입니다.');
+			   $('#pwd_div').html('사용가능한 비밀번호입니다');
 			   console.log("통과"); 
 			   pwdFlag = "Y";
-			   return true; 	
 		   }
 		   
 		   
@@ -322,7 +360,8 @@
 		
 		//휴대폰번호 확인
 		$("#member_phone").change(function() {
-		   var phoneObj = $('#member_phone').val();
+		   
+			var phoneObj = $('#member_phone').val();
 		   
 		   $.ajax({
 		      url : "./checkPhone.do",
@@ -547,7 +586,7 @@
 						<h3> 제 1 조 (목적)</h3><br>
 						<ol>
 							<li>1. 본 약관은 기업마당 사이트가 제공하는 모든 서비스(이하 "서비스")의 이용조건 및 절차, 이용자와 기업마당 사이트의 권리, 의무, 책임사항과 기타 필요한 사항을 규정함을 목적으로 합니다.</li>
-						</ol>
+						</ol><br>
 						<h3>제 2 조 (약관의 효력과 변경)</h3><br>
 						<ol>
 							<li>1. 기업마당 사이트는 귀하가 본 약관 내용에 동의하는 경우 기업마당 사이트의 서비스 제공 행위 및 귀하의 서비스 사용 행위에 본 약관이 우선적으로 적용됩니다.</li>

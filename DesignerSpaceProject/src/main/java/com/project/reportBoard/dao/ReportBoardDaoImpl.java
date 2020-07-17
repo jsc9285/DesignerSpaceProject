@@ -20,7 +20,7 @@ public class ReportBoardDaoImpl implements ReportBoardDao{
 
 	@Override
 	public List<ReportBoardDto> reportBoardSelectList(String searchOption, String keyword, 
-				String sortOption, int start, int end) {
+				String sortOption, int start, int end, int mno) {
 		// TODO Auto-generated method stub
 		
 		Map<String, Object> map = new HashMap<>();
@@ -29,6 +29,7 @@ public class ReportBoardDaoImpl implements ReportBoardDao{
 		map.put("sortOption", sortOption);
 		map.put("start", start);
 		map.put("end", end);
+		map.put("mno", mno);
 		
 		List<ReportBoardDto> reportBoardList = sqlSession.selectList(namespace + "reportBoardSelectList", map);
 		
@@ -36,13 +37,15 @@ public class ReportBoardDaoImpl implements ReportBoardDao{
 	}
 
 	@Override
-	public int reportBoardSelectTotalCount(String searchOption, String keyword) {
+	public int reportBoardSelectTotalCount(String searchOption, String keyword, String sortOption, int mno) {
 		// TODO Auto-generated method stub
 		
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
 		
 		paramMap.put("searchOption", searchOption);
 		paramMap.put("keyword", keyword);
+		paramMap.put("sortOption", sortOption);
+		paramMap.put("mno", mno);
 		
 		return sqlSession.selectOne(namespace + "reportBoardSelectTotalCount", paramMap);
 	}
@@ -71,6 +74,28 @@ public class ReportBoardDaoImpl implements ReportBoardDao{
 		// TODO Auto-generated method stub
 		
 		sqlSession.insert(namespace + "reportBoardInsertOne", reportBoardDto);
+	}
+
+	@Override
+	public void processingComplete(ReportBoardDto reportBoardDto) {
+		// TODO Auto-generated method stub
+		
+		sqlSession.update(namespace + "processingComplete", reportBoardDto);
+	}
+
+	@Override
+	public int selectProjectBoardNumber(String title) {
+		// TODO Auto-generated method stub
+		
+		return sqlSession.selectOne(namespace + "selectProjectBoardNumber", title);
+	}
+
+	@Override
+	public void reportBoardDeleteOne(int report_board_no) {
+		// TODO Auto-generated method stub
+		
+		sqlSession.delete(namespace + "reportBoardDeleteOne", report_board_no);
+		
 	}
 
 }
