@@ -13,7 +13,7 @@
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 <style type="text/css">
 	#innerPage{
-		margin-top: 100px;
+		margin-top: 10px;
 	}
 	#boardTitle{
 		font-size: 70px;
@@ -30,6 +30,7 @@
 		text-align-last: center;
 		font-size: 17px;
 		float: left;
+		cursor: pointer;
 	}
 	#keyword{
 		margin-top: 40px;
@@ -37,11 +38,14 @@
 		height: 45px;
 		float: left;
 	}
-	#searchButton{
-		margin-top: 40px;
-		width: 50px;
-		height: 50px;
-		float: left;
+	#searchBtn{
+	 	width: 50px;
+	 	height: 50px;
+	 	background-color: #60524E;
+	 	border-style: none;
+	 	border-radius: 5px;
+	 	vertical-align: middle;
+	 	margin-top: 40px;
 	}
 	#writeButton{
 		float: right;
@@ -55,6 +59,7 @@
 		background-color: #7D7471;
 		border: 0;
 		outline: 0;
+		border-radius: 5px;
 	}	
 	#writeButton:hover{
 		float: right;
@@ -64,9 +69,10 @@
 		height: 50px;
 		margin-top: 40px;
 		font-size: 20px;
-		background-color: #7D7500;
+		background-color: #4AD674;
 		border: 0;
 		outline: 0;
+		cursor: pointer;
 	}	
 	#selectProcessStatus{
 		margin-top: 40px;
@@ -97,6 +103,17 @@
 		height: 50px;
 		vertical-align: middle;
 	}
+	
+	#projectListTable th:hover{
+		cursor: pointer;
+		color: #4AD674;
+		font-size: 20px;
+		font-weight: bold;
+		height: 50px;
+		vertical-align: middle;
+	}
+	
+	
 	#projectListTable td{			
 		height: 50px;
 		vertical-align: middle;
@@ -114,7 +131,7 @@
 		color: black;
 	} 	
 	.freeBoardTitle:hover{
-		color: yellow;
+		text-decoration: underline;
 	}
 </style>
 
@@ -162,13 +179,11 @@ function freeBoardListOnePageFnc(obj, event){
 		var searchOptionObj = $('#searchOption');
 		var memberNoObj = $('#mno');
 		var whatKindObj = $(sort).attr('id');		
-		
-// 		freeBoardNoObj = aTagObj.parent().parent().children('tr').eq(1).children('td').eq(0);
-// 		alert(freeBoardNoObj.html())
+
 		var url = '';
 		
 		url += './free.do?';
-// 		url += 'no=' + freeBoardNoObj.html();
+
 		url += 'keyword=' + keywordObj.val();
 		url += '&searchOption=' + searchOptionObj.val();
 		url += '&mno=' + memberNoObj.val();
@@ -210,9 +225,41 @@ function freeBoardListOnePageFnc(obj, event){
 				freeBoardTitleStr = freeBoardTitleStr.substring(0,30) + "...";	
 			}
 			$('.freeBoardTitle').eq(i).text(freeBoardTitleStr);
-		}
+		};
+		 //체크박스 전체선택
+	      $('#allCheck').click(function() {
+	         var allChecked = $(this).prop('checked');
+	         
+	         if (allChecked) {
+	            $('.checkbox').each(function(){
+	               $(this).prop('checked', true);
+	            });
+	         } else{
+	            $('.checkbox').prop('checked', false);
+	         }
+	         
+	      });
+	      //전체선택에서 개별 선택시 전체선택 비활성화
+	      $('.checkbox').click(function() {
+	          if (!$(this).prop('checked')) {
+	              $("#allCheck").prop('checked', false);
+	          }
+	      });
+
 		
-	})
+	});
+	 function projectDeleteFnc() {         
+	      var deleteFormObj = document.getElementById('deleteForm');         
+	      
+	      if(confirm('정말로 삭제하시겠습니까?')){
+	         
+	         deleteFormObj.submit();
+	          return true;
+	       }else{
+	          return false;
+	       }
+	   }
+
 
 	
 </script>
@@ -225,6 +272,9 @@ function freeBoardListOnePageFnc(obj, event){
 	<div id="wrap">
 		<div id="innerWrap">
 			<div id='boardTitle'>자유게시판</div>
+			<c:if test="${memberDto.member_grade eq '1'}">
+				<a type="submit" id="deleteBtn" onclick="projectDeleteFnc();" style="float: right; color: red;">게시물삭제</a>
+			</c:if>
 			<div>
 				<form action="./freeBoardAdd.do" method="post">
 					<input type="submit" value="작성" id='writeButton'>
@@ -259,19 +309,24 @@ function freeBoardListOnePageFnc(obj, event){
 				<input type="text" id='keyword' 
 					name="keyword" value="${searchMap.keyword}"
 					placeholder="제목 or 작성자 검색">
-				<input type="submit" value="검색" id='searchButton'>		
+				<button id="searchBtn" type="submit"><img src="<%=request.getContextPath()%>/resources/img/iconSearch.png"></button>
 			</form>	
 			
 			<div id="innerPage">
+			<form action="./freeBoardAdminDeleteCtr.do" id="deleteForm" method="get">
 			<table id="projectListTable">
+				
 				<tr id='lineTitle' style="border: 1px solid #7D7471;" >
+								
 					<th class="cell" onclick="sortFnc(this);" id="free_board_no">글번호</th>
 					<th class="cell" onclick="sortFnc(this);" id="free_board_title">제목</th>
 					<th class="cell" onclick="sortFnc(this);" id="member_nick">작성자</th>
 					<th class="cell" onclick="sortFnc(this);" id="free_board_views">조회수</th>
 					<th class="cell" onclick="sortFnc(this);" id="nl">좋아요</th>
-					<th class="cell" onclick="sortFnc(this);" id="free_board_cre_date" colspan="4">작성일</th>
-					
+					<th class="cell" onclick="sortFnc(this);" id="free_board_cre_date" colspan="3">작성일</th>
+					<c:if test="${memberDto.member_grade eq '1'}">
+						<th class="cell"><input id="allCheck" type="checkbox"></th>
+					</c:if>			
 				</tr>
 			<c:choose>
 				<c:when test="${empty freeBoardList}">
@@ -290,12 +345,14 @@ function freeBoardListOnePageFnc(obj, event){
 						<c:choose>
 						<c:when test="${freeBoardDto.memberGrade eq '0'}">
 						<td class="cell2" style="text-align: left;">
-							<a href='#' class="freeBoardTitle" onclick="freeBoardListOnePageFnc(this, event);">${freeBoardDto.freeBoardTitle}</a>
+							<a href='#' class="freeBoardTitle" 
+							onclick="freeBoardListOnePageFnc(this, event);">${freeBoardDto.freeBoardTitle}</a>
 						</td>
 						</c:when>
 						<c:when test="${freeBoardDto.memberGrade eq '1'}">
 						<td class="cell2" style="text-align: left;">
-							<a id="admin" class="freeBoardTitle" href='#' onclick="freeBoardListOnePageFnc(this, event);">${freeBoardDto.freeBoardTitle}</a>
+							<a id="admin" class="freeBoardTitle" href='#' 
+							onclick="freeBoardListOnePageFnc(this, event);">${freeBoardDto.freeBoardTitle}</a>
 						</td>
 						</c:when>
 						</c:choose>
@@ -318,23 +375,19 @@ function freeBoardListOnePageFnc(obj, event){
 							<h6><fmt:formatDate value="${freeBoardDto.freeBoardCreDate}" 
 								pattern="HH:mm"/></h6>
 						</td>
-						<c:choose>
-						<c:when test="${memberDto.member_grade eq '1'}">
-						<td class="cell2">
-							<a href='#' onclick="freeBoardDeleteFnc(this, event);">[삭제]</a>
-						</td>
-						</c:when>
-					
-						<c:otherwise>
 						
-						</c:otherwise>
-						</c:choose>
+						
+						<c:if test="${memberDto.member_grade eq '1'}">
+							<td><input name="noCheck" type="checkbox" class='checkbox' 
+                                    value="${freeBoardDto.freeBoardNo}"></td>
+                        </c:if>
 					</tr>
 					</c:forEach>
 				</c:otherwise>
 			</c:choose>
 			
 			</table>
+			</form>
 			</div>
 			
 			<jsp:include page="/WEB-INF/views/common/paging.jsp">

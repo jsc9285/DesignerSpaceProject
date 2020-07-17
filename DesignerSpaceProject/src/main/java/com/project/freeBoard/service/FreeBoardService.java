@@ -25,8 +25,6 @@ public interface FreeBoardService {
 
 	public int freeBoardLikeInsert(int no,int mno);
 
-//	public List<Object> freeBoardLikeSelectList(int no, int mno);
-
 	public String freeBoardLikeSelectList(int no, int mno);
 
 	public int freeBoardLikeUpdate(int no, int mno);

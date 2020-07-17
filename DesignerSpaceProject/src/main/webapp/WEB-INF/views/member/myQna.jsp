@@ -10,7 +10,7 @@
 
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/style.css">
-<style type="text/css">
+	<style type="text/css">
 	#boardTitle{
 		font-size: 80px;
 		font-weight: bold;
@@ -35,14 +35,15 @@
 		height: 45px;
 		float: left;
 	}
-	
-	#searchButton{
-		margin-top: 40px;
-		width: 50px;
-		height: 50px;
-		float: left;
+	#searchBtn{
+	 	width: 50px;
+	 	height: 50px;
+	 	background-color: #60524E;
+	 	border-style: none;
+	 	border-radius: 5px;
+	 	vertical-align: middle;
+	 	margin-top: 40px;
 	}
-	
 	#writeButton{
 		float: right;
 		text-align: center;
@@ -50,14 +51,13 @@
 		width: 150px;
 		height: 50px;
 		margin-top: 40px;
-		margin-right: 175px;
+		margin-right: 185px;
 		font-size: 20px;
 		background-color: #7D7471;
 		border-radius: 5px;
 		border: none;
 		cursor: pointer;
 	}
-	
 	#writeButton:hover{
 		color: #fff;
 		background-color: #4AD674;
@@ -93,8 +93,18 @@
        height: 50px;
        vertical-align: middle;
     }
+    #projectListTable a{
+    	color: black;
+    	text-decoration: none;
+    }
+    #projectListTable a:hover{
+    	text-decoration: underline;
+    }
+    #innerWrap select{
+    	cursor: pointer;
+    }
     #innerPage{
-    	margin-top: 100px;
+    	margin-top: 10px;
     }
 </style>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
@@ -168,7 +178,7 @@
 				</select>
 				
 				<input type="text" id='keyword' name="keyword" value="${searchMap.keyword}">
-				<input type="submit" value="검색" id='searchButton'>
+				<button id="searchBtn" type="submit"><img src="<%=request.getContextPath()%>/resources/img/iconSearch.png"></button>
 				<input type="button" value="작성" id='writeButton'
 				 onclick="location.href='../qnaBoard/add.do'">
 				
@@ -234,7 +244,7 @@
 						</c:when>
 						
 						<c:otherwise>
-	`						<c:forEach var="QnaBoardDto" items="${qnaBoardList}">
+							<c:forEach var="QnaBoardDto" items="${qnaBoardList}">
 								<tr>
 									<td class="cell2">${QnaBoardDto.qna_board_no}</td>
 									<td class="cell2">
@@ -246,8 +256,10 @@
 										${QnaBoardDto.member_nick}
 									</td>
 									<td class="cell2">
-										<fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
-											pattern="yyyy.MM.dd HH:mm"/>
+										<h6><fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
+											pattern="yyyy.MM.dd"/></h6>
+										<h6><fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
+											pattern="HH:mm"/></h6>
 									</td>
 									<td class="cell2">
 										<c:choose>
@@ -255,8 +267,10 @@
 												-
 											</c:when>
 											<c:otherwise>
-												<fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
-													pattern="yyyy.MM.dd HH:mm"/>
+												<h6><fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
+													pattern="yyyy.MM.dd"/></h6>
+												<h6><fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
+													pattern="HH:mm"/></h6>
 											</c:otherwise>
 										</c:choose>
 									</td>
@@ -287,23 +301,23 @@
 				</table>
 			</div>
 			
+			<input type="hidden" value="${qna_comment_no}" name="qna_comment_no">
+	
+			<jsp:include page="/WEB-INF/views/common/paging.jsp">
+				<jsp:param value="${pagingMap}" name="pagingMap"/>
+			</jsp:include>
+			
+			<form action="./myQnaList.do" id='pagingForm' method="get">
+				<input type="hidden" id='curPage' name='curPage' 
+					value="${pagingMap.paging.curPage}">
+				<input type="hidden" id='qna_board_no' name="qna_board_no" value="${qnaBoardDto.qna_board_no}">
+				<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
+				<input type="hidden" id='keyword' name="keyword" value="${searchMap.keyword}">
+				<input type="hidden" id='sortOption' name='sortOption' value="${searchMap.sortOption}">
+			</form>
+			
 		</div>
 	</div>
-	
-	<input type="hidden" value="${qna_comment_no}" name="qna_comment_no">
-	
-	<jsp:include page="/WEB-INF/views/common/paging.jsp">
-		<jsp:param value="${pagingMap}" name="pagingMap"/>
-	</jsp:include>
-	
-	<form action="./myQnaList.do" id='pagingForm' method="get">
-		<input type="hidden" id='curPage' name='curPage' 
-			value="${pagingMap.paging.curPage}">
-		<input type="hidden" id='qna_board_no' name="qna_board_no" value="${qnaBoardDto.qna_board_no}">
-		<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
-		<input type="hidden" id='keyword' name="keyword" value="${searchMap.keyword}">
-		<input type="hidden" id='sortOption' name='sortOption' value="${searchMap.sortOption}">
-	</form>
 	
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 
