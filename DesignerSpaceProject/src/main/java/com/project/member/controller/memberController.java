@@ -24,7 +24,9 @@ import com.project.member.service.MemberService;
 import com.project.projectBoard.model.ProjectBoardDto;
 import com.project.projectBoard.service.ProjectBoardService;
 import com.project.qnaBoard.model.QnaBoardDto;
+import com.project.qnaBoard.service.QnaBoardService;
 import com.project.reportBoard.model.ReportBoardDto;
+import com.project.reportBoard.service.ReportBoardService;
 import com.project.util.CommentPaging;
 import com.project.util.Paging;
 
@@ -46,6 +48,12 @@ public class memberController {
 	
 	@Autowired
 	private FreeBoardService freeBoardService;
+	
+	@Autowired
+	private ReportBoardService reportBoardService;
+	
+	@Autowired
+	private QnaBoardService qnaBoardService;
 	
 	@RequestMapping(value = "/login.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public String mainLogin(@RequestParam(defaultValue = "")String member_email, Model model) {
@@ -173,7 +181,7 @@ public class memberController {
 		MemberDto memberDto = memberService.memberInfo(sessionMemeberDto.getMember_no());
 		
 		
-		model.addAttribute("memberDto", memberDto);
+		model.addAttribute("member", memberDto);
 		
 		return "/member/memberInfo";
 	}
@@ -287,7 +295,7 @@ public class memberController {
 								 , HttpSession session
 								 , Model model) {
 			log.info("Welcome reportBoardList! " + curPage + " : ????"
-					+ searchOption + " : " + keyword);
+					+ searchOption + " : " + keyword + "회원번호" + mno);
 			
 			if("writer".equals(searchOption)) {
 				searchOption = "member_nick";
@@ -302,13 +310,13 @@ public class memberController {
 			}
 			
 			int totalCount = 
-					freeBoardService.reportBoardSelectTotalCount(searchOption, keyword, sortOption, mno);
+					reportBoardService.reportBoardSelectTotalCount(searchOption, keyword, sortOption, mno);
 			
 			Paging reportBoardPaging = new Paging(totalCount, curPage);
 			int start = reportBoardPaging.getPageBegin();
 			int end = reportBoardPaging.getPageEnd();
 					
-			List<ReportBoardDto> reportBoardList = freeBoardService.reportBoardSelectList(
+			List<ReportBoardDto> reportBoardList = reportBoardService.reportBoardSelectList(
 					searchOption, keyword, sortOption, start, end, mno);
 			
 //			 화면의 form의 이름을 맞추기 위한 작업
@@ -368,13 +376,13 @@ public class memberController {
 			}
 			
 			int totalCount = 
-					freeBoardService.qnaBoardSelectTotalCount(searchOption, keyword, sortOption, mno);
+					qnaBoardService.qnaBoardSelectTotalCount(searchOption, keyword, sortOption, mno);
 			
 			Paging qnaBoardPaging = new Paging(totalCount, curPage);
 			int start = qnaBoardPaging.getPageBegin();
 			int end = qnaBoardPaging.getPageEnd();
 			System.out.println("총 카운트 : "+totalCount);		
-			List<QnaBoardDto> qnaBoardList = freeBoardService.qnaBoardSelectList(
+			List<QnaBoardDto> qnaBoardList = qnaBoardService.qnaBoardSelectList(
 					searchOption, keyword, sortOption, start, end, mno);
 //			 화면의 form의 이름을 맞추기 위한 작업
 
@@ -506,6 +514,9 @@ public class memberController {
 			
 			log.info("회원삭제"+member_no);
 			
+			MemberDto sessionMemeberDto = (MemberDto)session.getAttribute("memberDto");
+			int loginUser = sessionMemeberDto.getMember_no();
+			
 			
 			if(member_no==0) {
 				
@@ -517,9 +528,15 @@ public class memberController {
 				
 			}else {
 				memberService.memberRemove(member_no);
+				
+				if (member_no==loginUser) {
+					session.invalidate();
+				}
 			}
 			
-			session.invalidate();
+			
+			
+			
 			return "/member/alert/deleteSuccess";
 			
 		}

@@ -133,38 +133,38 @@
 				</div> 
 			
 				<div id="join_div">
-					<input type="hidden" class="input" value="${memberDto.member_no}" 
+					<input type="hidden" class="input" value="${member.member_no}" 
 						name='member_no'>
 					<input type="hidden" id="member_grade" class="input" value="${memberDto.member_grade}" 
 						name='member_grade'>
 					<span>닉네임</span>					
-					<input type="text" class="input" value="${memberDto.member_nick}" 
+					<input type="text" class="input" value="${member.member_nick}" 
 						name='member_nick' readonly="readonly">
 					<span>이메일</span>
-					<input type="text" class="input" value="${memberDto.member_email}" 
+					<input type="text" class="input" value="${member.member_email}" 
 						name='member_email' readonly="readonly">
 					<span>성명</span>
-					<input type="text" class="input" value="${memberDto.member_name}" 
+					<input type="text" class="input" value="${member.member_name}" 
 						name='member_name' readonly="readonly">
 					<span>휴대번호</span>
-					<input type="text" class="input" value="${memberDto.member_phone}" 
+					<input type="text" class="input" value="${member.member_phone}" 
 						name='member_phone' readonly="readonly">
 					<span>프로필 이미지</span>
 					<div id="img_div">
 						<c:choose>
-							<c:when test="${empty memberDto.profile_table_stored_name}">
+							<c:when test="${empty member.profile_table_stored_name}">
 								<img id="p_image" alt="기본 프로필 이미지"  src="<%=request.getContextPath()%>/resources/img/defaultProfile.png">
 							</c:when>
 							<c:otherwise>
 								<img id="p_image" alt="프로필 이미지" 
-									src="<c:url value='/profileImg/${memberDto.profile_table_stored_name}'/>">
+									src="<c:url value='/profileImg/${member.profile_table_stored_name}'/>">
 							</c:otherwise>
 						</c:choose>
 					</div>
 					
 					<span>자기소개</span>
 					<textarea id="textarea" rows="8" cols="38" readonly="readonly"
-					name="member_comments">${memberDto.member_comments}</textarea>
+					name="member_comments">${member.member_comments}</textarea>
 					
 					
 					

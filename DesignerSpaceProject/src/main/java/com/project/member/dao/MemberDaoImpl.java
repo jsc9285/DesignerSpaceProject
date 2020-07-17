@@ -188,6 +188,9 @@ public class MemberDaoImpl implements MemberDao{
 		System.out.println("memberRemove들어왔다");
 		
 		sqlSession.insert(namespace + "memberRemove", member_no);
+		sqlSession.insert(namespace + "projectRemove", member_no);
+		
+//		sqlSession.inse()
 		
 	}
 

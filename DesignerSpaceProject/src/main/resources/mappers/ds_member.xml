@@ -244,6 +244,14 @@
 		WHERE MEMBER_NO =#{member_no}
 	</update>
 	
+	<update id="projectRemove" parameterType="int">
+		UPDATE PROJECT_BOARD
+		<set>
+			 PROJECT_BOARD_DEL_FLAG = 'Y'
+		</set>
+		WHERE PROJECT_BOARD_MNO =#{member_no}
+	</update>
+	
 <!-- 	중복체크   -->
 	<select id="checkNick" parameterType="String" 
 		resultType="int">
