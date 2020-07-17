@@ -294,7 +294,7 @@
 			<c:choose>
 				<c:when test="${memberDto.member_no eq  mno}">
 					<div id="createBox" onclick="location.href='../projectBoard/add.do?chkPage=1'">
-						<a>작품제작</a>
+						<a>작품작성</a>
 					</div>	
 				</c:when>
 			</c:choose>			
@@ -403,7 +403,8 @@
 			<!-- 			프로젝트 페이징 -->
 			<div id="paging">
 				<jsp:include page="/WEB-INF/views/common/projectBoardPaging.jsp">
-					<jsp:param value="${projectBoardPaging}" name="projectBoardPaging" />
+					<jsp:param value="${projectBoardPaging}" name="projectBoardPaging"/>
+					<jsp:param name="chkPage" value="my"/>
 				</jsp:include>
 
 				<form action="./myBoard.do" id='pagingForm' method="get">

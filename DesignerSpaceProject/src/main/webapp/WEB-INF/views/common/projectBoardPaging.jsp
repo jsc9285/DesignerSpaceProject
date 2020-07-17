@@ -41,13 +41,20 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	
 <script type="text/javascript">
-	function goPageFnc(pageNumber){
+	function goPageFnc(pageNumber, chkPage){
 
 		var curPage = $('#curPage');
 
 		curPage.val(pageNumber);
 		
 		var pagingForm = $('#pagingForm');
+		
+		if(chkPage == "list"){
+			pagingForm.attr('action', './list.do#navList')	
+		}else if(chkPage == "my"){
+			pagingForm.attr('action', './myBoard.do#navList')
+		}
+		
 		pagingForm.submit();
 	}
 </script>
@@ -57,7 +64,7 @@
 		<c:choose>
 			<c:when test="${projectBoardPaging.curPage < projectBoardPaging.totPage}">
 				<a href="#"
-					onclick="goPageFnc(${projectBoardPaging.curPage + 1});">
+					onclick="goPageFnc(${projectBoardPaging.curPage + 1}, '<%=request.getParameter("chkPage")%>');">
 					<span>더보기</span>
 				</a>
 			</c:when>
