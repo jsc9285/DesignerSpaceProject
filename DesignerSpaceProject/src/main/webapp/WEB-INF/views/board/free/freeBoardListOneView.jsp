@@ -73,16 +73,16 @@
 	}
 	
 	.imgObj{
-		position: absolute;
-		top: 1240px;
-  		left: 930px;
+/* 		position: absolute; */
+/* 		top: 1240px; */
+/*   		left: 930px; */
   		bottom: auto;
   		right: auto;
 	}
  	#likeCount{ 
- 		position: absolute; 
- 		top: 1290px; 
-   		left: 950px; 
+/*  		position: absolute;  */
+/*  		top: 1290px;  */
+/*    		left: 950px;  */
    		bottom: auto; 
    		right: auto; 
    		color: #4AD674;
@@ -109,8 +109,10 @@
 
 	function pageMoveListFnc(){
 		var noObj = $('#no');
+		var mnoObj = $('#mno')
 		var keywordObj = $('#keyword');
 		var searchOptionObj = $('#searchOption');
+		var lineTitleObj = $('#lineTitle');
 		
 		var url = '';
 		
@@ -118,6 +120,8 @@
 		url += 'no=' + noObj.val();
 		url += '&keyword=' + keywordObj.val();
 		url += '&searchOption=' + searchOptionObj.val();
+		url += '&mno=' + mnoObj.val();
+		url += '&lineTitle=' + lineTitleObj.val();
 		
 		location.href = url;
 	}
@@ -215,45 +219,45 @@
 		
 // 	}
 	
-	function freeBoardCommentUpdateFnc(obj, event) {
+// 	function freeBoardCommentUpdateFnc(obj, event) {
 		
-			var aTagObj = $(obj);
+// 			var aTagObj = $(obj);
 			
-			event.preventDefault();
+// 			event.preventDefault();
 			
-			var mnoObj = $('#mno')
-			var fbnoObj = $('#fbno');
-			var rnumObj = $('#rnum');
-			var keywordObj = $('#keyword');
-			var searchOptionObj = $('#searchOption');
-			var lineTitleObj = $('#lineTitle');
-			var commentsObj = '';
-			var fcnoObj = '';
+// 			var mnoObj = $('#mno')
+// 			var fbnoObj = $('#fbno');
+// 			var rnumObj = $('#rnum');
+// 			var keywordObj = $('#keyword');
+// 			var searchOptionObj = $('#searchOption');
+// 			var lineTitleObj = $('#lineTitle');
+// 			var commentsObj = '';
+// 			var fcnoObj = '';
 			
-			fcnoObj = aTagObj.parent().parent().children('div').eq(1).children().eq(1);
+// 			fcnoObj = aTagObj.parent().parent().children('div').eq(1).children().eq(1);
 			
-			commentsObj = aTagObj.parent().parent().children('div').eq(1).children();
+// 			commentsObj = aTagObj.parent().parent().children('div').eq(1).children();
 			
-			var url = '';
-			if(commentsObj.val() != ''){	
-			url += './freeBoardCommentUpdateCtr.do?';
-			url += 'no=' + fbnoObj.val();
-			url += '&keyword=' + keywordObj.val();
-			url += '&searchOption=' + searchOptionObj.val();
-			url += '&mno=' + mnoObj.val();
-			url += '&fcno=' + fcnoObj.val();
-			url += '&rnum=' + rnumObj.val();
-			url += '&comments=' + commentsObj.val();
-			url += '&lineTitleObj=' + lineTitleObj.val();
+// 			var url = '';
+// 			if(commentsObj.val() != ''){	
+// 			url += './freeBoardCommentUpdateCtr.do?';
+// 			url += 'no=' + fbnoObj.val();
+// 			url += '&keyword=' + keywordObj.val();
+// 			url += '&searchOption=' + searchOptionObj.val();
+// 			url += '&mno=' + mnoObj.val();
+// 			url += '&fcno=' + fcnoObj.val();
+// 			url += '&rnum=' + rnumObj.val();
+// 			url += '&comments=' + commentsObj.val();
+// 			url += '&lineTitleObj=' + lineTitleObj.val();
 			
-			location.href = url;
-		}else{
-			alert('댓글을 써주세요');
+// 			location.href = url;
+// 		}else{
+// 			alert('댓글을 써주세요');
 			
-		}
+// 		}
 		
 		
-	}
+// 	}
 
 	function freeBoardCommentUpdateOneFnc(obj, event) {
 	
@@ -523,11 +527,15 @@
 					<div>
 					<br>
 					<br>
-					<input type="button" id="like" name="like" onclick="likeFnc();" value="" 
-					style="border-radius: 50%; 
-					width:150px; height:150px; background-color:#4AD674; border: none;cursor: pointer;">
-					<img style="cursor: pointer;" onclick="likeFnc();" class="imgObj" 
+					<div style="border-radius: 50%; margin-left: 780px;
+					width:150px; height:150px; background-color:#4AD674; border: none;cursor: pointer;"
+					 id="like" name="like" onclick="likeFnc();">
+<!-- 					<input type="button" id="like" name="like" onclick="likeFnc();" value=""  -->
+<!-- 					style="border-radius: 50%;  -->
+<!-- 					width:150px; height:150px; background-color:#4AD674; border: none;cursor: pointer;"> -->
+					<img style="cursor: pointer; margin-top: 50px;" onclick="likeFnc();" class="imgObj" 
 					src="<%=request.getContextPath()%>/resources/img/iconLike_Brown.png">
+					</div>
 					</div>
 			</c:if>
 	
@@ -537,13 +545,17 @@
 					<div>
 					<br>
 					<br>
-						<input style="border-radius: 50%; width:150px; height:150px; 
+					<div style="border-radius: 50%; width:150px; height:150px; margin-left: 780px;
 						background-color:#60524E; color:#4AD674; border: none;cursor: pointer;"
-						 type="button" id="like" name="like" onclick="likeDelFnc();" 
-						value="">
+						id="like" name="like" onclick="likeDelFnc();">
+<!-- 						<input style="border-radius: 50%; width:150px; height:150px; background-color:#60524E; color:#4AD674; border: none;cursor: pointer;" -->
+<!-- 						 type="button" id="like" name="like" onclick="likeDelFnc();"  -->
+<!-- 						value=""> -->
+						<img style="cursor: pointer; margin-top: 50px;" onclick="likeDelFnc();" class="imgObj" 
+						src="<%=request.getContextPath()%>/resources/img/iconLike_Green.png">
+						<br>
 						<span id="likeCount">${freeBoardDto.freeBoardLike}</span>
-						<img style="cursor: pointer;" onclick="likeDelFnc();" class="imgObj" 
-						src="<%=request.getContextPath()%>/resources/img/iconLike_Green.png"> 
+					</div>	 
 					</div>
 				</c:when>
 				
@@ -551,11 +563,15 @@
 					<div>
 					<br>
 					<br>
-						<input style="border-radius: 50%; width:150px; height:150px; 
-						background-color:#4AD674; border: none; cursor: pointer;" type="button" id="like" name="like"
-						onclick="likeUpdateFnc();" value="">
-						<img style="cursor: pointer;" onclick="likeUpdateFnc();" class="imgObj" 
+					<div style="border-radius: 50%; width:150px; height:150px; margin-left: 780px;
+						background-color:#4AD674; border: none; cursor: pointer;"
+						id="like" name="like"
+						onclick="likeUpdateFnc();">
+<!-- 						<input style="border-radius: 50%; width:150px; height:150px; background-color:#4AD674; border: none; cursor: pointer;" type="button" id="like" name="like" -->
+<!-- 						onclick="likeUpdateFnc();" value=""> -->
+						<img style="cursor: pointer; margin-top: 50px;" onclick="likeUpdateFnc();" class="imgObj" 
 						src="<%=request.getContextPath()%>/resources/img/iconLike_Brown.png">
+					</div>
 					</div>
 				</c:when>
 								
@@ -631,6 +647,8 @@
 						<input type="hidden" id="fbno" name="fbno" value="${freeBoardDto.freeBoardNo}">
 						<input type="hidden" id="writer" name="writer" value="${freeBoardDto.memberNick}">
 						<input type="hidden" id="title" name="title" value="${freeBoardDto.freeBoardTitle}">
+						<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
+						<input type="hidden" id='keyword' name="keyword" value="${keyword}">
 						<input type="hidden" id="contents" name="contents" value="${freeBoardDto.freeBoardContents}">
 						<input type="hidden" id="rnum" name="rnum" value="${rnum}">
 						<input type="hidden" id="lineTitle" name="lineTitle" value="${lineTitle}">
@@ -656,6 +674,8 @@
 						<input type="hidden" id="fcno" name="fcno" value="${freeBoardDto.freeCommentNo}">
 						<input type="hidden" id="writer" name="writer" value="${freeBoardDto.memberNick}">
 						<input type="hidden" id="rnum" name="rnum" value="${rnum}">
+						<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
+						<input type="hidden" id='keyword' name="keyword" value="${keyword}">
 						<input type="hidden" id="lineTitle" name="lineTitle" value="${lineTitle}">
 		                  <br>
 		                     <div style="margin-left: 210px; width: 950px; height: auto;">
@@ -706,6 +726,7 @@
 				<input type="hidden" id='curPage' name='curPage' 
 					value="${freeBoardCommentPaging.curPage}">
 				<input type="hidden" id='no' name="no" value="${freeBoardDto.freeBoardNo}">
+				<input type="hidden" id="mno" name="mno" value="${mno}">
 				<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
 				<input type="hidden" id='keyword' name="keyword" value="${keyword}">
 				<input type="hidden" id="comments" name="comments">

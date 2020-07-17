@@ -74,7 +74,7 @@
 				<nav id="h_myPage_link">
 					<ul>
 						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage1.png"><a href='<%=request.getContextPath()%>/member/info.do'>회원정보조회</a></li>
-						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage2.png"><a href='<%=request.getContextPath()%>/member/myBoard.do?mno=${memberDto.member_no}'>글 목록</a></li>
+						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage2.png"><a href='<%=request.getContextPath()%>/member/myBoard.do?mno=${memberDto.member_no}'>내 작품목록</a></li>
 						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage3.png"><a href='<%=request.getContextPath()%>/member/myQna.do?mno=${memberDto.member_no}'>QnA 조회</a></li>
 						<li><img class="h_myPage_icon" src="<%=request.getContextPath()%>/resources/img/myPage4.png"><a href='<%=request.getContextPath()%>/member/myReport.do?mno=${memberDto.member_no}'>신고글 조회</a></li>
 					</ul>

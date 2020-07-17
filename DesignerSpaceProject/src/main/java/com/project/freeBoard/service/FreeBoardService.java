@@ -9,7 +9,7 @@ import com.project.reportBoard.model.ReportBoardDto;
 
 public interface FreeBoardService {
 
-	public int freeBoardSelectTotalCount(String searchOption, String keyword);
+	public int freeBoardSelectTotalCount(String searchOption, String keyword, String lineTitle);
 
 	public int freeBoardSelectCurPage(String searchOption, String keyword, int no, String lineTitle);
 

@@ -23,12 +23,13 @@ public class FreeBoardDaoImpl implements FreeBoardDao{
 	String namespace = "com.project.freeBoard.";
 
 	@Override
-	public int freeBoardSelectTotalCount(String searchOption, String keyword) {
+	public int freeBoardSelectTotalCount(String searchOption, String keyword, String lineTitle) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
 		
 		paramMap.put("searchOption", searchOption);
 		paramMap.put("keyword", keyword);
+		paramMap.put("lineTitle", lineTitle);
 		
 		return sqlSession.selectOne(namespace + "freeBoardSelectTotalCount"
 				, paramMap);

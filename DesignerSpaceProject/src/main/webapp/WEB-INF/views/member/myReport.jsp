@@ -19,7 +19,6 @@
 		float: left;
 		color: #7D7471;
 	}
-
 	#searchOption{
 		margin-top: 40px;
 		margin-left: 20px;
@@ -29,22 +28,22 @@
 		text-align-last: center;
 		font-size: 17px;
 		float: left;
-	}
-	
+	}	
 	#keyword{
 		margin-top: 40px;
 		width: 420px;
 		height: 45px;
 		float: left;
+	}	
+	#searchBtn{
+	 	width: 50px;
+	 	height: 50px;
+	 	background-color: #60524E;
+	 	border-style: none;
+	 	border-radius: 5px;
+	 	vertical-align: middle;
+	 	margin-top: 40px;
 	}
-	
-	#searchButton{
-		margin-top: 40px;
-		width: 50px;
-		height: 50px;
-		float: left;
-	}
-	
 	#writeButton{
 		float: right;
 		text-align: center;
@@ -58,13 +57,11 @@
 		border-radius: 5px;
 		border: none;
 		cursor: pointer;
-	}
-	
+	}	
 	#writeButton:hover{
 		color: #fff;
 		background-color: #4AD674;
-	}
-	
+	}	
 	#selectProcessStatus{
 		margin-top: 40px;
 		margin-left: 20px;
@@ -95,8 +92,11 @@
        height: 50px;
        vertical-align: middle;
     }
+    #innerWrap select{
+    	cursor: pointer;
+    }
     #innerPage{
-    	margin-top: 100px;
+    	margin-top: 10px;
     }
 </style>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
@@ -169,7 +169,7 @@ function sortOptionChangeFnc(e) {
 				</select>
 				
 				<input type="text" id='keyword' name="keyword" value="${searchMap.keyword}">
-				<input type="submit" value="검색" id='searchButton'>
+				<button id="searchBtn" type="submit"><img src="<%=request.getContextPath()%>/resources/img/iconSearch.png"></button>
 				<input id="writeButton" name="reportWrite" type="button" onclick="reportWriteFnc();" value="작성">
 				<select id='selectProcessStatus' onchange="sortOptionChangeFnc(this);">
 					<c:choose>
@@ -271,18 +271,18 @@ function sortOptionChangeFnc(e) {
 				</table>
 			</div>
 			
-				<jsp:include page="/WEB-INF/views/common/paging.jsp">
-					<jsp:param value="${pagingMap}" name="pagingMap"/>
-				</jsp:include>
-				
-				<form action="./myList.do" id='pagingForm' method="get">
-					<input type="hidden" id='curPage' name='curPage' 
-						value="${pagingMap.paging.curPage}">
-					<input type="hidden" id='qna_board_no' name="qna_board_no" value="${reportBoardDto.report_board_no}">
-					<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
-					<input type="hidden" id='keyword' name="keyword" value="${searchMap.keyword}">
-					<input type="hidden" id='sortOption' name='sortOption' value="${searchMap.sortOption}">	
-				</form>
+			<jsp:include page="/WEB-INF/views/common/paging.jsp">
+				<jsp:param value="${pagingMap}" name="pagingMap"/>
+			</jsp:include>
+			
+			<form action="./myList.do" id='pagingForm' method="get">
+				<input type="hidden" id='curPage' name='curPage' 
+					value="${pagingMap.paging.curPage}">
+				<input type="hidden" id='qna_board_no' name="qna_board_no" value="${reportBoardDto.report_board_no}">
+				<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
+				<input type="hidden" id='keyword' name="keyword" value="${searchMap.keyword}">
+				<input type="hidden" id='sortOption' name='sortOption' value="${searchMap.sortOption}">	
+			</form>
 			
 		</div>
 	</div>
