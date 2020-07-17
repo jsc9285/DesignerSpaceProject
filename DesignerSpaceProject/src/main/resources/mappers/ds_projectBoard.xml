@@ -307,9 +307,9 @@
 	
 	<select id="selectInfoList" resultType="map">
 		select 
-		(select count(*) from project_board) pbList 
+		(select count(*) from project_board where project_board_del_flag = 'N') pbList 
 		, (select count(*) from free_board) fbList 
-		, (select count(*) from member) mList
+		, (select count(*) from member where member_del_flag = 'N') mList
 		, (select count(*) from qna_board where QNA_BOARD_ANSWER_STATUS = '접수중') qbList
 		, (select count(*) from report_board where REPORT_BOARD_ANSWER_STATUS  = '접수중') rbList
 		from dual

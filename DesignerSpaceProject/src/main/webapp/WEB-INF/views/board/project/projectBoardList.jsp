@@ -270,11 +270,12 @@
 					</div>
 				</c:forEach>
 			</div>	
-
 <!-- 			프로젝트 페이징 -->
+
 			<div id="paging">
 				<jsp:include page="/WEB-INF/views/common/projectBoardPaging.jsp">
 					<jsp:param value="${projectBoardPaging}" name="projectBoardPaging"/>
+					<jsp:param name="chkPage" value="list"/>
 				</jsp:include>				
 				
 				<form action="./list.do" id='pagingForm' method="get">
