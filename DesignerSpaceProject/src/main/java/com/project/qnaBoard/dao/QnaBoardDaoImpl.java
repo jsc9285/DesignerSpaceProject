@@ -20,7 +20,7 @@ public class QnaBoardDaoImpl implements QnaBoardDao{
 	
 	@Override
 	public List<QnaBoardDto> qnaBoardSelectList(String searchOption, String keyword,
-			String sortOption, int start, int end) {
+			String sortOption, int start, int end, int mno) {
 		// TODO Auto-generated method stub
 		
 		Map<String, Object> map = new HashMap<>();
@@ -29,6 +29,7 @@ public class QnaBoardDaoImpl implements QnaBoardDao{
 		map.put("sortOption", sortOption);
 		map.put("start", start);
 		map.put("end", end);
+		map.put("mno", mno);
 		
 		List<QnaBoardDto> qnaBoardList = sqlSession.selectList(namespace + "qnaBoardSelectList", map);
 		
@@ -66,13 +67,15 @@ public class QnaBoardDaoImpl implements QnaBoardDao{
 	}
 
 	@Override
-	public int qnaBoardSelectTotalCount(String searchOption, String keyword) {
+	public int qnaBoardSelectTotalCount(String searchOption, String keyword, String sortOption, int mno) {
 		// TODO Auto-generated method stub
 		
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
 		
 		paramMap.put("searchOption", searchOption);
 		paramMap.put("keyword", keyword);
+		paramMap.put("sortOption", sortOption);
+		paramMap.put("mno", mno);
 		
 		return sqlSession.selectOne(namespace + "qnaBoardSelectTotalCount", paramMap);
 	}
@@ -159,6 +162,13 @@ public class QnaBoardDaoImpl implements QnaBoardDao{
 		
 		sqlSession.update(namespace + "changeUpdateStatus", qna_comment_qbno);
 		
+	}
+
+	@Override
+	public void answerCompleteChange(int qna_board_no) {
+		// TODO Auto-generated method stub
+		
+		sqlSession.update(namespace + "answerCompleteChange", qna_board_no);
 	}
 
 

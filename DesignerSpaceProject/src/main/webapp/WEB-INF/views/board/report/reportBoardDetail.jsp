@@ -63,33 +63,25 @@
 
 <script type="text/javascript">
 
-	function pageMoveListFnc() {
+	function pageMoveListAdminFnc() {
 		
-		var noObj = $('#qna_board_no');
-		var keywordObj = $('#keyword');
-		var searchOptionObj = $('#searchOption');
-		
-		var url = '';
-		
-		url += './list.do?';
-		url += 'qna_board_no=' + noObj.val();
-		url += '&keyword=' + keywordObj.val();
-		url += '&searchOption=' + searchOptionObj.val();
-		
-		location.href = url;
+		location.href = './list.do';
 	}
 	
-	function pageMoveDeleteFnc(qna_board_no) {
+	function pageMoveListUserFnc() {
+		
+		location.href = '../member/myReport.do';
+	}
+	
+	function pageMoveDeleteFnc(report_board_no) {
 		var reQuestion = confirm('게시물을 삭제하시겠습니까?');
 		
 		if (reQuestion) {
-			var url = "./deleteCtr.do?qna_board_no=" + qna_board_no;
+			var url = "./deleteCtr.do?report_board_no=" + report_board_no;
 			location.href = url;
-		}else {
-			alert("다시 되돌아갑니다");
 		}
 		
-	}
+// 	}
 	
 </script>
 
@@ -121,7 +113,10 @@
 					<br>
 					<div style="margin-left: 200px;">
 						<span style="width: 200px;">신고작품</span>
-						<span style="margin-left: 117px;">${reportBoardDto.report_board_title}</span>
+						<a style="margin-left: 85px;" href="<%=request.getContextPath()%>
+							/projectBoard/detail.do?project_board_no=${project_board_no}&chkPage=3">
+							${reportBoardDto.report_board_title}
+						</a>
 					</div>
 					<br>
 					<hr style="text-align: center; width: 80%;">
@@ -129,7 +124,7 @@
 					<br>
 					<div style="margin-left: 200px;">
 						<span style="width: 200px;">신고사유</span>
-						<span style="margin-left: 117px;">${reportBoardDto.report_board_reason}</span>
+						<span style="margin-left: 85px;">${reportBoardDto.report_board_reason}</span>
 					</div>
 					<br>
 					<hr style="text-align: center; width: 80%;">
@@ -147,9 +142,26 @@
 						<span style="width: 200px;">작성일</span>
 						<span style="margin-left: 100px;">
 							<fmt:formatDate value="${reportBoardDto.report_board_cre_date}" 
-								pattern="yyyy.MM.dd hh:mm"/>
+								pattern="yyyy.MM.dd HH:mm"/>
 						</span>
 					</div>
+					
+					<div style="margin-left: 120px; float: left;">
+						<span style="width: 200px;">처리일</span>
+						<span style="margin-left: 100px;">
+							<c:choose>
+								<c:when test="${empty qnaBoardDto.qna_board_answer_date}">
+									-
+								</c:when>
+								<c:otherwise>
+									<fmt:formatDate value="${qnaBoardDto.qna_board_answer_date}" 
+										pattern="yyyy.MM.dd hh:mm"/>
+								</c:otherwise>
+							</c:choose>
+						</span> 
+						
+					</div>
+					
 					<div style="margin-left: 200px; float: left;">
 						<span style="width: 200px;">처리상태</span>
 						<c:if test="${reportBoardDto.report_board_answer_status eq '접수중'}">
@@ -169,23 +181,41 @@
 						</c:if>
 					</div>
 					<div style="margin-left: 200px;">
-						<input type="hidden" id='qna_board_no' 
-							name="qna_board_no" value="${reportBoardDto.report_board_no}">
+						<input type="hidden" id='report_board_no' 
+							name="report_board_no" value="${reportBoardDto.report_board_no}">
 						<input type="hidden" id='member_nick' 
 							name="member_nick" value="${reportBoardDto.member_nick}">
-						<input type="hidden" id='searchOption' name="searchOption" value="${searchOption}">
-						<input type="hidden" id='keyword' name="keyword" value="${keyword}">
+						<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
+						<input type="hidden" id='project_board_no' name="project_board_no" 
+							value="${projectBoardDto.project_board_no}">
+						<input type="hidden" id='chkPage' name="chkPage" value="${projectBoardDto.chkPage}">
 					</div>
 				</div>
 			</div>
 			
-			<c:choose>
-				<c:when test="${memberDto.member_nick eq reportBoardDto.member_nick || memberDto.member_grade eq '1'}">
+			<c:if test="${memberDto.member_grade == 1}">
+				<div style="text-align: center; margin-top: 50px;">
+					<input type="button" value="삭제" id='deleteButton'
+						 onclick="pageMoveDeleteFnc(${reportBoardDto.report_board_no});">
+					<input type="button" value="목록" id='listButton' onclick="pageMoveListAdminFnc();">
+				</div>
+			</c:if>
+			
+			<c:if test="${memberDto.member_grade == 0}">
+				<c:if test="${memberDto.member_nick eq reportBoardDto.member_nick}">
 					<div style="text-align: center; margin-top: 50px;">
-						<input type="button" value="목록" id='listButton' onclick="pageMoveListFnc();">
+						<input type="button" value="삭제" id='deleteButton'
+							 onclick="pageMoveDeleteFnc(${reportBoardDto.report_board_no});">
+						<input type="button" value="목록" id='listButton' onclick="pageMoveListUserFnc();">
 					</div>
-				</c:when>
-			</c:choose>
+				</c:if>
+				<c:if test="${memberDto.member_nick ne reportBoardDto.member_nick}">
+					<div style="text-align: center; margin-top: 50px;">
+						<input type="button" value="목록" id='listButton' onclick="pageMoveListUserFnc();">
+					</div>
+				</c:if>	
+			</c:if>
+			
 		</form>
 	</div>
 	

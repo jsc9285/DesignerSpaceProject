@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +55,7 @@ public class ReportBoardController {
 		}
 		
 		int totalCount = 
-				reportBoardService.reportBoardSelectTotalCount(searchOption, keyword);
+				reportBoardService.reportBoardSelectTotalCount(searchOption, keyword, sortOption, 0);
 		
 		if(report_board_no != 0) {
 			curPage 
@@ -65,7 +67,7 @@ public class ReportBoardController {
 		int end = reportBoardPaging.getPageEnd();
 				
 		List<ReportBoardDto> reportBoardList = reportBoardService.reportBoardSelectList(
-				searchOption, keyword, sortOption, start, end);
+				searchOption, keyword, sortOption, start, end, 0);
 		
 //		 화면의 form의 이름을 맞추기 위한 작업
 		if("member_nick".equals(searchOption)) {
@@ -110,11 +112,17 @@ public class ReportBoardController {
 		log.info("Welcome reportBoardListDetail! " + curPage + " : ????"
 				+ searchOption + " : " + keyword);
 		
+		
 		ReportBoardDto reportBoardDto = reportBoardService.reportBoardSelectDetail(report_board_no);
+		String title = reportBoardDto.getReport_board_title();
+		
+		int project_board_no = reportBoardService.selectProjectBoardNumber(title);
+		
 		
 		model.addAttribute("reportBoardDto", reportBoardDto);
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);
+		model.addAttribute("project_board_no", project_board_no);
 		
 		return "board/report/reportBoardDetail";
 	}
@@ -138,21 +146,42 @@ public class ReportBoardController {
 	public String ReportBoardAddCtr(ReportBoardDto reportBoardDto, Model model) {
 		
 		log.info("Welcome ReportBoardAdd_ctr!");
-		System.out.println(reportBoardDto);
-		System.out.println(reportBoardDto);
-		System.out.println(reportBoardDto);
-		System.out.println(reportBoardDto);
-		System.out.println(reportBoardDto);
-		System.out.println(reportBoardDto);
-		System.out.println(reportBoardDto);
-		System.out.println(reportBoardDto);
-		reportBoardService.reportBoardInsertOne(reportBoardDto);
 		
-//		ProjectBoardDto projectBoardDto = projectBoardService.projectBoardSelectOne(project_board_no);
-//		
-//		model.addAttribute("projectBoardDto", projectBoardDto);
+		reportBoardService.reportBoardInsertOne(reportBoardDto);
 		
 		return "redirect:../reportBoard/listDetail.do?report_board_no=" + reportBoardDto.getReport_board_no();
 	}
 	
+	@RequestMapping(value = "reportBoard/processingCompleteCtr.do", method = RequestMethod.GET)
+	public String processingCompleteCtr(ReportBoardDto reportBoardDto, String searchOption,
+			String keyword, Model model) {
+		
+		log.info("call processingComplete_ctr! " + reportBoardDto);
+		
+		reportBoardService.processingComplete(reportBoardDto);
+		
+		return "forward:/reportBoard/list.do";
+	}
+	
+	@RequestMapping(value = "reportBoard/deleteCtr.do", method = RequestMethod.GET)
+	public String reportBoardDeleteCtr(int report_board_no, Model model) {
+		
+		log.info("call reportBoardDelete_ctr! " + report_board_no);
+		
+		reportBoardService.reportBoardDeleteOne(report_board_no);
+		
+		return "redirect:list.do";
+	}
+	
+	@RequestMapping(value = "reportBoard/managementDeleteCtr.do", method = RequestMethod.GET)
+	public String reportBoardManagementDelete(int[] reportCheck, HttpSession session, Model model) {		
+		
+		System.out.println(reportCheck.length);
+		for (int i = 0; i < reportCheck.length; i++) {
+			reportBoardService.reportBoardDeleteOne(reportCheck[i]);
+		}
+		
+		return "redirect:/reportBoard/list.do";
+	}
 }
+

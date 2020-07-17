@@ -54,7 +54,7 @@ public class QnaBoardController {
 		}
 		
 		int totalCount = 
-				qnaBoardService.qnaBoardSelectTotalCount(searchOption, keyword);
+				qnaBoardService.qnaBoardSelectTotalCount(searchOption, keyword, sortOption, 0);
 		
 		if(qna_board_no != 0) {
 			curPage 
@@ -66,7 +66,7 @@ public class QnaBoardController {
 		int end = qnaBoardPaging.getPageEnd();
 				
 		List<QnaBoardDto> qnaBoardList = qnaBoardService.qnaBoardSelectList(
-				searchOption, keyword, sortOption, start, end);
+				searchOption, keyword, sortOption, start, end, 0);
 		
 //		 화면의 form의 이름을 맞추기 위한 작업
 		if("member_nick".equals(searchOption)) {
@@ -107,6 +107,7 @@ public class QnaBoardController {
 	public String qnaBoardListDetail(@RequestParam(defaultValue = "1") int curPage
 			 , @RequestParam(defaultValue = "0") int qna_board_no
 			 , @RequestParam(defaultValue = "titleAndContent") String searchOption
+			 , @RequestParam(defaultValue = "qna_board_whole") String sortOption
 			 , @RequestParam(defaultValue = "") String keyword
 			 , Model model) {
 		
@@ -127,10 +128,11 @@ public class QnaBoardController {
 				qnaBoardService.qnaBoardCommentSelectList(qna_board_no, end);
 		
 		model.addAttribute("qnaBoardCommentList", qnaBoardCommentList);
-		model.addAttribute("freeBoardCommentPaging", qnaCommentPaging);
+		model.addAttribute("paging", qnaCommentPaging);
 		
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);
+		model.addAttribute("sortOption", sortOption);
 		
 		return "board/qna/qnaBoardDetail";
 	}
@@ -195,30 +197,56 @@ public class QnaBoardController {
 	
 	
 	@RequestMapping(value="qnaBoard/commentAddCtr.do", method = RequestMethod.GET)
-	public String qnaBoardCommentAddCtr(int qna_comment_mno, int qna_comment_qbno, String searchOption
-			,String keyword ,String qna_comment_comments, Model model, HttpSession session) {
+	public String qnaBoardCommentAddCtr(int qna_board_no, int qna_comment_mno, int qna_comment_qbno
+			, String searchOption , String keyword , String qna_comment_comments
+			, String sortOption, Model model, HttpSession session) {
 		
 		log.info("call qnaBoardCommentAdd_ctr! {} {} ", qna_comment_mno, qna_comment_qbno);
 		
 		MemberDto sessionMemberDto = (MemberDto) session.getAttribute("memberDto");
 		
-		if(sessionMemberDto.getMember_grade() == 0) {
+		if(sessionMemberDto.getMember_grade() == 1) {
 			qnaBoardService.changeUpdateStatus(qna_comment_qbno);
 		}
 		
 		qnaBoardService.qnaBoardCommentInsertOne(qna_comment_qbno, qna_comment_mno, qna_comment_comments);
 		
-		return "forward:/qnaBoard/listDetail.do";
+		model.addAttribute("qna_board_no", qna_board_no);
+		model.addAttribute("qna_comment_mno", qna_comment_mno);
+		model.addAttribute("qna_comment_qbno", qna_comment_qbno);
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("qna_comment_comments", qna_comment_comments);
+		model.addAttribute("sortOption", sortOption);
+		
+		return "redirect:/qnaBoard/listDetail.do";
 	}
 	
 	@RequestMapping(value = "qnaBoard/commentDeleteCtr.do", method = RequestMethod.GET)
-	public String qnaBoardCommentDeleteCtr(int qna_comment_no, Model model) {
+	public String qnaBoardCommentDeleteCtr(int qna_comment_no
+			, int qna_board_no
+			, int qna_comment_qbno
+			, int qna_comment_mno
+			, String searchOption
+			, String keyword
+			, String sortOption
+			, String qna_comment_comments
+			, Model model) {
 		
 		log.info("call qnaBoardCommentDelete_ctr! " + qna_comment_no);
 		
 		qnaBoardService.qnaCommentDeleteOne(qna_comment_no);
 		
-		return "forward:/qnaBoard/listDetail.do";
+		model.addAttribute("qna_comment_no", qna_comment_no);
+		model.addAttribute("qna_board_no", qna_board_no);
+		model.addAttribute("qna_comment_qbno", qna_comment_qbno);
+		model.addAttribute("qna_comment_mno", qna_comment_mno);
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("sortOption", sortOption);
+		model.addAttribute("qna_comment_comments", qna_comment_comments);
+		
+		return "redirect:/qnaBoard/listDetail.do";
 	}
 	
 	@RequestMapping(value = "qnaBoard/commentUpdateCtr.do", method = RequestMethod.GET)
@@ -230,6 +258,29 @@ public class QnaBoardController {
 		qnaBoardService.qnaCommentUpdateOne(qna_comment_no, qna_comment_comments);
 		
 		return "forward:/qnaBoard/listDetail.do";
+	}
+	
+	@RequestMapping(value = "qnaBoard/answerCompleteCtr.do", method = RequestMethod.GET)
+	public String answerCompleteCtr(int qna_board_no, String searchOption,
+			String keyword, Model model, HttpSession session) {
+		
+		log.info("call answerComplete_ctr! " + qna_board_no);
+		
+		qnaBoardService.answerCompleteChange(qna_board_no);
+		
+		return "forward:/qnaBoard/listDetail.do";
+	}
+	
+	@RequestMapping(value = "qnaBoard/managementDeleteCtr.do", method = RequestMethod.GET)
+	public String qnaBoardManagementDelete(int[] qnaCheck, HttpSession session, Model model) {		
+		
+		System.out.println(qnaCheck.length);
+		for (int i = 0; i < qnaCheck.length; i++) {
+			qnaBoardService.qnaCommentDelete(qnaCheck[i]);
+			qnaBoardService.qnaBoardDeleteOne(qnaCheck[i]);
+		}
+		
+		return "redirect:/qnaBoard/list.do";
 	}
 	
 }

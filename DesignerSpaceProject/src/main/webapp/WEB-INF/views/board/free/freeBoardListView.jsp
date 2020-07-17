@@ -320,7 +320,6 @@ function freeBoardListOnePageFnc(obj, event){
 					<th class="cell" onclick="sortFnc(this);" id="free_board_views">조회수</th>
 					<th class="cell" onclick="sortFnc(this);" id="nl">좋아요</th>
 					<th class="cell" onclick="sortFnc(this);" id="free_board_cre_date" colspan="3">작성일</th>
-					<th></th>
 					<c:if test="${memberDto.member_grade eq '1'}">
 						<th class="cell"><input id="allCheck" type="checkbox"></th>
 					</c:if>			
@@ -372,21 +371,12 @@ function freeBoardListOnePageFnc(obj, event){
 							<h6><fmt:formatDate value="${freeBoardDto.freeBoardCreDate}" 
 								pattern="HH:mm"/></h6>
 						</td>
-						<c:choose>
-						<c:when test="${memberDto.member_grade eq '1'}">
-						<td class="cell2">
-							<a href='#' onclick="freeBoardDeleteFnc(this, event);">[삭제]</a>
-						</td>
+						
+						
 						<c:if test="${memberDto.member_grade eq '1'}">
 							<td><input name="noCheck" type="checkbox" class='checkbox' 
                                     value="${freeBoardDto.freeBoardNo}"></td>
                         </c:if>
-						</c:when>
-					
-						<c:otherwise>
-						
-						</c:otherwise>
-						</c:choose>
 					</tr>
 					</c:forEach>
 				</c:otherwise>

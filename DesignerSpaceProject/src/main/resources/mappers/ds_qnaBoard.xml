@@ -35,6 +35,14 @@
         	</when>
         </choose>
 	</sql>
+	
+	<sql id="chkMno">
+      <choose>
+         <when test="mno > 0">
+            and qna_board_mno = #{mno}
+         </when>
+      </choose>
+   </sql>
 
 	<resultMap type="com.project.qnaBoard.model.QnaBoardDto" 
 		id="qnaBoardResultMap">
@@ -94,11 +102,12 @@
           		  ON QB.QNA_BOARD_MNO = M.MEMBER_NO
           		  
           		  <include refid="search"></include>
+          		  <include refid="sort"></include>
+          		  <include refid="chkMno"></include>
           		  
           		  ORDER BY QB.QNA_BOARD_NO DESC) QNA 
      		 )QNAM     
 		WHERE QNAM.RNUM BETWEEN #{start} AND #{end}
-		<include refid="sort"></include>
 	</select>
 	
 	<select id="qnaBoardSelectDetail" parameterType="int"
@@ -136,6 +145,8 @@
 		FROM QNA_BOARD QB LEFT OUTER JOIN MEMBER M
 		ON QB.QNA_BOARD_MNO = M.MEMBER_NO
 		<include refid="search"></include>
+		<include refid="sort"></include>
+		<include refid="chkMno"></include>		
 	</select>
 	
 	<select id="qnaSelectCurPage" parameterType="map"
@@ -153,6 +164,7 @@
           		  ORDER BY QB.QNA_BOARD_NO DESC) QNA 
      		 )    
 		WHERE QNA_BOARD_NO = #{qna_board_no}
+		<include refid="sort"></include>
 	</select>
 	
 	<select id="qnaBoardCommentSelectList" parameterType="map" 
@@ -218,6 +230,14 @@
 		UPDATE QNA_BOARD
 		SET
 		QNA_BOARD_ANSWER_STATUS = '답변중',
+   		QNA_BOARD_ANSWER_DATE = SYSDATE
+		WHERE QNA_BOARD_NO = #{qna_board_no}
+	</update>
+	
+	<update id="answerCompleteChange" parameterType="int">
+		UPDATE QNA_BOARD
+		SET
+		QNA_BOARD_ANSWER_STATUS = '답변완료',
    		QNA_BOARD_ANSWER_DATE = SYSDATE
 		WHERE QNA_BOARD_NO = #{qna_board_no}
 	</update>

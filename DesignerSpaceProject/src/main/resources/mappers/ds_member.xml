@@ -244,6 +244,49 @@
 		WHERE MEMBER_NO =#{member_no}
 	</update>
 	
+	<update id="projectRemove" parameterType="int">
+		UPDATE PROJECT_BOARD
+		<set>
+			 PROJECT_BOARD_DEL_FLAG = 'Y'
+		</set>
+		WHERE PROJECT_BOARD_MNO =#{member_no}
+	</update>
+	
+
+	<delete id="freeLikeDelete" parameterType="int">
+			DELETE FROM FREE_LIKE
+			WHERE FREE_LIKE_MNO = #{member_no}
+	</delete>
+	
+	<delete id="freeCommentDelete" parameterType="int">
+			DELETE FROM FREE_COMMENT
+			WHERE FREE_COMMENT_MNO = #{member_no}
+	</delete>
+	
+	<delete id="freeBoardDelete" parameterType="int">
+			DELETE FROM FREE_BOARD
+			WHERE FREE_BOARD_MNO = #{member_no}
+	</delete>
+	
+	
+	<delete id="QnaCommentDelete" parameterType="int">
+			DELETE FROM QNA_COMMENT
+			WHERE QNA_COMMENT_MNO = #{member_no}
+	</delete>
+	
+	<delete id="QnaBoardDelete" parameterType="int">
+			DELETE FROM QNA_BOARD 
+			WHERE QNA_BOARD_MNO = #{member_no}
+	</delete>
+	
+	<delete id="reportDelete" parameterType="int">
+			DELETE FROM REPORT_BOARD
+			WHERE REPORT_BOARD_MNO = #{member_no}
+	</delete>
+	
+	
+	
+
 <!-- 	중복체크   -->
 	<select id="checkNick" parameterType="String" 
 		resultType="int">

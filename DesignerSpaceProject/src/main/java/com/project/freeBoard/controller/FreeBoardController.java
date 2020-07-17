@@ -367,7 +367,7 @@ public class FreeBoardController {
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("lineTitle", lineTitle);
-		return "redirect:/freeBoard/freeBoardListOne.do#upd";
+		return "redirect:/freeBoard/freeBoardListOne.do#comments";
 	}
 	
 	

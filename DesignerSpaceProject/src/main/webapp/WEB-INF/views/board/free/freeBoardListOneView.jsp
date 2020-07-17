@@ -298,7 +298,7 @@
 		
 		updaObj = aTagObj.parent().parent().children('div').eq(0).children('input').eq(0);
 		delObj = aTagObj.parent().parent().children('div').eq(0).children('input').eq(1);
-		var confirmBtn = $('<input class="commentBtn" type="submit" value="수정" >');
+		var confirmBtn = $('<input class="commentBtn" type="button" value="수정 " onclick="freeBoardCommentUpdateOneFnc(this,event);">');
 		var delBtn = $('<input class="commentBtn" type="button" value="삭제" onclick="freeBoardCommentDeleteFnc(this,event);">');
 		
 		updaObj.after(confirmBtn);
@@ -665,7 +665,7 @@
 		               					 src="<%=request.getContextPath()%>/resources/img/iconNone.png">
 		                     	</c:when>
 		                     	<c:when test="${freeBoardDto.profileTableStoredName ne null}">
-		                        	<img alt="프로필 이미지" src="<c:url value='/img/${freeBoardDto.profileTableStoredName}'/>"
+		                        	<img alt="프로필 이미지" src="<c:url value='/profileImg/${freeBoardDto.profileTableStoredName}'/>"
 		                           	style="border-radius: 50%; width: 75px; height: 75px; float: left;">
 		                           </c:when>
 		                          </c:choose>
