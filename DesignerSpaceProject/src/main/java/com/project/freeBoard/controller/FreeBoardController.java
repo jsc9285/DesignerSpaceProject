@@ -374,12 +374,12 @@ public class FreeBoardController {
 	@RequestMapping(value="/freeBoard/prePage.do", method = RequestMethod.GET)
 	public String freeBoardPrePage(int mno, int rnum, int no, String searchOption
 			,String keyword,@RequestParam(defaultValue = "free_board_no") String lineTitle,Model model) {
-		log.info(mno + ": 회원번호 " +no+ " : 게시물 번호 " + rnum + " : 알넘" +searchOption + keyword);
+		log.info("이전글"+mno + ": 회원번호 " +no+ " : 게시물 번호 " + rnum + " : 알넘" +searchOption + keyword);
 		FreeBoardDto freeBoardDto = freeBoardService.selectPrePage(searchOption, keyword
 				,lineTitle, rnum);
 		
 		model.addAttribute("rnum", freeBoardDto.getFreeBoardRownum());
-		model.addAttribute("mno", freeBoardDto.getMemberNo());
+		model.addAttribute("mno", mno);
 		model.addAttribute("no", freeBoardDto.getFreeBoardNo());
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);
@@ -390,12 +390,12 @@ public class FreeBoardController {
 	@RequestMapping(value="/freeBoard/nextPage.do", method = RequestMethod.GET)
 	public String freeBoardNextPage(int mno, int rnum, int no, String searchOption
 			,String keyword,@RequestParam(defaultValue = "free_board_no") String lineTitle,Model model ) {
-		log.info(mno + ": 회원번호 " +no+ " : 게시물 번호 " + rnum + " : 알넘" +searchOption + keyword);
+		log.info("다음글"+mno + ": 회원번호 " +no+ " : 게시물 번호 " + rnum + " : 알넘" +searchOption + keyword);
 		FreeBoardDto freeBoardDto = freeBoardService.selectNextPage(searchOption, keyword
 				,lineTitle, rnum);
 		
 		model.addAttribute("rnum", freeBoardDto.getFreeBoardRownum());
-		model.addAttribute("mno", freeBoardDto.getMemberNo());
+		model.addAttribute("mno", mno);
 		model.addAttribute("no", freeBoardDto.getFreeBoardNo());
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);

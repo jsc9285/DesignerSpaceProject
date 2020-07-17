@@ -262,8 +262,6 @@
 				
 				
 				<input type="text" id='keyword' name="keyword" value="${searchMap.keyword}">
-<%-- 				<input type="submit" value="<img src="<%=request.getContextPath()%>/resources/img/iconSearch.png">" --%>
-<!-- 					 id='searchButton'> -->
 				<button id="searchButton" type="submit">
 					<img src="<%=request.getContextPath()%>/resources/img/iconSearch.png">
 				</button>

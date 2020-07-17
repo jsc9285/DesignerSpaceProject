@@ -13,7 +13,7 @@
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
 <style type="text/css">
 	#innerPage{
-		margin-top: 100px;
+		margin-top: 10px;
 	}
 	#boardTitle{
 		font-size: 70px;
@@ -30,6 +30,7 @@
 		text-align-last: center;
 		font-size: 17px;
 		float: left;
+		cursor: pointer;
 	}
 	#keyword{
 		margin-top: 40px;
@@ -37,11 +38,14 @@
 		height: 45px;
 		float: left;
 	}
-	#searchButton{
-		margin-top: 40px;
-		width: 50px;
-		height: 50px;
-		float: left;
+	#searchBtn{
+	 	width: 50px;
+	 	height: 50px;
+	 	background-color: #60524E;
+	 	border-style: none;
+	 	border-radius: 5px;
+	 	vertical-align: middle;
+	 	margin-top: 40px;
 	}
 	#writeButton{
 		float: right;
@@ -55,6 +59,7 @@
 		background-color: #7D7471;
 		border: 0;
 		outline: 0;
+		border-radius: 5px;
 	}	
 	#writeButton:hover{
 		float: right;
@@ -101,8 +106,7 @@
 	
 	#projectListTable th:hover{
 		cursor: pointer;
-		background-color: #4AD674;
-		color: #fff;
+		color: #4AD674;
 		font-size: 20px;
 		font-weight: bold;
 		height: 50px;
@@ -127,7 +131,7 @@
 		color: black;
 	} 	
 	.freeBoardTitle:hover{
-		color: #4AD674;
+		text-decoration: underline;
 	}
 </style>
 
@@ -305,7 +309,7 @@ function freeBoardListOnePageFnc(obj, event){
 				<input type="text" id='keyword' 
 					name="keyword" value="${searchMap.keyword}"
 					placeholder="제목 or 작성자 검색">
-				<input type="submit" value="검색" id='searchButton'>		
+				<button id="searchBtn" type="submit"><img src="<%=request.getContextPath()%>/resources/img/iconSearch.png"></button>
 			</form>	
 			
 			<div id="innerPage">
