@@ -101,9 +101,7 @@
 			font-weight: bold;
 			height: 50px;
 			vertical-align: middle;
-		}
-		
-		
+		}		
 		#projectListTable td{			
 			height: 50px;
 			vertical-align: middle;
@@ -301,7 +299,7 @@
 						</form>
 					</div>
 					<c:if test="${memberDto.member_grade eq '1'}">
-						<a type="submit" id="deleteBtn" onclick="projectDeleteFnc();" style="float: left; margin: 20px 0px 0px 20px; color: red;">게시물삭제</a>
+						<a type="submit" id="deleteBtn" onclick="projectDeleteFnc();" style="float: left; margin: 20px 0px 0px 20px; color: red; font-weight: bold;">게시물삭제</a>
 					</c:if>
 				</div>
 			</div>
@@ -311,7 +309,6 @@
 			<table id="projectListTable">
 				
 				<tr id='lineTitle' style="border: 1px solid #7D7471;" >
-								
 					<th class="cell" onclick="sortFnc(this);" id="free_board_no">글번호</th>
 					<th class="cell" onclick="sortFnc(this);" id="free_board_title">제목</th>
 					<th class="cell" onclick="sortFnc(this);" id="member_nick">작성자</th>

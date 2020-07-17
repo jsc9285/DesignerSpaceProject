@@ -13,7 +13,7 @@
 
 <style type="text/css">
 	#innerPage{
-		margin-top: 100px;
+		margin-top: 10px;
 	}
 	#boardTitle{
 		font-size: 80px;
@@ -21,7 +21,6 @@
 		float: left;
 		color: #7D7471;
 	}
-
 	#searchOption{
 		margin-top: 40px;
 		margin-left: 20px;
@@ -31,15 +30,14 @@
 		text-align-last: center;
 		font-size: 17px;
 		float: left;
+		cursor: pointer;
 	}
-	
 	#keyword{
 		margin-top: 40px;
 		width: 420px;
 		height: 45px;
 		float: left;
 	}
-	
 	#searchButton{
 		margin-top: 40px;
 		width: 50px;
@@ -50,7 +48,6 @@
 	 	border-radius: 5px;
 	 	vertical-align: middle;
 	}
-	
 	#writeButton{
 		float: right;
 		text-align: center;
@@ -58,21 +55,19 @@
 		width: 150px;
 		height: 50px;
 		margin-top: 40px;
-		margin-right: 90px;
+		margin-right: 10px;
 		font-size: 20px;
+		vertical-align: middle;
 		background-color: #7D7471;
 	}
-	
 	#selectProcessStatus{
 		margin-top: 40px;
-		margin-left: 20px;
 		width: 138px;
 		height: 50px;
-		margin-right: 90px;
 		vertical-align: middle;
 		text-align-last: center;
 		font-size: 17px;
-		float: right;
+		cursor: pointer;
 	}
 	#projectListTable{
        width: 1350px;
@@ -93,14 +88,36 @@
        height: 50px;
        vertical-align: middle;
     }
-	
 	#deleteBtn{
 		color: red;
 		font-weight: bold;
-		margin-left: 540px;
+		margin-left: 265px;
+		margin-right: 10px;
 		vertical-align: bottom;
 	}
-	
+	.detailLink{
+		color: #000;
+		text-decoration: none;
+	}
+	.detailLink:hover{
+		text-decoration: underline;
+	}
+	#completeBtn{
+		width: 138px; 
+		height: 50px; 
+		border: none;
+		border-radius: 5px;
+		margin-top: 40px;
+		margin-right: 10px;
+		color: #fff;
+		font-size: 20px;
+		vertical-align: middle; 
+		background-color: #7D7471;
+		cursor: pointer;
+	}
+	#completeBtn:hover{
+		background-color: #4AD674;
+	}
 </style>
 
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
@@ -248,17 +265,19 @@
 				</select>
 				
 				<input type="text" id='keyword' name="keyword" value="${searchMap.keyword}">
-				<input type="submit" value="검색" id='searchButton'>
+				<button id="searchButton" type="submit">
+					<img src="<%=request.getContextPath()%>/resources/img/iconSearch.png">
+				</button>
 				
 				
 				<a type="submit" id="deleteBtn" onclick="projectDeleteFnc();">게시물삭제</a>
-				
+				<input type="button" value="처리완료"  onclick="processingCompleteFnc();"
+					id="completeBtn">
 				<select id='selectProcessStatus' onchange="sortOptionChangeFnc(this);">
 					<c:choose>
 						<c:when test="${searchMap.sortOption eq 'report_board_whole'}">
 							<option value="report_board_whole" selected="selected">전체</option>
 							<option value="report_board_accept">접수중</option>
-							<option value="report_board_reject">처리기각</option>
 							<option value="report_board_processing_complete">처리완료</option>
 						</c:when>
 						<c:when test="${searchMap.sortOption eq 'report_board_accept'}">
@@ -267,25 +286,13 @@
 							<option value="report_board_reject">처리기각</option>
 							<option value="report_board_processing_complete">처리완료</option>
 						</c:when>
-						<c:when test="${searchMap.sortOption eq 'report_board_reject'}">
-							<option value="report_board_whole">전체</option>
-							<option value="report_board_accept">접수중</option>
-							<option value="report_board_reject" selected="selected">처리기각</option>
-							<option value="report_board_processing_complete">처리완료</option>
-						</c:when>
 						<c:when test="${searchMap.sortOption eq 'report_board_processing_complete'}">
 							<option value="report_board_whole">전체</option>
 							<option value="report_board_accept">접수중</option>
-							<option value="report_board_reject">처리기각</option>
 							<option value="report_board_processing_complete" selected="selected">처리완료</option>
 						</c:when>
 					</c:choose>
 				</select>
-				<div>
-					<input type="button" value="처리완료" style="float: right; 
-						width: 138px; height: 50px; margin-top: 40px;" onclick="processingCompleteFnc();">
-					
-				</div>
 				
 			</form>
 			
@@ -293,13 +300,13 @@
 				<form action="./managementDeleteCtr.do" id="deleteForm" method="get">
 					<table id='projectListTable'>
 						<tr id='lineTitle' style="border: 1px solid #7D7471;">
-							<th class="cell"><input id="allCheck" type="checkbox"></th>
-							<th class="cell">글번호</th>
-							<th class="cell">제목</th>
-							<th class="cell">작성자</th>
-							<th class="cell">작성일</th>
-							<th class="cell">처리일</th>
-							<th class="cell">처리상태</th>
+							<th><input id="allCheck" type="checkbox"></th>
+							<th>글번호</th>
+							<th>제목</th>
+							<th>작성자</th>
+							<th>작성일</th>
+							<th>처리일</th>
+							<th>처리상태</th>
 						</tr>
 						
 						<c:choose>
@@ -316,43 +323,47 @@
 									<tr>
 										<td><input name="reportCheck" type="checkbox" class='checkbox' 
 												value="${reportBoardDto.report_board_no}"></td>
-										<td class="cell2">${reportBoardDto.report_board_no}</td>
-										<td class="cell2">
-											<a href='#' onclick="listDetailAdminPageFnc(this, event);">
+										<td>${reportBoardDto.report_board_no}</td>
+										<td>
+											<a class="detailLink" href='#' onclick="listDetailAdminPageFnc(this, event);">
 												${reportBoardDto.report_board_reason}
 											</a>
 										</td>
-										<td class="cell2">
+										<td>
 											${reportBoardDto.member_nick}
 										</td>
-										<td class="cell2">
-											<fmt:formatDate value="${reportBoardDto.report_board_cre_date}" 
-												pattern="yyyy.MM.dd HH:mm"/>
+										<td>
+											<h5><fmt:formatDate value="${reportBoardDto.report_board_cre_date}" 
+												pattern="yyyy.MM.dd"/></h5>
+											<h5><fmt:formatDate value="${reportBoardDto.report_board_cre_date}" 
+												pattern="HH:mm"/></h5>
 										</td>
-										<td class="cell2">
+										<td>
 											<c:choose>
 												<c:when test="${empty reportBoardDto.report_board_answer_date}">
 													-
 												</c:when>
 												<c:otherwise>
-													<fmt:formatDate value="${reportBoardDto.report_board_answer_date}" 
-														pattern="yyyy.MM.dd HH:mm"/>
+													<h5><fmt:formatDate value="${reportBoardDto.report_board_answer_date}" 
+														pattern="yyyy.MM.dd"/></h5>
+													<h5><fmt:formatDate value="${reportBoardDto.report_board_answer_date}" 
+														pattern="HH:mm"/></h5>
 												</c:otherwise>
 											</c:choose>
 										</td>
 										
 										<c:if test="${reportBoardDto.report_board_answer_status eq '접수중'}">
-											<td class="cell2" style="color: #E14E4E;">
+											<td style="color: #E14E4E;">
 												${reportBoardDto.report_board_answer_status}
 											</td>
 										</c:if>
 										<c:if test="${reportBoardDto.report_board_answer_status eq '처리기각'}">
-											<td class="cell2" style="color: #BFC506;">
+											<td style="color: #BFC506;">
 												${reportBoardDto.report_board_answer_status}
 											</td>
 										</c:if>
 										<c:if test="${reportBoardDto.report_board_answer_status eq '처리완료'}">
-											<td class="cell2" style="color: #BABABA;">
+											<td style="color: #BABABA;">
 												${reportBoardDto.report_board_answer_status}
 											</td>
 										</c:if>

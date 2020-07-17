@@ -180,6 +180,17 @@
 	<!-- 			프로젝트 관리 테이블 ( 작품 게시물 정보 ) -->
 				<form action="./ManagementDeleteCtr.do" id="deleteForm" method="get">
 					<table id="projectListTable">
+						<colgroup>
+							<col width="5%">
+							<col width="8%">
+							<col width="25%">
+							<col width="12%">
+							<col width="12%">
+							<col width="8%">
+							<col width="8%">
+							<col width="8%">
+							<col width="14%">
+						</colgroup>
 						<tr style="border: 1px solid #7D7471;">
 							<th><input id="allCheck" type="checkbox"></th>
 							<th>번호</th>

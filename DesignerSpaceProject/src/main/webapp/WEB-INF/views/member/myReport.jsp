@@ -205,6 +205,14 @@ function sortOptionChangeFnc(e) {
 		
 			<div id="innerPage">
 				<table id='projectListTable'>
+					<colgroup>
+						<col width="10%">
+						<col width="33%">
+						<col width="12%">
+						<col width="15%">
+						<col width="15%">
+						<col width="15%">
+					</colgroup>
 					<tr id='lineTitle'>
 						<th class="cell">글번호</th>
 						<th class="cell">제목</th>

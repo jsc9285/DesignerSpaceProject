@@ -55,7 +55,15 @@
 		color: white; 
 		border-collapse: collapse;
 	}
-	
+	#reportTitle{
+		margin-left: 85px;
+		font-weight: bold;
+		color: #000; 
+		text-decoration: none; 
+	}
+	#reportTitle:hover{
+		text-decoration: underline; 
+	}
 </style>
 
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
@@ -113,7 +121,7 @@
 					<br>
 					<div style="margin-left: 200px;">
 						<span style="width: 200px;">신고작품</span>
-						<a style="margin-left: 85px;" href="<%=request.getContextPath()%>
+						<a id="reportTitle" href="<%=request.getContextPath()%>
 							/projectBoard/detail.do?project_board_no=${project_board_no}&chkPage=3">
 							${reportBoardDto.report_board_title}
 						</a>
