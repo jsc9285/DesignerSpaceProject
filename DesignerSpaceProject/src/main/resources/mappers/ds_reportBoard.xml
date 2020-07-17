@@ -36,7 +36,7 @@
 	<sql id="chkMno">
       <choose>
          <when test="mno > 0">
-            and qna_board_mno = #{mno}
+            and report_board_mno = #{mno}
          </when>
       </choose>
    </sql>

@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.freeBoard.model.FreeBoardDto;
 import com.project.freeBoard.service.FreeBoardService;
-import com.project.qnaBoard.model.QnaBoardDto;
-import com.project.reportBoard.model.ReportBoardDto;
 import com.project.util.CommentPaging;
 import com.project.util.Paging;
 
@@ -218,11 +216,22 @@ public class FreeBoardController {
 	}
 	
 	@RequestMapping(value="/freeBoard/freeBoardView.do", method = RequestMethod.GET)
-	public String freeBoardView(int mno, int no, String searchOption
-			,String keyword) {
+	public String freeBoardView(int mno, int no
+			,String searchOption
+			,String keyword
+			,int rnum
+			,String lineTitle
+			,Model model) {
 		log.info("조회수"+mno + ": 회원번호 " + no + "게시물 번호" + searchOption + keyword);
 		freeBoardService.freeBoardView(no);
-		return "forward:/freeBoard/freeBoardListOne.do";
+		
+		model.addAttribute("rnum", rnum);
+		model.addAttribute("mno", mno);
+		model.addAttribute("no", no);
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("lineTitle", lineTitle);
+		return "redirect:/freeBoard/freeBoardListOne.do";
 	}
 	
 	@RequestMapping(value="/freeBoard/freeBoardDeleteCtr.do", method = RequestMethod.GET)
@@ -234,7 +243,21 @@ public class FreeBoardController {
 		return "redirect:/freeBoard/free.do";
 	}
 	
-	@RequestMapping(value="/freeBoard/commentAdd.do", method = RequestMethod.GET)
+	@RequestMapping(value="/freeBoard/freeBoardAdminDeleteCtr.do", method = RequestMethod.GET)
+	public String freeBoardAdminDel(int[] noCheck) {
+		
+		log.info("게시물 삭제"+ ": 게시물번호 " + noCheck);
+		for (int i = 0; i < noCheck.length; i++) {
+			freeBoardService.freeBoardLikeDelete(noCheck[i]);
+			freeBoardService.freeBoardCommentDelete(noCheck[i]);
+			freeBoardService.freeBoardDelete(noCheck[i]);
+	      }
+		
+		return "redirect:/freeBoard/free.do";
+	}
+	
+	
+	@RequestMapping(value="/freeBoard/commentAdd.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public String commentAdd(int mno, int no
 			,String searchOption
 			,String keyword
@@ -279,7 +302,7 @@ public class FreeBoardController {
 		return "/board/free/freeBoardUpdateForm";
 	}
 	
-	@RequestMapping(value="/freeBoard/freeBoardUpdateCtr.do", method = RequestMethod.POST) 
+	@RequestMapping(value="/freeBoard/freeBoardUpdateCtr.do", method = {RequestMethod.GET, RequestMethod.POST}) 
 	public String freeBoardUpdateCtr(@RequestParam(defaultValue="0") int no
 			,String title
 			,String contents
@@ -323,7 +346,7 @@ public class FreeBoardController {
 		return "redirect:/freeBoard/freeBoardListOne.do#upd";
 	}
 	
-	@RequestMapping(value="/freeBoard/freeBoardCommentUpdateCtr.do", method = RequestMethod.GET) 
+	@RequestMapping(value="/freeBoard/freeBoardCommentUpdateCtr.do", method = {RequestMethod.GET, RequestMethod.POST}) 
 	public String freeBoardCommentUpdateCtr(
 			@RequestParam(defaultValue="0") int no
 			,String title
@@ -361,7 +384,7 @@ public class FreeBoardController {
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("lineTitle", lineTitle);
-		return "redirect:/freeBoard/freeBoardListOne.do";
+		return "redirect:/freeBoard/freeBoardView.do";
 	}
 	
 	@RequestMapping(value="/freeBoard/nextPage.do", method = RequestMethod.GET)
@@ -377,7 +400,7 @@ public class FreeBoardController {
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("lineTitle", lineTitle);
-		return "redirect:/freeBoard/freeBoardListOne.do";
+		return "redirect:/freeBoard/freeBoardView.do";
 	}
 	
 }
