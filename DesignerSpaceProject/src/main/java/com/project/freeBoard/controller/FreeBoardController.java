@@ -35,12 +35,12 @@ public class FreeBoardController {
 			, @RequestParam(defaultValue = "free_board_no") String lineTitle
 			,@RequestParam(defaultValue = "0") int mno
 			,Model model) {
-		log.info("Welcome free!");
+		log.info("Welcome free!" + lineTitle);
 		
 		
 		int totalCount = 
 				freeBoardService.freeBoardSelectTotalCount(
-						searchOption, keyword
+						searchOption, keyword, lineTitle
 		);
 		
 		if(no != 0) {
@@ -332,7 +332,7 @@ public class FreeBoardController {
 			,String keyword
 			,String lineTitle
 			,Model model) {
-		log.info("게시물 댓글 삭제"+ ": 댓글번호 " + fcno);
+		log.info("게시물 댓글 삭제"+ ": 댓글번호 " + fcno + "제목정렬" + lineTitle);
 		
 		freeBoardService.freeBoardCommentOneDelete(fcno);
 		

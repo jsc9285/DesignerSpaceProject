@@ -391,6 +391,7 @@
 				<input type="hidden" id='no' name="no" value="${freeBoardDto.freeBoardNo}">
 				<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
 				<input type="hidden" id='keyword' name="keyword" value="${searchMap.keyword}">
+				<input type="hidden" id="lineTitle" name="lineTitle" value="${lineTitle}">
 			</form>
 			
 		
