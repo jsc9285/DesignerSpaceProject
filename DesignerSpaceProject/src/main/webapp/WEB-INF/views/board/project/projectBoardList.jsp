@@ -30,6 +30,9 @@
 			height: 50px;
 			box-sizing: border-box;
 		}
+		#topMenu select{
+			cursor: pointer;
+		}
 		#topCategory{
 			margin-left: 100px;
 			margin-right: 550px;

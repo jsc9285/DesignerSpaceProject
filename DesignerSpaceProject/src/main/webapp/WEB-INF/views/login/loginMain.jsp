@@ -45,6 +45,10 @@
 			text-decoration:none; 
 			color: #60524E;
 		}
+		.aTag:hover{
+			text-decoration: underline;
+		}
+		
 		#img_div{
 			 width: 608px; 
 			 height: 363px; 
@@ -143,9 +147,9 @@
 						<input id="button" class="input" type="submit" value="로그인" >
 					</form>
 						<a class="aTag" href="member/findId.do">아이디찾기</a>
-						<a class="aTag" style="margin: 7px;">|</a>
+						<a style="margin: 7px; color: #60524E; cursor: default;">|</a>
 						<a class="aTag" href="member/findPwd.do">비밀번호찾기</a>
-						<a class="aTag" style="margin: 7px;">|</a>
+						<a style="margin: 7px; color: #60524E; cursor: default;">|</a>
 						<a class="aTag" href="member/join.do">회원가입</a>						
 				</div>
 			</div>

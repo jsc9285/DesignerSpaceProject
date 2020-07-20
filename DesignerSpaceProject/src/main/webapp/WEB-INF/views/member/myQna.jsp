@@ -144,7 +144,8 @@
 		<div id="innerWrap">
 			<div id='boardTitle'>QnA</div>
 			
-			<form action="./myQnaList.do" method="get">
+			<form action="./myQna.do" method="get">
+				<input type="hidden" id='mno' name='mno' value="${memberDto.member_no}">			
 				<select id='searchOption' name="searchOption">
 					<c:choose>
 						<c:when test="${searchMap.searchOption eq 'titleAndContent'}">
@@ -225,6 +226,14 @@
 			
 			<div id="innerPage">
 				<table id='projectListTable'>
+					<colgroup>
+						<col width="14%">
+						<col width="30%">
+						<col width="14%">
+						<col width="14%">
+						<col width="14%">
+						<col width="14%">
+					</colgroup>
 					<tr id='lineTitle' style="border: 1px solid #7D7471;">
 						<th class="cell">글번호</th>
 						<th class="cell">제목</th>
@@ -307,13 +316,14 @@
 				<jsp:param value="${pagingMap}" name="pagingMap"/>
 			</jsp:include>
 			
-			<form action="./myQnaList.do" id='pagingForm' method="get">
+			<form action="./myQna.do" id='pagingForm' method="get">
 				<input type="hidden" id='curPage' name='curPage' 
 					value="${pagingMap.paging.curPage}">
 				<input type="hidden" id='qna_board_no' name="qna_board_no" value="${qnaBoardDto.qna_board_no}">
 				<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
 				<input type="hidden" id='keyword' name="keyword" value="${searchMap.keyword}">
 				<input type="hidden" id='sortOption' name='sortOption' value="${searchMap.sortOption}">
+				<input type="hidden" id='mno' name='mno' value="${memberDto.member_no}">				
 			</form>
 			
 		</div>

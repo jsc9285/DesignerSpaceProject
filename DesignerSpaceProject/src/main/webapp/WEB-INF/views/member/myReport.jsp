@@ -135,7 +135,8 @@ function sortOptionChangeFnc(e) {
 		<div id="innerWrap">
 			<div id='boardTitle'>신고글</div>
 			
-			<form action="./myList.do" method="get">
+			<form action="./myReport.do" method="get">
+				<input type="hidden" id='mno' name='mno' value="${memberDto.member_no}">
 				<select id='searchOption' name="searchOption">
 					<c:choose>
 						<c:when test="${searchMap.searchOption eq 'titleAndContent'}">
@@ -204,6 +205,14 @@ function sortOptionChangeFnc(e) {
 		
 			<div id="innerPage">
 				<table id='projectListTable'>
+					<colgroup>
+						<col width="10%">
+						<col width="33%">
+						<col width="12%">
+						<col width="15%">
+						<col width="15%">
+						<col width="15%">
+					</colgroup>
 					<tr id='lineTitle'>
 						<th class="cell">글번호</th>
 						<th class="cell">제목</th>
@@ -275,13 +284,14 @@ function sortOptionChangeFnc(e) {
 				<jsp:param value="${pagingMap}" name="pagingMap"/>
 			</jsp:include>
 			
-			<form action="./myList.do" id='pagingForm' method="get">
+			<form action="./myReport.do" id='pagingForm' method="get">
 				<input type="hidden" id='curPage' name='curPage' 
 					value="${pagingMap.paging.curPage}">
 				<input type="hidden" id='qna_board_no' name="qna_board_no" value="${reportBoardDto.report_board_no}">
 				<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
 				<input type="hidden" id='keyword' name="keyword" value="${searchMap.keyword}">
-				<input type="hidden" id='sortOption' name='sortOption' value="${searchMap.sortOption}">	
+				<input type="hidden" id='sortOption' name='sortOption' value="${searchMap.sortOption}">
+				<input type="hidden" id='mno' name='mno' value="${memberDto.member_no}">					
 			</form>
 			
 		</div>

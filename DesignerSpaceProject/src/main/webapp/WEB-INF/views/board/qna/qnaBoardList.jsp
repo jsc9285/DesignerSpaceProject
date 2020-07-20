@@ -13,7 +13,7 @@
 
 <style type="text/css">
 	#innerPage{
-		margin-top: 100px;
+		margin-top: 10px;
 	}
 	#boardTitle{
 		font-size: 80px;
@@ -21,7 +21,6 @@
 		float: left;
 		color: #7D7471;
 	}
-
 	#searchOption{
 		margin-top: 40px;
 		margin-left: 20px;
@@ -30,16 +29,15 @@
 		vertical-align: middle;
 		text-align-last: center;
 		font-size: 17px;
+		cursor: pointer;
 		float: left;
 	}
-	
 	#keyword{
 		margin-top: 40px;
 		width: 420px;
 		height: 45px;
 		float: left;
 	}
-	
 	#searchButton{
 		margin-top: 40px;
 		width: 50px;
@@ -50,29 +48,32 @@
 	 	border-radius: 5px;
 	 	vertical-align: middle;
 	}
-	
 	#writeButton{
-		float: right;
 		text-align: center;
+		font-size: 20px;
 		color: white;
 		width: 150px;
 		height: 50px;
 		margin-top: 40px;
-		margin-right: 90px;
-		font-size: 20px;
+		margin-left: 425px;
+		margin-right: 10px;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+		vertical-align: middle;
 		background-color: #7D7471;
 	}
-	
+	#writeButton:hover{
+		background-color: #4AD674;
+	}
 	#selectProcessStatus{
 		margin-top: 40px;
-		margin-left: 20px;
 		width: 138px;
 		height: 50px;
-		margin-right: 10px;
 		vertical-align: middle;
 		text-align-last: center;
 		font-size: 17px;
-		float: right;
+		cursor: pointer;
 	}
 	#projectListTable{
        width: 1350px;
@@ -97,10 +98,17 @@
     #deleteBtn{
 		color: red;
 		font-weight: bold;
-		margin-left: 540px;
+		margin-left: 330px;
+		margin-right: 10px;
 		vertical-align: bottom;
 	}
-	
+	.detailLink{
+		color: #000;
+		text-decoration: none;
+	}
+	.detailLink:hover{
+		text-decoration: underline;
+	}
 </style>
 
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
@@ -260,7 +268,6 @@
 					</c:choose>
 				</select>
 				
-				
 				<input type="text" id='keyword' name="keyword" value="${searchMap.keyword}">
 				<button id="searchButton" type="submit">
 					<img src="<%=request.getContextPath()%>/resources/img/iconSearch.png">
@@ -269,8 +276,7 @@
 					<input type="button" value="작성" id='writeButton' onclick="writeButtonFnc();">
 				</c:if>
 				<c:if test="${memberDto.member_grade == 1}">
-					<a type="submit" id="deleteBtn" onclick="projectDeleteFnc();">게시물삭제</a>
-					<input type="button" value="작성" disabled="disabled" id='writeButton' onclick="writeButtonFnc();">
+					<a type="submit" id="deleteBtn" style="margin-left: 500px;" onclick="projectDeleteFnc();">게시물삭제</a>
 				</c:if>
 				
 				<select id='selectProcessStatus' name="sortOption" onchange="sortOptionChangeFnc(this);">
@@ -279,35 +285,24 @@
 							<option value="qna_board_whole" selected="selected">전체</option>
 							<option value="qna_board_accept">접수중</option>
 							<option value="qna_board_answer">답변중</option>
-							<option value="qna_board_time_limit">기한만료</option>
 							<option value="qna_board_answer_complete">답변완료</option>
 						</c:when>
 						<c:when test="${searchMap.sortOption eq 'qna_board_accept'}">
 							<option value="qna_board_whole">전체</option>
 							<option value="qna_board_accept" selected="selected">접수중</option>
 							<option value="qna_board_answer">답변중</option>
-							<option value="qna_board_time_limit">기한만료</option>
 							<option value="qna_board_answer_complete">답변완료</option>
 						</c:when>
 						<c:when test="${searchMap.sortOption eq 'qna_board_answer'}">
 							<option value="qna_board_whole">전체</option>
 							<option value="qna_board_accept">접수중</option>
 							<option value="qna_board_answer" selected="selected">답변중</option>
-							<option value="qna_board_time_limit">기한만료</option>
-							<option value="qna_board_answer_complete">답변완료</option>
-						</c:when>
-						<c:when test="${searchMap.sortOption eq 'qna_board_time_limit'}">
-							<option value="qna_board_whole">전체</option>
-							<option value="qna_board_accept">접수중</option>
-							<option value="qna_board_answer">답변중</option>
-							<option value="qna_board_time_limit" selected="selected">기한만료</option>
 							<option value="qna_board_answer_complete">답변완료</option>
 						</c:when>
 						<c:when test="${searchMap.sortOption eq 'qna_board_answer_complete'}">
 							<option value="qna_board_whole">전체</option>
 							<option value="qna_board_accept">접수중</option>
 							<option value="qna_board_answer">답변중</option>
-							<option value="qna_board_time_limit">기한만료</option>
 							<option value="qna_board_answer_complete" selected="selected">답변완료</option>
 						</c:when>					
 					</c:choose>
@@ -318,6 +313,15 @@
 				<c:if test="${memberDto.member_grade == 1}">
 					<form action="./managementDeleteCtr.do" id="deleteForm" method="get">
 						<table id='projectListTable'>
+							<colgroup>
+								<col width="5%">
+								<col width="10%">
+								<col width="20%">
+								<col width="15%">
+								<col width="15%">
+								<col width="15%">
+								<col width="20%">
+							</colgroup>
 							<tr id='lineTitle' style="border: 1px solid #7D7471;">
 								<th class="cell"><input id="allCheck" type="checkbox"></th>
 								<th class="cell">글번호</th>
@@ -342,47 +346,46 @@
 										<tr>
 											<td><input name="qnaCheck" type="checkbox" class='checkbox' 
 												value="${QnaBoardDto.qna_board_no}"></td>
-											<td class="cell2">${QnaBoardDto.qna_board_no}</td>
-											<td class="cell2">
-												<a href='#' onclick="listDetailAdminPageFnc(this, event);">
+											<td >${QnaBoardDto.qna_board_no}</td>
+											<td>
+												<a class="detailLink" href='#' onclick="listDetailAdminPageFnc(this, event);">
 													${QnaBoardDto.qna_board_title}
 												</a>
 											</td>
-											<td class="cell2">
+											<td>
 												${QnaBoardDto.member_nick}
 											</td>
-											<td class="cell2">
-												<fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
-													pattern="yyyy.MM.dd hh:mm"/>
+											<td>
+												<h5><fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
+													pattern="yyyy.MM.dd"/></h5>
+												<h5><fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
+													pattern="hh:mm"/></h5>
 											</td>
-											<td class="cell2">
+											<td>
 												<c:choose>
 													<c:when test="${empty QnaBoardDto.qna_board_answer_date}">
 														-
 													</c:when>
 													<c:otherwise>
-														<fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
-															pattern="yyyy.MM.dd hh:mm"/>
+														<h5><fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
+															pattern="yyyy.MM.dd"/></h5>
+														<h5><fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
+															pattern="hh:mm"/></h5>
 													</c:otherwise>
 												</c:choose>
 											</td>
 											<c:if test="${QnaBoardDto.qna_board_answer_status eq '접수중'}">
-												<td class="cell2" style="color: #E14E4E;">
+												<td style="color: #E14E4E;">
 													${QnaBoardDto.qna_board_answer_status}
 												</td>
 											</c:if>
 											<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변중'}">
-												<td class="cell2" style="color: #2E89D4;">
-													${QnaBoardDto.qna_board_answer_status}
-												</td>
-											</c:if>
-											<c:if test="${QnaBoardDto.qna_board_answer_status eq '기한만료'}">
-												<td class="cell2" style="color: #E8CA35;">
+												<td style="color: #2E89D4;">
 													${QnaBoardDto.qna_board_answer_status}
 												</td>
 											</c:if>
 											<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변완료'}">
-												<td class="cell2" style="color: #BBBBBB;">
+												<td style="color: #BBBBBB;">
 													${QnaBoardDto.qna_board_answer_status}
 												</td>
 											</c:if>
@@ -396,6 +399,14 @@
 				
 				<c:if test="${memberDto.member_grade == 0}">
 					<table id='projectListTable'>
+						<colgroup>
+							<col width="8%">
+							<col width="32%">
+							<col width="15%">
+							<col width="15%">
+							<col width="15%">
+							<col width="15%">
+						</colgroup>
 						<tr id='lineTitle' style="border: 1px solid #7D7471;">
 							<th class="cell">글번호</th>
 							<th class="cell">제목</th>
@@ -417,47 +428,46 @@
 							<c:otherwise>
 								<c:forEach var="QnaBoardDto" items="${qnaBoardList}">
 									<tr>
-										<td class="cell2">${QnaBoardDto.qna_board_no}</td>
-										<td class="cell2">
-											<a href='#' onclick="listDetailUserPageFnc(this, event);">
+										<td>${QnaBoardDto.qna_board_no}</td>
+										<td>
+											<a class="detailLink" href='#' onclick="listDetailUserPageFnc(this, event);">
 												${QnaBoardDto.qna_board_title}
 											</a>
 										</td>
-										<td class="cell2">
+										<td>
 											${QnaBoardDto.member_nick}
 										</td>
-										<td class="cell2">
-											<fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
-												pattern="yyyy.MM.dd hh:mm"/>
+										<td>
+											<h5><fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
+												pattern="yyyy.MM.dd"/></h5>
+											<h5><fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
+												pattern="hh:mm"/></h5>
 										</td>
-										<td class="cell2">
+										<td>
 											<c:choose>
 												<c:when test="${empty QnaBoardDto.qna_board_answer_date}">
 													-
 												</c:when>
 												<c:otherwise>
-													<fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
-														pattern="yyyy.MM.dd hh:mm"/>
+													<h5><fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
+														pattern="yyyy.MM.dd"/></h5>
+													<h5><fmt:formatDate value="${QnaBoardDto.qna_board_answer_date}" 
+														pattern="hh:mm"/></h5>
 												</c:otherwise>
 											</c:choose>
 										</td>
 										<c:if test="${QnaBoardDto.qna_board_answer_status eq '접수중'}">
-											<td class="cell2" style="color: #E14E4E;">
+											<td style="color: #E14E4E;">
 												${QnaBoardDto.qna_board_answer_status}
 											</td>
 										</c:if>
 										<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변중'}">
-											<td class="cell2" style="color: #2E89D4;">
-												${QnaBoardDto.qna_board_answer_status}
-											</td>
-										</c:if>
-										<c:if test="${QnaBoardDto.qna_board_answer_status eq '기한만료'}">
-											<td class="cell2" style="color: #E8CA35;">
+											<td style="color: #2E89D4;">
 												${QnaBoardDto.qna_board_answer_status}
 											</td>
 										</c:if>
 										<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변완료'}">
-											<td class="cell2" style="color: #BBBBBB;">
+											<td style="color: #BBBBBB;">
 												${QnaBoardDto.qna_board_answer_status}
 											</td>
 										</c:if>
@@ -469,23 +479,25 @@
 				</c:if>
 			</div>
 			
+			<input type="hidden" value="${qna_comment_no}" name="qna_comment_no">
+	
+			<jsp:include page="/WEB-INF/views/common/paging.jsp">
+				<jsp:param value="${pagingMap}" name="pagingMap"/>
+			</jsp:include>
+			
+			<form action="./list.do" id='pagingForm' method="get">
+				<input type="hidden" id='curPage' name='curPage' 
+					value="${pagingMap.paging.curPage}">
+				<input type="hidden" id='qna_board_no' name="qna_board_no" value="${qnaBoardDto.qna_board_no}">
+				<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
+				<input type="hidden" id='keyword' name="keyword" value="${searchMap.keyword}">
+				<input type="hidden" id='sortOption' name='sortOption' value="${searchMap.sortOption}">	
+			</form>
+			
 		</div>
 	</div>
 	
-	<input type="hidden" value="${qna_comment_no}" name="qna_comment_no">
-	
-	<jsp:include page="/WEB-INF/views/common/paging.jsp">
-		<jsp:param value="${pagingMap}" name="pagingMap"/>
-	</jsp:include>
-	
-	<form action="./list.do" id='pagingForm' method="get">
-		<input type="hidden" id='curPage' name='curPage' 
-			value="${pagingMap.paging.curPage}">
-		<input type="hidden" id='qna_board_no' name="qna_board_no" value="${qnaBoardDto.qna_board_no}">
-		<input type="hidden" id='searchOption' name="searchOption" value="${searchMap.searchOption}">
-		<input type="hidden" id='keyword' name="keyword" value="${searchMap.keyword}">
-		<input type="hidden" id='sortOption' name='sortOption' value="${searchMap.sortOption}">	
-	</form>
+
 	
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 

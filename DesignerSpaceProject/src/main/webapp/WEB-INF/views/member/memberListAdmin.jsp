@@ -42,6 +42,10 @@
 		width: 50px;
 		height: 50px;
 		float: left;
+	 	background-color: #60524E;
+	 	border-style: none;
+	 	border-radius: 5px;
+	 	vertical-align: middle;
 	}
 	#writeButton{
 		float: right;
@@ -174,7 +178,9 @@
 						<input type="text" id='keyword' 
 							name="keyword" value="${searchMap.keyword}"
 							placeholder="회원이름 or 이메일 검색">
-						<input type="submit" id='searchButton' value="검색">
+						<button id="searchButton" type="submit">
+							<img src="<%=request.getContextPath()%>/resources/img/iconSearch.png">
+						</button>
 				</form>	
 				
 				<a id="deleteBtn" onclick="removeMemberFnc();">회원삭제</a>
@@ -184,6 +190,15 @@
 			<form action="../member/remove.do" id="removeForm" method="get">
 			<div id="innerPage">
 				<table id='projectListTable'>
+					<colgroup>
+						<col width="6%">
+						<col width="6%">
+						<col width="24%">
+						<col width="22%">
+						<col width="12%">
+						<col width="12%">
+						<col width="18%">
+					</colgroup>
 					<tr id='lineTitle' style="border: 1px solid #7D7471;">
 						<th class="cell"><input type="checkbox" id="allCheck"></th>
 						<th class="cell">회원번호</th>

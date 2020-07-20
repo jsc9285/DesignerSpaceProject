@@ -309,11 +309,6 @@
 								${qnaBoardDto.qna_board_answer_status}
 							</span>
 						</c:if>
-						<c:if test="${qnaBoardDto.qna_board_answer_status eq '기한만료'}">
-							<span style="margin-left: 86px; color: #E8CA35;">
-								${qnaBoardDto.qna_board_answer_status}
-							</span>
-						</c:if>
 						<c:if test="${qnaBoardDto.qna_board_answer_status eq '답변완료'}">
 							<span style="margin-left: 86px; color: #BBBBBB;">
 								${qnaBoardDto.qna_board_answer_status}
@@ -338,7 +333,7 @@
 					<c:if test="${qnaBoardDto.qna_board_answer_status eq '답변중'}">
 						<div style="text-align: center; margin-top: -50px;">
 							<input type="button" value="답변완료" style="width: 150px; height: 150px;
-								border-radius: 50%; background-color: #4AD674; color: white;"
+								border-radius: 50%; background-color: #4AD674; color: white; border: none;"
 								onclick="answerCompleteFnc();">
 						</div>
 					</c:if>
@@ -346,7 +341,7 @@
 					<c:if test="${qnaBoardDto.qna_board_answer_status eq '접수중'}">
 						<div style="text-align: center; margin-top: -50px;">
 							<input type="button" value="답변완료" disabled="disabled" style="width: 150px; height: 150px;
-								border-radius: 50%; background-color: #D4D4D4; color: white;" 
+								border-radius: 50%; background-color: #D4D4D4; color: white; border: none;" 
 								onclick="answerCompleteFnc();">
 						</div>
 					</c:if>
