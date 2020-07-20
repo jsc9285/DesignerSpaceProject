@@ -31,10 +31,10 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 	private FileUtils fileUtils;
 
 	@Override
-	public int freeBoardSelectTotalCount(String searchOption, String keyword) {
+	public int freeBoardSelectTotalCount(String searchOption, String keyword, String lineTitle) {
 		// TODO Auto-generated method stub
 		return freeBoardDao.freeBoardSelectTotalCount(searchOption
-				, keyword);
+				, keyword,lineTitle);
 	}
 
 	@Override
