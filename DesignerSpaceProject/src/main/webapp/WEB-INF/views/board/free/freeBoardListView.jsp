@@ -325,7 +325,7 @@
 					<th class="cell" onclick="sortFnc(this);" id="nl">좋아요</th>
 					<th class="cell"></th>
 					<th class="cell"></th>
-					<th class="cell" onclick="sortFnc(this);" id="free_board_cre_date" colspan="3">작성일</th>
+					<th class="cell" onclick="sortFnc(this);" id="free_board_cre_date">작성일</th>
 					<c:if test="${memberDto.member_grade eq '1'}">
 						<th class="cell"><input id="allCheck" type="checkbox"></th>
 					</c:if>			
