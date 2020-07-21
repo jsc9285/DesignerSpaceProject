@@ -94,12 +94,27 @@ public class ProjectController {
 	}
 	
 	@RequestMapping(value = "projectBoard/projectView.do", method = RequestMethod.GET)
-	public String projectView(int chkPage, int project_board_no, HttpSession session, Model model) {
+	public String projectView(int project_board_no
+			, @RequestParam(defaultValue="1") int curPage
+			, @RequestParam(defaultValue="project_board_no") String sortOption
+			, @RequestParam(defaultValue="all") String categoryOption
+			, @RequestParam(defaultValue="member_nick") String searchOption
+			, @RequestParam(defaultValue="") String keyword
+			, @RequestParam(defaultValue="") String pageOption
+			, int chkPage
+			, HttpSession session, Model model) {
 		
 		projectBoardService.projectView(project_board_no);
 		
 		model.addAttribute("project_board_no", project_board_no);
 		model.addAttribute("chkPage", chkPage);
+		
+		model.addAttribute("curPage", curPage);
+		model.addAttribute("sortOption", sortOption);
+		model.addAttribute("categoryOption", categoryOption);
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("pageOption", pageOption);
 		
 		return "forward:/projectBoard/detail.do";
 	}
@@ -129,8 +144,14 @@ public class ProjectController {
 	}
 	
 	@RequestMapping(value = "projectBoard/detail.do", method = RequestMethod.GET)
-	public String projectBoardDetail(@RequestParam(defaultValue="0") int chkPage
-			, int project_board_no
+	public String projectBoardDetail(int project_board_no
+			,@RequestParam(defaultValue="0") int chkPage
+			, @RequestParam(defaultValue="1") int curPage
+			, @RequestParam(defaultValue="project_board_no") String sortOption
+			, @RequestParam(defaultValue="all") String categoryOption
+			, @RequestParam(defaultValue="member_nick") String searchOption
+			, @RequestParam(defaultValue="") String keyword
+			, @RequestParam(defaultValue="") String pageOption  
 			, HttpSession session, Model model) {
 		
 		// 하나의 작품 상세 정보 전달 ( 작품, 파일 )
@@ -146,12 +167,21 @@ public class ProjectController {
 		int member_no = sessionMemberDto.getMember_no();
 		Map<String, Object> projectLikeFlag = projectBoardService.projectLikeFlag(project_board_no, member_no); 
 		
+		// 검색조건
+		Map<String, Object> searchOptionMap = new HashMap<String, Object>();
+		searchOptionMap.put("curPage", curPage);
+		searchOptionMap.put("sortOption", sortOption);
+		searchOptionMap.put("categoryOption", categoryOption);
+		searchOptionMap.put("searchOption", searchOption);
+		searchOptionMap.put("keyword", keyword);
+		
 		// 모델로 필요정보 넘김
 		model.addAttribute("projectBoardDto", projectBoardDto);
 		model.addAttribute("projectBoardFileList", projectBoardFileList);
 		model.addAttribute("projectCommentList", projectCommentList);
 		model.addAttribute("projectLikeFlag", projectLikeFlag);
 		model.addAttribute("chkPage", chkPage);
+		model.addAttribute("searchOptionMap", searchOptionMap);
 		
 		return "board/project/projectBoardDetail";
 	}

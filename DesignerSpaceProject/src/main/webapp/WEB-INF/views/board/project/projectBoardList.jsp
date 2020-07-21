@@ -183,6 +183,28 @@
 			var pagingForm = document.getElementById('pagingForm'); 
 			pagingForm.submit();					
 		}
+		
+		function detailViewFnc(projectBoardNo) {
+			var projectBoardNo = projectBoardNo;
+			var curPageObj = document.getElementById('curPage');
+			var categoryOptionObj = document.getElementById('categoryOption');
+			var sortOptionObj = document.getElementById('sortOption');
+			var searchOptionObj = document.getElementById('searchOption');
+			var keywordObj = document.getElementById('keyword');
+			
+			
+			var str = "./projectView.do";			
+			str += "?project_board_no=" + projectBoardNo;
+			str += "&curPage=" + curPageObj.value;
+			str += "&categoryOption=" + categoryOptionObj.value;
+			str += "&sortOption=" + sortOptionObj.value;
+			str += "&searchOption=" + searchOptionObj.value;
+			str += "&keyword=" + keywordObj.value;
+			str += "&chkPage=0";
+			
+			
+			location.href = str;
+		}
 	</script>
 </head>
 
@@ -246,7 +268,7 @@
 				</c:if>
 				<c:forEach var="projectBoardDto" items="${projectBoardList}">
 					<div class="projectList">
-						<div class="thumbnailPic" onclick="location.href='./projectView.do?project_board_no=${projectBoardDto.project_board_no}&chkPage=0'"
+						<div class="thumbnailPic" onclick="detailViewFnc(${projectBoardDto.project_board_no});"
 							 style="background-image: url(<c:url value='/projectImg/${projectBoardDto.FILE_TABLE_STORED_FILE_NAME}'/>);">
 							<c:choose>
 								<c:when test="${projectBoardDto.project_board_category eq 'p'}">

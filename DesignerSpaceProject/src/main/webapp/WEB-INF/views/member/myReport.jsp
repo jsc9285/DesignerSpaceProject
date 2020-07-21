@@ -234,7 +234,7 @@ function sortOptionChangeFnc(e) {
 								<tr>
 									<td>${reportBoardDto.report_board_no}</td>
 									<td>
-										<a class="detailLink" href="#">
+										<a class="detailLink" href="../reportBoard/listDetail.do?report_board_no=${reportBoardDto.report_board_no}">
 											${reportBoardDto.report_board_title}
 										</a>
 									</td>

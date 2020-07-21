@@ -128,7 +128,7 @@ public class QnaBoardController {
 				qnaBoardService.qnaBoardCommentSelectList(qna_board_no, end);
 		
 		model.addAttribute("qnaBoardCommentList", qnaBoardCommentList);
-		model.addAttribute("paging", qnaCommentPaging);
+		model.addAttribute("freeBoardCommentPaging", qnaCommentPaging);
 		
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);
@@ -178,9 +178,12 @@ public class QnaBoardController {
 		
 		qnaBoardService.qnaBoardUpdateOne(qnaBoardDto);
 		
-		model.addAttribute("qnaBoardDto", qnaBoardDto);
+		int qna_board_no = qnaBoardDto.getQna_board_no();
 		
-		return "redirect:list.do";
+		model.addAttribute("qnaBoardDto", qnaBoardDto);
+		model.addAttribute("qna_board_no", qna_board_no);
+		
+		return "redirect:listDetail.do";
 	}
 	
 	@RequestMapping(value = "qnaBoard/deleteCtr.do", method = RequestMethod.GET)

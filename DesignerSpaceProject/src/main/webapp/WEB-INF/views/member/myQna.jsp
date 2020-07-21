@@ -224,12 +224,12 @@
 						<col width="14%">
 					</colgroup>
 					<tr id='lineTitle' style="border: 1px solid #7D7471;">
-						<th class="cell">글번호</th>
-						<th class="cell">제목</th>
-						<th class="cell">작성자</th>
-						<th class="cell">작성일</th>
-						<th class="cell">답변일</th>
-						<th class="cell">처리상태</th>
+						<th>글번호</th>
+						<th>제목</th>
+						<th>작성자</th>
+						<th>작성일</th>
+						<th>답변일</th>
+						<th>처리상태</th>
 					</tr>
 					
 					<c:choose>
@@ -244,22 +244,22 @@
 						<c:otherwise>
 							<c:forEach var="QnaBoardDto" items="${qnaBoardList}">
 								<tr>
-									<td class="cell2">${QnaBoardDto.qna_board_no}</td>
-									<td class="cell2">
-										<a href="#">
+									<td>${QnaBoardDto.qna_board_no}</td>
+									<td>
+										<a href="../qnaBoard/listDetail.do?qna_board_no=${QnaBoardDto.qna_board_no}">
 											${QnaBoardDto.qna_board_title}
 										</a>
 									</td>
-									<td class="cell2">
+									<td>
 										${QnaBoardDto.member_nick}
 									</td>
-									<td class="cell2">
+									<td>
 										<h6><fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
 											pattern="yyyy.MM.dd"/></h6>
 										<h6><fmt:formatDate value="${QnaBoardDto.qna_board_cre_date}" 
 											pattern="HH:mm"/></h6>
 									</td>
-									<td class="cell2">
+									<td>
 										<c:choose>
 											<c:when test="${empty QnaBoardDto.qna_board_answer_date}">
 												-
@@ -273,22 +273,22 @@
 										</c:choose>
 									</td>
 									<c:if test="${QnaBoardDto.qna_board_answer_status eq '접수중'}">
-										<td class="cell2" style="color: #E14E4E;">
+										<td style="color: #E14E4E;">
 											${QnaBoardDto.qna_board_answer_status}
 										</td>
 									</c:if>
 									<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변중'}">
-										<td class="cell2" style="color: #2E89D4;">
+										<td style="color: #2E89D4;">
 											${QnaBoardDto.qna_board_answer_status}
 										</td>
 									</c:if>
 									<c:if test="${QnaBoardDto.qna_board_answer_status eq '기한만료'}">
-										<td class="cell2" style="color: #E8CA35;">
+										<td style="color: #E8CA35;">
 											${QnaBoardDto.qna_board_answer_status}
 										</td>
 									</c:if>
 									<c:if test="${QnaBoardDto.qna_board_answer_status eq '답변완료'}">
-										<td class="cell2" style="color: #BBBBBB;">
+										<td style="color: #BBBBBB;">
 											${QnaBoardDto.qna_board_answer_status}
 										</td>
 									</c:if>
