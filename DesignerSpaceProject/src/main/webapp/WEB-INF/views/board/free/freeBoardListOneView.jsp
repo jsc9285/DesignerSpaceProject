@@ -190,75 +190,6 @@
 		location.href = url;
 	}
 	
-// 	function commentAddFnc() {
-// 		var commentsObj = $('#comments');
-// 		if(commentsObj.val() != ''){
-// 			var mnoObj = $('#mno')
-// 			var fbnoObj = $('#fbno');
-// 			var keywordObj = $('#keyword');
-// 			var rnumObj = $('#rnum');
-// 			var lineTitleObj = $('#lineTitle');
-// 			var searchOptionObj = $('#searchOption');
-			
-			
-// 			var url = '';
-			
-// 			url += './commentAdd.do?';
-// 			url += 'no=' + fbnoObj.val();
-// 			url += '&keyword=' + keywordObj.val();
-// 			url += '&searchOption=' + searchOptionObj.val();
-// 			url += '&mno=' + mnoObj.val();
-// 			url += '&comments=' + commentsObj.val();
-// 			url += '&rnum=' + rnumObj.val();
-// 			url += '&lineTitleObj=' + lineTitleObj.val();
-			
-// 			location.href = url;
-// 		}else{
-// 			alert('댓글을 써주세요');
-// 		}
-		
-// 	}
-	
-// 	function freeBoardCommentUpdateFnc(obj, event) {
-		
-// 			var aTagObj = $(obj);
-			
-// 			event.preventDefault();
-			
-// 			var mnoObj = $('#mno')
-// 			var fbnoObj = $('#fbno');
-// 			var rnumObj = $('#rnum');
-// 			var keywordObj = $('#keyword');
-// 			var searchOptionObj = $('#searchOption');
-// 			var lineTitleObj = $('#lineTitle');
-// 			var commentsObj = '';
-// 			var fcnoObj = '';
-			
-// 			fcnoObj = aTagObj.parent().parent().children('div').eq(1).children().eq(1);
-			
-// 			commentsObj = aTagObj.parent().parent().children('div').eq(1).children();
-			
-// 			var url = '';
-// 			if(commentsObj.val() != ''){	
-// 			url += './freeBoardCommentUpdateCtr.do?';
-// 			url += 'no=' + fbnoObj.val();
-// 			url += '&keyword=' + keywordObj.val();
-// 			url += '&searchOption=' + searchOptionObj.val();
-// 			url += '&mno=' + mnoObj.val();
-// 			url += '&fcno=' + fcnoObj.val();
-// 			url += '&rnum=' + rnumObj.val();
-// 			url += '&comments=' + commentsObj.val();
-// 			url += '&lineTitleObj=' + lineTitleObj.val();
-			
-// 			location.href = url;
-// 		}else{
-// 			alert('댓글을 써주세요');
-			
-// 		}
-		
-		
-// 	}
-
 	function freeBoardCommentUpdateOneFnc(obj, event) {
 	
 	        	var aTagObj = $(obj);
@@ -309,7 +240,6 @@
 		updaObj.remove();
 		delObj.after(delBtn);
 		delObj.remove();
-// 		${freeBoardDto.freeCommentComments}
 		var reTextarea = $('<span style="width: 500px; word-wrap: break-word; display:inline-block; white-space: pre-line;">'+commentsObj.html()+'</span>');
 		commentsObj.after(reTextarea);
 		commentsObj.remove();
@@ -440,9 +370,9 @@
 	$(document).ready(function () {
 		$('.comments').keydown(function (e){
 			var comments = $(this).val();		
-			if(comments.length > 400){
-				alert('댓글은 최대 400자까지입니다.');
-				$(this).val(comments.substring(0, 400));
+			if(comments.length > 300){
+				alert('댓글은 최대 300자까지입니다.');
+				$(this).val(comments.substring(0, 300));
 			}
 		});
 	});
