@@ -286,7 +286,7 @@
 				<%-- 			value="${pagingMap.memberPaging.curPage}"> --%>
 						<input type="text" id='keyword' 
 							name="keyword" value="${searchMap.keyword}"
-							placeholder="제목 or 작성자 검색">
+							placeholder="제목 or 내용 검색">
 						<button id="searchBtn" type="submit"><img src="<%=request.getContextPath()%>/resources/img/iconSearch.png"></button>
 					</form>	
 				</div>
@@ -307,13 +307,24 @@
 			<div id="innerPage">
 			<form action="./freeBoardAdminDeleteCtr.do" id="deleteForm" method="get">
 			<table id="projectListTable">
-				
+				<colgroup>
+							<col width="5%">
+							<col width="35%">
+							<col width="15%">
+							<col width="15%">
+							<col width="15%">
+							<col width="0%">
+							<col width="0%">
+							<col width="15%">
+				</colgroup>
 				<tr id='lineTitle' style="border: 1px solid #7D7471;" >
 					<th class="cell" onclick="sortFnc(this);" id="free_board_no">글번호</th>
 					<th class="cell" onclick="sortFnc(this);" id="free_board_title">제목</th>
 					<th class="cell" onclick="sortFnc(this);" id="member_nick">작성자</th>
 					<th class="cell" onclick="sortFnc(this);" id="free_board_views">조회수</th>
 					<th class="cell" onclick="sortFnc(this);" id="nl">좋아요</th>
+					<th class="cell"></th>
+					<th class="cell"></th>
 					<th class="cell" onclick="sortFnc(this);" id="free_board_cre_date" colspan="3">작성일</th>
 					<c:if test="${memberDto.member_grade eq '1'}">
 						<th class="cell"><input id="allCheck" type="checkbox"></th>
