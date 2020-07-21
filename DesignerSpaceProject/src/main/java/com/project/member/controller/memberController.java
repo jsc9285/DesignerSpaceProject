@@ -425,7 +425,7 @@ public class memberController {
 			, @RequestParam(defaultValue = "") String keyword
 			, Model model){
 			
-			log.info("관리자용 회원관리");
+			log.info("관리자용 회원관리 컬페이지 : " + curPage);
 			
 //			List<MemberBoardDto> memberList = memberService.getMemberList();
 //			
@@ -496,13 +496,14 @@ public class memberController {
 		
 		
 		@RequestMapping(value = "/admin/listOneAdmin.do", method = RequestMethod.GET)
-		public String memberOne(int member_no, HttpSession session, Model model){
+		public String memberOne(int member_no, HttpSession session, int curPage, Model model){
 			
 			log.info("관리자용 회원정보보기"+member_no);
 			
 			MemberDto memberDto = memberService.memberModDetail(member_no);
 			
 			model.addAttribute("memberDto", memberDto);
+			model.addAttribute("curPage", curPage);
 			
 			return "/member/memberInfoAdmin";
 		}
