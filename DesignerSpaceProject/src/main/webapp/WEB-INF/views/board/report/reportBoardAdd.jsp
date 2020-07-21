@@ -56,7 +56,9 @@
 
 <script type="text/javascript">
 	function pageMoveListFnc() {
-		location.href = './list.do';
+		var noObj = $('#report_board_no').val();
+		
+		location.href = '../projectBoard/detail.do?project_board_no=' + noObj;
 	}
 	
 	function checkAddFnc() {
@@ -153,18 +155,19 @@
 					<div style="text-align: center;">
 						<input type="submit" value="작성완료" id='writeCompleteButton'>
 						<input type="button" value="취소" id='resetButton' onclick="pageMoveListFnc();">
-						<input type="hidden" value="${projectBoardDto.project_board_mno}" 
-							 name="project_board_mno">
-						<input type="hidden" value="${projectBoardDto.member_nick}" 
+						<input type="hidden" value="${memberDto.member_no}" 
+							 name="report_board_mno">
+						<input type="hidden" value="${memberDto.member_nick}" 
 							 name="member_nick">
-						<input type="hidden" value="${memberDto.member_no}"
-							 name="mno">
+<%-- 						<input type="hidden" value="${projectBoardDto.project_board_mno}" --%>
+<!-- 							 name="project_board_mno"> -->
 						<input type="hidden" value="${projectBoardDto.project_board_title}"
 							 name="report_board_title">
-						<input type="hidden" value="${memberDto.member_name}"
+						<input type="hidden" value="${projectBoardDto.member_nick}"
 							 name="report_board_name">
 						<input type="hidden" value="${project_board_no}"
-							 name="report_board_no">
+							 id="report_board_no" name="report_board_no">
+						
 					</div>
 				</form>	
 			</div>
