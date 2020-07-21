@@ -128,7 +128,7 @@ public class QnaBoardController {
 				qnaBoardService.qnaBoardCommentSelectList(qna_board_no, end);
 		
 		model.addAttribute("qnaBoardCommentList", qnaBoardCommentList);
-		model.addAttribute("paging", qnaCommentPaging);
+		model.addAttribute("freeBoardCommentPaging", qnaCommentPaging);
 		
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);
