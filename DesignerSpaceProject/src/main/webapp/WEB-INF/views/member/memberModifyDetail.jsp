@@ -552,7 +552,10 @@ $(function(){
 						
 						<button id="button">확인</button>
 					</form>
-					<button id="exit" onclick="exitMemberFnc();">탈퇴</button>
+					<c:if test="${memberDto.member_grade}==0">
+						<button id="exit" onclick="exitMemberFnc();">탈퇴</button>
+					</c:if>
+					
 					<button id="cancel" onclick="location.href='info.do;'">취소</button>
 				</div>
 			</div>

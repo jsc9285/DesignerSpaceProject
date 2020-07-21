@@ -360,7 +360,16 @@
 		      success : function(data) {
 		         console.log("1 = 중복o / 0 = 중복x : "+ data);                     
 		         
-		         if (data == 1) {
+		         
+		         if (phoneObj.length < 11) {
+					
+		        	 $('#member_phone').css('border', '2px solid #ff0000');
+		        	 $('#phone_div').css('color', '#ff0000');
+		        	 $('#phone_div').html("번호는 최소 11글자를 입력해주세요");
+		        	 
+		        	 phoneFlag="N";
+		        	 
+				 }else if (data == 1) {
 		        	 $('#member_phone').css('border', '2px solid #ff0000');
 		        	 $('#phone_div').css('color', '#ff0000');
 		        	 $('#phone_div').html("사용중인 번호입니다.");
