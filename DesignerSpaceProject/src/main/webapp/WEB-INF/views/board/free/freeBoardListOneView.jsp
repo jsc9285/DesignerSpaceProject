@@ -459,7 +459,7 @@
 	<div id="wrap">
 		<div id="innerWrap">
 			<div id='boardTitle'>자유게시판</div>
-			<div id='innerPage' style="height: 809px; margin-top: 40px;">
+			<div id='innerPage' style="height: auto; margin-top: 40px;">
 		<br>
 		<br>
 		<br>
@@ -491,10 +491,10 @@
 		<hr>
 		<br>
 		<br>
-		<div style="margin-left: 200px; height: 400px;">
+		<div style="margin-left: 200px; height: auto;">
 			<span style="width: 50px; margin-bottom: 50px; vertical-align: top;">내용</span>
 			<span id="contents" style=" margin-left: 86px;
-					width: 780px; height: 400px; display:inline-block; white-space: pre-line;">
+					width: 780px; height: auto; display:inline-block; white-space: pre-line;">
 					${freeBoardDto.freeBoardContents}
 			</span>
 		</div>
@@ -604,7 +604,7 @@
 					<input type="button" id="preBtn" style="text-align: center; 
 							 width: 150px;  height: 50px; 
 							 background-color: #4AD674;  color: white; cursor: pointer;" 
-							 onclick="prePageFnc();" value="이전 글">
+							 onclick="prePageFnc();" value="다음 글">
 				</c:otherwise>
 				</c:choose>
 				<c:if test="${freeBoardDto.memberNo eq memberDto.member_no}">
@@ -630,7 +630,7 @@
 					<input type="button" id="nextBtn" style="text-align: center; 
 							 width: 150px;  height: 50px; 
 							 background-color: #4AD674;  color: white;cursor: pointer;" 
-							 onclick="nextPageFnc();" value="다음 글">
+							 onclick="nextPageFnc();" value="이전 글">
 				</c:otherwise>
 				</c:choose>			 
 				</div>
