@@ -195,6 +195,14 @@
 		.memberInfoLink:hover{
 			text-decoration: underline;
 		}
+		#projectContent{
+			margin-left: 20px;
+			resize: none;
+			width: 1170px;
+			height: 100px;
+			border: none;
+			background: none;
+		}
 	</style>
 	
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
@@ -441,7 +449,7 @@
 					style="background-image: url(<c:url value='/profileImg/${projectBoardDto.PROFILE_TABLE_STORED_NAME}'/>);"></div>
 				<div style="height: 150px; text-align: left;">
 					<h1><a class="memberInfoLink" href="../member/myBoard.do?mno=${projectBoardDto.project_board_mno}">${projectBoardDto.member_nick}</a></h1>
-					<span style="margin-left: 20px;">${projectBoardDto.project_board_contents}</span>
+					<textarea id="projectContent">${projectBoardDto.project_board_contents}</textarea>
 				</div>								
 			</div>
 			<div id="commentArea">

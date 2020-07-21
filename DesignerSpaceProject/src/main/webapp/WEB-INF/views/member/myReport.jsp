@@ -98,6 +98,13 @@
     #innerPage{
     	margin-top: 10px;
     }
+    .detailLink{
+    	color: #000;
+    	text-decoration: none;
+    }
+    .detailLink:hover{
+    	text-decoration: underline;
+    }
 </style>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-3.5.1.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/script.js"></script>
@@ -177,25 +184,16 @@ function sortOptionChangeFnc(e) {
 						<c:when test="${searchMap.sortOption eq 'report_board_whole'}">
 							<option value="report_board_whole" selected="selected">전체</option>
 							<option value="report_board_accept">접수중</option>
-							<option value="report_board_reject">처리기각</option>
 							<option value="report_board_processing_complete">처리완료</option>
 						</c:when>
 						<c:when test="${searchMap.sortOption eq 'report_board_accept'}">
 							<option value="report_board_whole">전체</option>
 							<option value="report_board_accept" selected="selected">접수중</option>
-							<option value="report_board_reject">처리기각</option>
-							<option value="report_board_processing_complete">처리완료</option>
-						</c:when>
-						<c:when test="${searchMap.sortOption eq 'report_board_reject'}">
-							<option value="report_board_whole">전체</option>
-							<option value="report_board_accept">접수중</option>
-							<option value="report_board_reject" selected="selected">처리기각</option>
 							<option value="report_board_processing_complete">처리완료</option>
 						</c:when>
 						<c:when test="${searchMap.sortOption eq 'report_board_processing_complete'}">
 							<option value="report_board_whole">전체</option>
 							<option value="report_board_accept">접수중</option>
-							<option value="report_board_reject">처리기각</option>
 							<option value="report_board_processing_complete" selected="selected">처리완료</option>
 						</c:when>
 					</c:choose>
@@ -214,12 +212,12 @@ function sortOptionChangeFnc(e) {
 						<col width="15%">
 					</colgroup>
 					<tr id='lineTitle'>
-						<th class="cell">글번호</th>
-						<th class="cell">제목</th>
-						<th class="cell">작성자</th>
-						<th class="cell">작성일</th>
-						<th class="cell">답변일</th>
-						<th class="cell">처리상태</th>
+						<th>글번호</th>
+						<th>제목</th>
+						<th>작성자</th>
+						<th>작성일</th>
+						<th>답변일</th>
+						<th>처리상태</th>
 					</tr>
 					
 					<c:choose>
@@ -232,44 +230,48 @@ function sortOptionChangeFnc(e) {
 						</c:when>
 						
 						<c:otherwise>
-	`						<c:forEach var="reportBoardDto" items="${reportBoardList}">
+							<c:forEach var="reportBoardDto" items="${reportBoardList}">
 								<tr>
-									<td class="cell2">${reportBoardDto.report_board_no}</td>
-									<td class="cell2">
-										<a href="#">
+									<td>${reportBoardDto.report_board_no}</td>
+									<td>
+										<a class="detailLink" href="#">
 											${reportBoardDto.report_board_title}
 										</a>
 									</td>
-									<td class="cell2">
+									<td>
 										${reportBoardDto.member_nick}
 									</td>
-									<td class="cell2">
-										<fmt:formatDate value="${reportBoardDto.report_board_cre_date}" 
-											pattern="yyyy.MM.dd HH:mm"/>
+									<td>
+										<h5><fmt:formatDate value="${reportBoardDto.report_board_cre_date}" 
+											pattern="yyyy.MM.dd"/></h5>
+										<h5><fmt:formatDate value="${reportBoardDto.report_board_cre_date}" 
+											pattern="HH:mm"/></h5>
 									</td>
-									<td class="cell2">
+									<td>
 										<c:choose>
 										<c:when test="${empty reportBoardDto.report_board_answer_date}">
 											-
 										</c:when>
 										<c:otherwise>
-										<fmt:formatDate value="${reportBoardDto.report_board_answer_date}" 
-											pattern="yyyy.MM.dd HH:mm"/>
+										<h5><fmt:formatDate value="${reportBoardDto.report_board_answer_date}" 
+											pattern="yyyy.MM.dd"/></h5>
+										<h5><fmt:formatDate value="${reportBoardDto.report_board_answer_date}" 
+											pattern="HH:mm"/></h5>
 										</c:otherwise>
 										</c:choose>
 									</td>
 									<c:if test="${reportBoardDto.report_board_answer_status eq '접수중'}">
-										<td class="cell2" style="color: #E14E4E;">
+										<td style="color: #E14E4E;">
 											${reportBoardDto.report_board_answer_status}
 										</td>
 									</c:if>
 									<c:if test="${reportBoardDto.report_board_answer_status eq '처리기각'}">
-										<td class="cell2" style="color: #BFC506;">
+										<td style="color: #BFC506;">
 											${reportBoardDto.report_board_answer_status}
 										</td>
 									</c:if>
 									<c:if test="${reportBoardDto.report_board_answer_status eq '처리완료'}">
-										<td class="cell2" style="color: #BABABA;">
+										<td style="color: #BABABA;">
 											${reportBoardDto.report_board_answer_status}
 										</td>
 									</c:if>

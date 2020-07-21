@@ -334,8 +334,8 @@
 
 					<div id="topCategory">
 						<button onclick="categoryOptionChangeFnc(this);" value="all">전체</button>
-						<button onclick="categoryOptionChangeFnc(this);" value="pic">그림</button>
-						<button onclick="categoryOptionChangeFnc(this);" value="ill">사진</button>
+						<button onclick="categoryOptionChangeFnc(this);" value="pic">사진</button>
+						<button onclick="categoryOptionChangeFnc(this);" value="ill">일러스트</button>
 					</div>
 
 					<select onchange="sortOptionChangeFnc(this);">

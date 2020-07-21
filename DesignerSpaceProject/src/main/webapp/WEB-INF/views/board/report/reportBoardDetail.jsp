@@ -78,7 +78,7 @@
 	
 	function pageMoveListUserFnc() {
 		
-		var noObj = $('#report_board_mno').val();
+		var noObj = $('#member_no').val();
 		
 		location.href = '../member/myReport.do?mno=' + noObj;
 	}
@@ -115,7 +115,7 @@
 						<span style="width: 200px;">작성자</span>
 						<span style="margin-left: 100px;">${reportBoardDto.member_nick}</span>
 						<span style="width: 200px; margin-left: 300px;">신고대상</span>
-						<span style="margin-left: 100px;">${reportBoardDto.member_nick}</span>
+						<span style="margin-left: 100px;">${reportBoardDto.report_board_name}</span>
 					</div>
 					<br>
 					<hr style="text-align: center; width: 80%;">
@@ -200,8 +200,8 @@
 							value="${projectBoardDto.project_board_no}">
 						<input type="hidden" id='chkPage' name="chkPage" value="${projectBoardDto.chkPage}">
 						<input type="hidden" id='member_no' name="member_no" value="${memberDto.member_no}">
-						<input type="hidden" id='report_board_mno' name="report_board_mno" 
-							value="${reportBoardDto.report_board_mno}">
+<!-- 						<input type="hidden" id='report_board_mno' name="report_board_mno"  -->
+<%-- 							value="${reportBoardDto.report_board_mno}"> --%>
 					</div>
 				</div>
 			</div>

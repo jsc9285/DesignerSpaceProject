@@ -189,35 +189,24 @@
 							<option value="qna_board_whole" selected="selected">전체</option>
 							<option value="qna_board_accept">접수중</option>
 							<option value="qna_board_answer">답변중</option>
-							<option value="qna_board_time_limit">기한만료</option>
 							<option value="qna_board_answer_complete">답변완료</option>
 						</c:when>
 						<c:when test="${searchMap.sortOption eq 'qna_board_accept'}">
 							<option value="qna_board_whole">전체</option>
 							<option value="qna_board_accept" selected="selected">접수중</option>
 							<option value="qna_board_answer">답변중</option>
-							<option value="qna_board_time_limit">기한만료</option>
 							<option value="qna_board_answer_complete">답변완료</option>
 						</c:when>
 						<c:when test="${searchMap.sortOption eq 'qna_board_answer'}">
 							<option value="qna_board_whole">전체</option>
 							<option value="qna_board_accept">접수중</option>
 							<option value="qna_board_answer" selected="selected">답변중</option>
-							<option value="qna_board_time_limit">기한만료</option>
-							<option value="qna_board_answer_complete">답변완료</option>
-						</c:when>
-						<c:when test="${searchMap.sortOption eq 'qna_board_time_limit'}">
-							<option value="qna_board_whole">전체</option>
-							<option value="qna_board_accept">접수중</option>
-							<option value="qna_board_answer">답변중</option>
-							<option value="qna_board_time_limit" selected="selected">기한만료</option>
 							<option value="qna_board_answer_complete">답변완료</option>
 						</c:when>
 						<c:when test="${searchMap.sortOption eq 'qna_board_answer_complete'}">
 							<option value="qna_board_whole">전체</option>
 							<option value="qna_board_accept">접수중</option>
 							<option value="qna_board_answer">답변중</option>
-							<option value="qna_board_time_limit">기한만료</option>
 							<option value="qna_board_answer_complete" selected="selected">답변완료</option>
 						</c:when>					
 					</c:choose>
