@@ -78,7 +78,9 @@
 	
 	function pageMoveListUserFnc() {
 		
-		location.href = '../member/myReport.do';
+		var noObj = $('#report_board_mno').val();
+		
+		location.href = '../member/myReport.do?mno=' + noObj;
 	}
 	
 	function pageMoveDeleteFnc(report_board_no) {
@@ -89,7 +91,7 @@
 			location.href = url;
 		}
 		
-// 	}
+	}
 	
 </script>
 
@@ -197,6 +199,9 @@
 						<input type="hidden" id='project_board_no' name="project_board_no" 
 							value="${projectBoardDto.project_board_no}">
 						<input type="hidden" id='chkPage' name="chkPage" value="${projectBoardDto.chkPage}">
+						<input type="hidden" id='member_no' name="member_no" value="${memberDto.member_no}">
+						<input type="hidden" id='report_board_mno' name="report_board_mno" 
+							value="${reportBoardDto.report_board_mno}">
 					</div>
 				</div>
 			</div>
