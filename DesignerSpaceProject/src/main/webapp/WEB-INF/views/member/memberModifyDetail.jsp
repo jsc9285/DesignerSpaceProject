@@ -416,7 +416,7 @@ $(function(){
 	    $("#file_name").val("");
 	    $("#file_route").val("");
 	    
-	    $("#p_image").attr('src', '<%=request.getContextPath()%>/resources/img/profile.png');
+	    $("#p_image").attr('src', '<%=request.getContextPath()%>/resources/img/defaultProfile.png');
 
  	}
 	

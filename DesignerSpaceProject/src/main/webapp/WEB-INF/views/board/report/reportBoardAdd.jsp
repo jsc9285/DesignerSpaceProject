@@ -157,8 +157,8 @@
 							 name="project_board_mno">
 						<input type="hidden" value="${projectBoardDto.member_nick}" 
 							 name="member_nick">
-						<input type="hidden" value="${projectBoardDto.project_board_mno}"
-							 name="report_board_mno">
+						<input type="hidden" value="${memberDto.member_no}"
+							 name="mno">
 						<input type="hidden" value="${projectBoardDto.project_board_title}"
 							 name="report_board_title">
 						<input type="hidden" value="${memberDto.member_name}"

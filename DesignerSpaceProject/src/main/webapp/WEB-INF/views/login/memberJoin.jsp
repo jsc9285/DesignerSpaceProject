@@ -409,7 +409,7 @@
 	    
 	    document.getElementById("file_route").value =  $("#file_name").val();
 	    
-	    $("#p_image").attr('src', '<%=request.getContextPath()%>/resources/img/profile.png');
+	    $("#p_image").attr('src', '<%=request.getContextPath()%>/resources/img/defaultProfile.png');
 
 
  	}

@@ -118,7 +118,6 @@ public class ReportBoardController {
 		
 		int project_board_no = reportBoardService.selectProjectBoardNumber(title);
 		
-		
 		model.addAttribute("reportBoardDto", reportBoardDto);
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("keyword", keyword);
@@ -138,6 +137,8 @@ public class ReportBoardController {
 		model.addAttribute("projectBoardDto", projectBoardDto);
 		model.addAttribute("project_board_no", project_board_no);
 		
+	
+		
 		return "board/report/reportBoardAdd";
 	}
 	
@@ -146,7 +147,11 @@ public class ReportBoardController {
 	public String ReportBoardAddCtr(ReportBoardDto reportBoardDto, Model model) {
 		
 		log.info("Welcome ReportBoardAdd_ctr!");
-		
+		System.out.println(reportBoardDto);
+		System.out.println(reportBoardDto);
+		System.out.println(reportBoardDto);
+		System.out.println(reportBoardDto);
+		System.out.println(reportBoardDto);
 		reportBoardService.reportBoardInsertOne(reportBoardDto);
 		
 		return "redirect:../reportBoard/listDetail.do?report_board_no=" + reportBoardDto.getReport_board_no();

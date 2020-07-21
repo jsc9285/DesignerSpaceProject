@@ -7,7 +7,7 @@ import com.project.reportBoard.model.ReportBoardDto;
 public interface ReportBoardService {
 	
 	public List<ReportBoardDto> reportBoardSelectList(String searchOption, String keyword,
-			String sortOption, int start, int end, int mno);
+			String sortOption, int start, int end, int member_no);
 
 	public int reportBoardSelectTotalCount(String searchOption, String keyword, String sortOption, int mno);
 
