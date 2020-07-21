@@ -347,6 +347,31 @@
 				event.target.value = message;
 			}
 		}
+		
+		function returnPageFnc(chkPage) {
+			var curPageObj = document.getElementById('curPage');
+			var categoryOptionObj = document.getElementById('categoryOption');
+			var sortOptionObj = document.getElementById('sortOption');
+			var searchOptionObj = document.getElementById('searchOption');
+			var keywordObj = document.getElementById('keyword');
+			var projectBoardMno = document.getElementById('projectBoardMno');
+			
+			if(chkPage == 0){
+				var str = "./list.do"
+				str += "?curPage=" + curPageObj.value;
+			}else if(chkPage == 1){
+				var str = "../member/myBoard.do"
+				str += "?curPage=" + curPageObj.value;
+				str += "&mno=" + projectBoardMno.value;
+			}					
+			
+			str += "&categoryOption=" + categoryOptionObj.value;
+			str += "&sortOption=" + sortOptionObj.value;
+			str += "&searchOption=" + searchOptionObj.value;
+			str += "&keyword=" + keywordObj.value;
+			
+			location.href = str;
+		}
 	</script>
 	
 </head>
@@ -356,6 +381,13 @@
 	<input type="hidden" id='deleteProjectNum' value="${projectBoardDto.project_board_no}">
 	<input type="hidden" id="projectLikeChk" value="${projectLikeFlag.PROJECT_LIKE_NO}">
 	<input type="hidden" id="projectLikeFlag" value="${projectLikeFlag.PROJECT_LIKE_FLAG}">
+	<input type="hidden" id="projectBoardMno" value="${projectBoardDto.project_board_mno}">
+	
+	<input type="hidden" id="curPage" value="${searchOptionMap.curPage}">
+	<input type="hidden" id="sortOption" value="${searchOptionMap.sortOption}">
+	<input type="hidden" id="categoryOption" value="${searchOptionMap.categoryOption}">
+	<input type="hidden" id="searchOption" value="${searchOptionMap.searchOption}">
+	<input type="hidden" id="keyword" value="${searchOptionMap.keyword}">
 
 	<form action="./like.do#projectInfoArea" id="like" method="get">
 		<input type="hidden" name="project_board_no" value="${projectBoardDto.project_board_no}">
@@ -391,10 +423,10 @@
 			</div>
 			<c:choose>
 				<c:when test="${chkPage eq 0}">
-					<input class="btnList" style="margin-right: 175px;" type="button" onclick="location.href='./list.do'" value="목록">					
+					<input class="btnList" style="margin-right: 175px;" type="button" onclick="returnPageFnc(${chkPage});" value="목록">					
 				</c:when>
 				<c:when test="${chkPage eq 1}">
-					<input class="btnList" style="margin-right: 175px;" type="button" onclick="location.href='../member/myBoard.do?mno=${projectBoardDto.project_board_mno}'" value="목록">
+					<input class="btnList" style="margin-right: 175px;" type="button" onclick="returnPageFnc(${chkPage});" value="목록">
 				</c:when>
 				<c:when test="${chkPage eq 2}">
 					<input class="btnList" style="margin-right: 175px;" type="button" onclick="location.href='./management.do'" value="목록">

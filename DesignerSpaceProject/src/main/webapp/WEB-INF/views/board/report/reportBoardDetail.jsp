@@ -42,8 +42,13 @@
 		background-color: #7D7471;
 		color: white; 
 		border-collapse: collapse;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;	
 	}
-	
+	#deleteButton:hover{
+		background-color: #4AD674;
+	}
 	#listButton{
 		margin-bottom: 50px;
 		width: 150px; 
@@ -54,6 +59,12 @@
 		background-color: #7D7471;
 		color: white; 
 		border-collapse: collapse;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;		
+	}
+	#listButton:hover{
+		background-color: #4AD674;
 	}
 	#reportTitle{
 		margin-left: 85px;

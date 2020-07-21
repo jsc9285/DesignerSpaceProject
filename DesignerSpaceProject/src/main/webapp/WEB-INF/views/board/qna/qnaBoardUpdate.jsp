@@ -101,7 +101,7 @@
 					<br>
 					<br>
 					<div style="text-align: center;">
-						<input type="submit" value="작성완료" style="text-align: center; width: 150px; 
+						<input type="submit" value="수정완료" style="text-align: center; width: 150px; 
 							height: 50px; background-color: #60524E; color: white;">
 						<input type="button" value="취소" style="text-align: center; width: 150px; 
 							height: 50px; background-color: #60524E; color: white;" onclick="pageMoveListFnc();">

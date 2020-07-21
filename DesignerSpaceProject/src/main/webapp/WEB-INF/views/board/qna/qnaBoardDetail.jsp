@@ -30,6 +30,12 @@
 		background-color: #7D7471;
 		color: white; 
 		border-collapse: collapse;
+		border: none;
+		border-radius: 5px;		
+		cursor: pointer;
+	}
+	#updateButton:hover{
+		background-color: #4AD674;
 	}
 	
 	#deleteButton{
@@ -42,8 +48,13 @@
 		background-color: #7D7471;
 		color: white; 
 		border-collapse: collapse;
+		border: none;
+		border-radius: 5px;		
+		cursor: pointer;
 	}
-	
+	#deleteButton:hover{
+		background-color: #4AD674;
+	}
 	#listButton{
 		margin-bottom: 50px;
 		width: 150px; 
@@ -54,6 +65,12 @@
 		background-color: #7D7471;
 		color: white; 
 		border-collapse: collapse;
+		border: none;
+		border-radius: 5px;		
+		cursor: pointer;
+	}
+	#listButton:hover{
+		background-color: #4AD674;
 	}
 	
 </style>
@@ -333,7 +350,7 @@
 					<c:if test="${qnaBoardDto.qna_board_answer_status eq '답변중'}">
 						<div style="text-align: center; margin-top: -50px;">
 							<input type="button" value="답변완료" style="width: 150px; height: 150px;
-								border-radius: 50%; background-color: #4AD674; color: white; border: none;"
+								border-radius: 50%; background-color: #4AD674; color: white; border: none; cursor: pointer;"
 								onclick="answerCompleteFnc();">
 						</div>
 					</c:if>

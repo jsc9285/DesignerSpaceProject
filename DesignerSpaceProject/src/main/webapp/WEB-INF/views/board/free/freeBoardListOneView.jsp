@@ -603,24 +603,24 @@
 				<c:otherwise>
 					<input type="button" id="preBtn" style="text-align: center; 
 							 width: 150px;  height: 50px; 
-							 background-color: #4AD674;  color: white; cursor: pointer;" 
+							 background-color: #4AD674;  color: white; cursor: pointer; border: none; border-radius: 5px" 
 							 onclick="prePageFnc();" value="다음 글">
 				</c:otherwise>
 				</c:choose>
 				<c:if test="${freeBoardDto.memberNo eq memberDto.member_no}">
 					<input type='submit' style="text-align: center; 
 							 width: 150px;  height: 50px; 
-							 background-color: #60524E;  color: white;cursor: pointer;" value='수정'>
+							 background-color: #60524E;  color: white;cursor: pointer; border: none; border-radius: 5px;" value='수정'>
 				</c:if>
 				<c:if test="${freeBoardDto.memberNo eq memberDto.member_no || memberDto.member_grade eq '1'}">
 				<input type='button' style="text-align: center; 
 							 width: 150px;  height: 50px; 
-							 background-color: #60524E;  color: white; cursor: pointer;" 
+							 background-color: #60524E;  color: white; cursor: pointer; border: none; border-radius: 5px" 
 							 value='삭제' onclick="freeBoardDelteFnc();">
 				</c:if>
 				<input type='button' style="text-align: center; 
 							 width: 150px;  height: 50px; 
-							 background-color: #60524E;  color: white;cursor: pointer;" 
+							 background-color: #60524E;  color: white;cursor: pointer; border: none; border-radius: 5px" 
 							 value='목록' onclick='pageMoveListFnc();'>
 				<c:choose>
 				<c:when test="${rnum eq totalMoveCount}">
@@ -629,7 +629,7 @@
 				<c:otherwise>
 					<input type="button" id="nextBtn" style="text-align: center; 
 							 width: 150px;  height: 50px; 
-							 background-color: #4AD674;  color: white;cursor: pointer;" 
+							 background-color: #4AD674;  color: white;cursor: pointer; border: none; border-radius: 5px" 
 							 onclick="nextPageFnc();" value="이전 글">
 				</c:otherwise>
 				</c:choose>			 

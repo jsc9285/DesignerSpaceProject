@@ -178,9 +178,12 @@ public class QnaBoardController {
 		
 		qnaBoardService.qnaBoardUpdateOne(qnaBoardDto);
 		
-		model.addAttribute("qnaBoardDto", qnaBoardDto);
+		int qna_board_no = qnaBoardDto.getQna_board_no();
 		
-		return "redirect:list.do";
+		model.addAttribute("qnaBoardDto", qnaBoardDto);
+		model.addAttribute("qna_board_no", qna_board_no);
+		
+		return "redirect:listDetail.do";
 	}
 	
 	@RequestMapping(value = "qnaBoard/deleteCtr.do", method = RequestMethod.GET)
