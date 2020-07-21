@@ -101,7 +101,8 @@
 	
 	<script type="text/javascript">
 		function backMoveFnc() {
-			location.href='listAdmin.do';
+			var curPageObj = $('#curPage');
+			location.href='listAdmin.do?curPage=' + curPageObj.val();
 		}
 		
 		function removeMemberFnc(){
@@ -136,6 +137,7 @@
 				</div> 
 			
 				<div id="join_div">
+					<input type="hidden" id=curPage name="curPage" value="${curPage}">
 					<input type="hidden" id="member_no" class="input" value="${memberDto.member_no}" 
 						name='member_no' readonly="readonly">
 					<span>닉네임</span>
@@ -172,9 +174,11 @@
 					
 					<span>자기소개</span>					
 					<textarea id="textarea"  rows="8" cols="38" readonly="readonly">${memberDto.member_comments}</textarea>
+					<c:if test="${memberDto.member_grade == 0}">
+						<button id="button" onclick="removeMemberFnc()">
+							삭제</button>
+					</c:if>
 					
-					<button id="button" onclick="removeMemberFnc()">
-						삭제</button>
 					<button id="cancel" onclick="backMoveFnc()">뒤로가기</button>
 					
 				</div>	

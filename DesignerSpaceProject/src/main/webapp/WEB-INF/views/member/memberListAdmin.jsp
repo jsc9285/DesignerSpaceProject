@@ -220,13 +220,16 @@
 						<c:forEach var="memberBoardDto" items="${memberList}">
 							<tr>
 								<td class="cell2">
-									<input type="checkbox" name='member_chk' class="checkbox" value="${memberBoardDto.member_no}">
+									<c:if test="${memberBoardDto.member_grade==0}">
+										<input type="checkbox" name='member_chk' class="checkbox" value="${memberBoardDto.member_no}">
+									</c:if>
 								</td>
 								<td class="cell2">
 									${memberBoardDto.member_no}
 								</td>
 								<td class="cell2">
-									<a href="./listOneAdmin.do?member_no=${memberBoardDto.member_no}">${memberBoardDto.member_nick}</a></td>
+									<a href="./listOneAdmin.do?member_no=${memberBoardDto.member_no}&curPage=${pagingMap.paging.curPage}">
+										${memberBoardDto.member_nick}</a></td>
 								<td class="cell2">${memberBoardDto.member_email}</td>
 								<c:choose>
 									<c:when test="${empty memberBoardDto.board_cnt}">
